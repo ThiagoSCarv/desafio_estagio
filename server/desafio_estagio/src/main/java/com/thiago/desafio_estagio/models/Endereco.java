@@ -1,7 +1,5 @@
 package com.thiago.desafio_estagio.models;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCep;
-import com.thiago.desafio_estagio.validation.annotation.ValidTelefone;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -34,14 +32,12 @@ public class Endereco {
     @Column(nullable = false)
     private String numero;
 
-    @ValidCep
     @Column(nullable = false, length = 9)
     private String cep;
 
     @Column(nullable = false)
     private String bairro;
 
-    @ValidTelefone
     private String telefone;
 
     @Column(nullable = false)

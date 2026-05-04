@@ -1,6 +1,5 @@
 package com.thiago.desafio_estagio.models;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCnpj;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -19,7 +18,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ClientePj extends Cliente {
 
-    @ValidCnpj
     @Column(nullable = false, unique = true, length = 18)
     private String cnpj;
 
