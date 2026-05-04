@@ -1,10 +1,9 @@
+package com.thiago.desafio_estagio.exceptions;
 
 import java.util.List;
-
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,5 +27,22 @@ public class ExceptionHandlerController {
             messageSource.getMessage(error, LocaleContextHolder.getLocale())))
         .toList();
   }
-  
+
+  @ExceptionHandler(EmailJaCadastradoException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleEmailJaCadastrado(EmailJaCadastradoException ex) {
+    return new ErrorMessageDTO("email", ex.getMessage());
+  }
+
+  @ExceptionHandler(CpfJaCadastradoException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleCpfJaCadastrado(CpfJaCadastradoException ex) {
+    return new ErrorMessageDTO("cpf", ex.getMessage());
+  }
+
+  @ExceptionHandler(RgJaCadastradoException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleRgJaCadastrado(RgJaCadastradoException ex) {
+    return new ErrorMessageDTO("rg", ex.getMessage());
+  }
 }
