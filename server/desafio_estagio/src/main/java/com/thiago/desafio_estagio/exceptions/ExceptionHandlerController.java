@@ -57,4 +57,16 @@ public class ExceptionHandlerController {
   public ErrorMessageDTO handleRazaoSocialJaCadastrada(RazaoSocialJaCadastradaException ex) {
     return new ErrorMessageDTO("razaoSocial", ex.getMessage());
   }
+
+  @ExceptionHandler(CepJaCadastradoException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleCepJaCadastrado(CepJaCadastradoException ex) {
+    return new ErrorMessageDTO("cep", ex.getMessage());
+  }
+
+  @ExceptionHandler(ClienteNaoEncontradoException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ErrorMessageDTO handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
+    return new ErrorMessageDTO("id", ex.getMessage());
+  }
 }
