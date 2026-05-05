@@ -9,4 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, UUID>, JpaSpecificationExecutor<Cliente> {
+
+    boolean existsByEmailAndIdNot(String email, UUID id);
 }

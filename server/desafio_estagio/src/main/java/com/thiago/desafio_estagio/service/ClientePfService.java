@@ -1,7 +1,9 @@
 package com.thiago.desafio_estagio.service;
 
 import com.thiago.desafio_estagio.dto.ClientePfCreateDto;
+import com.thiago.desafio_estagio.dto.ClientePfUpdateDto;
 import com.thiago.desafio_estagio.dto.EnderecoCreateDto;
+import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.models.ClientePf;
 import com.thiago.desafio_estagio.models.Endereco;
 import com.thiago.desafio_estagio.models.TipoPessoa;
@@ -9,17 +11,22 @@ import com.thiago.desafio_estagio.exceptions.CpfJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.EmailJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.RgJaCadastradoException;
 import com.thiago.desafio_estagio.repository.ClientePfRepository;
+import com.thiago.desafio_estagio.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ClientePfService {
 
     @Autowired
     private ClientePfRepository clientePfRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Transactional
     public ClientePf criar(ClientePfCreateDto dto) {
@@ -46,6 +53,29 @@ public class ClientePfService {
                     .map(enderecoDto -> mapearEndereco(enderecoDto, clientePf))
                     .toList();
             clientePf.getEnderecos().addAll(enderecos);
+        }
+
+        return clientePfRepository.save(clientePf);
+    }
+
+    @Transactional
+    public ClientePf atualizar(UUID id, ClientePfUpdateDto dto) {
+        ClientePf clientePf = clientePfRepository.findById(id)
+                .orElseThrow(ClienteNaoEncontradoException::new);
+
+        if (dto.getEmail() != null && !dto.getEmail().equals(clientePf.getEmail())) {
+            if (clienteRepository.existsByEmailAndIdNot(dto.getEmail(), id)) {
+                throw new EmailJaCadastradoException();
+            }
+            clientePf.setEmail(dto.getEmail());
+        }
+
+        if (dto.getNome() != null) {
+            clientePf.setNome(dto.getNome());
+        }
+
+        if (dto.getAtivo() != null) {
+            clientePf.setAtivo(dto.getAtivo());
         }
 
         return clientePfRepository.save(clientePf);
