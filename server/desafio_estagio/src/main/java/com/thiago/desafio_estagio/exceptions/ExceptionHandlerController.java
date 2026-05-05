@@ -45,4 +45,16 @@ public class ExceptionHandlerController {
   public ErrorMessageDTO handleRgJaCadastrado(RgJaCadastradoException ex) {
     return new ErrorMessageDTO("rg", ex.getMessage());
   }
+
+  @ExceptionHandler(CnpjJaCadastradoException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleCnpjJaCadastrado(CnpjJaCadastradoException ex) {
+    return new ErrorMessageDTO("cnpj", ex.getMessage());
+  }
+
+  @ExceptionHandler(RazaoSocialJaCadastradaException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleRazaoSocialJaCadastrada(RazaoSocialJaCadastradaException ex) {
+    return new ErrorMessageDTO("razaoSocial", ex.getMessage());
+  }
 }
