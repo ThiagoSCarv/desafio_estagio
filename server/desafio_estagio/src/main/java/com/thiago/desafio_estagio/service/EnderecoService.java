@@ -53,18 +53,17 @@ public class EnderecoService {
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
         novoEndereco.setCliente(cliente);
-
         List<Endereco> enderecos = cliente.getEnderecos();
 
-        if (novoEndereco.isEnderecoPrincipal()) {
-            if (!enderecos.isEmpty()) {
-                enderecos.get(0).setEnderecoPrincipal(false);
-            }
-            enderecos.add(0, novoEndereco);
-        } else {
+        if (!novoEndereco.isEnderecoPrincipal()) {
             enderecos.add(novoEndereco);
+            return clienteRepository.save(cliente);
         }
 
+        if (!enderecos.isEmpty()) {
+            enderecos.get(0).setEnderecoPrincipal(false);
+        }
+        enderecos.add(0, novoEndereco);
         return clienteRepository.save(cliente);
     }
 }
