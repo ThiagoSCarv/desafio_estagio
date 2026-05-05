@@ -3,6 +3,9 @@ package com.thiago.desafio_estagio.controllers;
 import com.thiago.desafio_estagio.dto.ClienteListDto;
 import com.thiago.desafio_estagio.models.TipoPessoa;
 import com.thiago.desafio_estagio.service.ClienteService;
+
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +38,16 @@ public class ClienteController {
             Pageable pageable = PageRequest.of(page, size);
             Page<ClienteListDto> resultado = clienteService.listarTodos(tipoPessoa, documento, nome, pageable);
             return ResponseEntity.ok(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable UUID id) {
+        try {
+            clienteService.deletar(id);
+            return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

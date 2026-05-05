@@ -1,6 +1,7 @@
 package com.thiago.desafio_estagio.service;
 
 import com.thiago.desafio_estagio.dto.ClienteListDto;
+import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.models.Cliente;
 import com.thiago.desafio_estagio.models.ClientePf;
 import com.thiago.desafio_estagio.models.ClientePj;
@@ -12,6 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 public class ClienteService {
@@ -22,6 +26,14 @@ public class ClienteService {
     public Page<ClienteListDto> listarTodos(TipoPessoa tipoPessoa, String documento, String nome, Pageable pageable) {
         Specification<Cliente> spec = ClienteSpecification.comFiltros(tipoPessoa, documento, nome);
         return clienteRepository.findAll(spec, pageable).map(this::toDto);
+    }
+
+    @Transactional
+    public void deletar(UUID id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(ClienteNaoEncontradoException::new);
+
+        clienteRepository.delete(cliente);
     }
 
     private ClienteListDto toDto(Cliente cliente) {
@@ -42,4 +54,5 @@ public class ClienteService {
                 pj.getCnpj(), pj.getRazaoSocial(), pj.getInscricaoEstatual(), pj.getDataCriacao()
         );
     }
+
 }
