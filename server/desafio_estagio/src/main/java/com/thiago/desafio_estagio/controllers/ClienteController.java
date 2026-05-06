@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.thiago.desafio_estagio.dto.ClienteDetalheDto;
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
@@ -38,6 +40,16 @@ public class ClienteController {
             Pageable pageable = PageRequest.of(page, size);
             Page<ClienteListDto> resultado = clienteService.listarTodos(tipoPessoa, documento, nome, pageable);
             return ResponseEntity.ok(resultado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscar(@PathVariable UUID id) {
+        try {
+            ClienteDetalheDto cliente = clienteService.buscarPorId(id);
+            return ResponseEntity.ok(cliente);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
