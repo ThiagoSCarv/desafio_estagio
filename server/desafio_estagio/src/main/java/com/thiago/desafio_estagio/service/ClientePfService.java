@@ -1,98 +1,78 @@
 package com.thiago.desafio_estagio.service;
 
 import com.thiago.desafio_estagio.dto.ClientePfCreateDto;
+import com.thiago.desafio_estagio.dto.ClientePfDto;
 import com.thiago.desafio_estagio.dto.ClientePfUpdateDto;
-import com.thiago.desafio_estagio.dto.EnderecoCreateDto;
 import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.models.ClientePf;
-import com.thiago.desafio_estagio.models.Endereco;
 import com.thiago.desafio_estagio.models.TipoPessoa;
 import com.thiago.desafio_estagio.exceptions.CpfJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.EmailJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.RgJaCadastradoException;
 import com.thiago.desafio_estagio.repository.ClientePfRepository;
 import com.thiago.desafio_estagio.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ClientePfService {
 
-    @Autowired
-    private ClientePfRepository clientePfRepository;
+    private final ClientePfRepository clientePfRepository;
+    private final ClienteRepository clienteRepository;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
-
+    // Cria um novo Cliente PF validando unicidade de email (cobrindo PF e PJ via tabela pai), CPF e RG.
+    // CPF eh normalizado para apenas digitos e RG para alfanumerico maiusculo, garantindo que a checagem
+    // de unicidade e o armazenamento sejam consistentes mesmo se o cliente enviar com mascara.
     @Transactional
-    public ClientePf criar(ClientePfCreateDto dto) {
-        if (clientePfRepository.existsByEmail(dto.getEmail())) {
+    public ClientePfDto criar(ClientePfCreateDto dto) {
+        String cpf = dto.cpf().replaceAll("[^0-9]", "");
+        String rg = dto.rg().replaceAll("[.\\-\\s]", "").toUpperCase();
+
+        if (clienteRepository.existsByEmail(dto.email())) {
             throw new EmailJaCadastradoException();
         }
-        if (clientePfRepository.existsByCpf(dto.getCpf())) {
+        if (clientePfRepository.existsByCpf(cpf)) {
             throw new CpfJaCadastradoException();
         }
-        if (clientePfRepository.existsByRg(dto.getRg())) {
+        if (clientePfRepository.existsByRg(rg)) {
             throw new RgJaCadastradoException();
         }
 
         ClientePf clientePf = new ClientePf();
         clientePf.setTipoPessoa(TipoPessoa.FISICA);
-        clientePf.setEmail(dto.getEmail());
-        clientePf.setNome(dto.getNome());
-        clientePf.setCpf(dto.getCpf());
-        clientePf.setRg(dto.getRg());
-        clientePf.setDataNascimento(dto.getDataNascimento());
+        clientePf.setEmail(dto.email());
+        clientePf.setNome(dto.nome());
+        clientePf.setCpf(cpf);
+        clientePf.setRg(rg);
+        clientePf.setDataNascimento(dto.dataNascimento());
 
-        if (dto.getEnderecos() != null) {
-            List<Endereco> enderecos = dto.getEnderecos().stream()
-                    .map(enderecoDto -> mapearEndereco(enderecoDto, clientePf))
-                    .toList();
-            clientePf.getEnderecos().addAll(enderecos);
-        }
-
-        return clientePfRepository.save(clientePf);
+        return ClientePfDto.from(clientePfRepository.save(clientePf));
     }
 
     @Transactional
-    public ClientePf atualizar(UUID id, ClientePfUpdateDto dto) {
+    public ClientePfDto atualizar(UUID id, ClientePfUpdateDto dto) {
         ClientePf clientePf = clientePfRepository.findById(id)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
-        if (dto.getEmail() != null && !dto.getEmail().equals(clientePf.getEmail())) {
-            if (clienteRepository.existsByEmailAndIdNot(dto.getEmail(), id)) {
+        if (dto.email() != null && !dto.email().equals(clientePf.getEmail())) {
+            if (clienteRepository.existsByEmailAndIdNot(dto.email(), id)) {
                 throw new EmailJaCadastradoException();
             }
-            clientePf.setEmail(dto.getEmail());
+            clientePf.setEmail(dto.email());
         }
 
-        if (dto.getNome() != null) {
-            clientePf.setNome(dto.getNome());
+        if (dto.nome() != null) {
+            clientePf.setNome(dto.nome());
         }
 
-        if (dto.getAtivo() != null) {
-            clientePf.setAtivo(dto.getAtivo());
+        if (dto.ativo() != null) {
+            clientePf.setAtivo(dto.ativo());
         }
 
-        return clientePfRepository.save(clientePf);
-    }
-
-    private Endereco mapearEndereco(EnderecoCreateDto dto, ClientePf clientePf) {
-        Endereco endereco = new Endereco();
-        endereco.setLogradouro(dto.getLogradouro());
-        endereco.setNumero(dto.getNumero());
-        endereco.setCep(dto.getCep());
-        endereco.setBairro(dto.getBairro());
-        endereco.setTelefone(dto.getTelefone());
-        endereco.setCidade(dto.getCidade());
-        endereco.setEstado(dto.getEstado());
-        endereco.setEnderecoPrincipal(dto.getEnderecoPrincipal());
-        endereco.setComplemento(dto.getComplemento());
-        endereco.setCliente(clientePf);
-        return endereco;
+        return ClientePfDto.from(clientePfRepository.save(clientePf));
     }
 }

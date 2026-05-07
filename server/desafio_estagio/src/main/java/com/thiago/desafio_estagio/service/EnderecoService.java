@@ -1,69 +1,55 @@
 package com.thiago.desafio_estagio.service;
 
 import com.thiago.desafio_estagio.dto.EnderecoCreateDto;
+import com.thiago.desafio_estagio.dto.EnderecoDto;
 import com.thiago.desafio_estagio.exceptions.CepJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.models.Cliente;
 import com.thiago.desafio_estagio.models.Endereco;
 import com.thiago.desafio_estagio.repository.ClienteRepository;
 import com.thiago.desafio_estagio.repository.EnderecoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class EnderecoService {
 
-    @Autowired
-    private EnderecoRepository enderecoRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final ClienteRepository clienteRepository;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
-
+    // Cadastra um novo endereco para o cliente informado.
+    // Garante a invariante de que apenas um endereco pode ser principal: caso o novo seja principal,
+    // todos os principais existentes sao desmarcados antes da gravacao.
     @Transactional
-    public Endereco criar(UUID clienteId, EnderecoCreateDto dto) {
+    public EnderecoDto criar(UUID clienteId, EnderecoCreateDto dto) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
-        if (enderecoRepository.existsByClienteIdAndCep(clienteId, dto.getCep())) {
+        if (enderecoRepository.existsByClienteIdAndCep(clienteId, dto.cep())) {
             throw new CepJaCadastradoException();
         }
 
+        boolean principal = Boolean.TRUE.equals(dto.enderecoPrincipal());
+        if (principal) {
+            enderecoRepository.desmarcarTodosPrincipaisDoCliente(clienteId);
+        }
+
         Endereco endereco = new Endereco();
-        endereco.setLogradouro(dto.getLogradouro());
-        endereco.setNumero(dto.getNumero());
-        endereco.setCep(dto.getCep());
-        endereco.setBairro(dto.getBairro());
-        endereco.setTelefone(dto.getTelefone());
-        endereco.setCidade(dto.getCidade());
-        endereco.setEstado(dto.getEstado());
-        endereco.setEnderecoPrincipal(dto.getEnderecoPrincipal());
-        endereco.setComplemento(dto.getComplemento());
+        endereco.setLogradouro(dto.logradouro());
+        endereco.setNumero(dto.numero());
+        endereco.setCep(dto.cep());
+        endereco.setBairro(dto.bairro());
+        endereco.setTelefone(dto.telefone());
+        endereco.setCidade(dto.cidade());
+        endereco.setEstado(dto.estado());
+        endereco.setEnderecoPrincipal(principal);
+        endereco.setComplemento(dto.complemento());
         endereco.setCliente(cliente);
 
-        return enderecoRepository.save(endereco);
-    }
-
-    @Transactional
-    public Cliente adicionarEndereco(UUID clienteId, Endereco novoEndereco) {
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(ClienteNaoEncontradoException::new);
-
-        novoEndereco.setCliente(cliente);
-        List<Endereco> enderecos = cliente.getEnderecos();
-
-        if (!novoEndereco.isEnderecoPrincipal()) {
-            enderecos.add(novoEndereco);
-            return clienteRepository.save(cliente);
-        }
-
-        if (!enderecos.isEmpty()) {
-            enderecos.get(0).setEnderecoPrincipal(false);
-        }
-        enderecos.add(0, novoEndereco);
-        return clienteRepository.save(cliente);
+        return EnderecoDto.from(enderecoRepository.save(endereco));
     }
 }

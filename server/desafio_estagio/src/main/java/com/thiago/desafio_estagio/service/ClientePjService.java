@@ -1,94 +1,84 @@
 package com.thiago.desafio_estagio.service;
 
 import com.thiago.desafio_estagio.dto.ClientePjCreateDto;
+import com.thiago.desafio_estagio.dto.ClientePjDto;
 import com.thiago.desafio_estagio.dto.ClientePjUpdateDto;
-import com.thiago.desafio_estagio.dto.EnderecoCreateDto;
 import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.exceptions.CnpjJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.EmailJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.RazaoSocialJaCadastradaException;
 import com.thiago.desafio_estagio.models.ClientePj;
-import com.thiago.desafio_estagio.models.Endereco;
 import com.thiago.desafio_estagio.models.TipoPessoa;
 import com.thiago.desafio_estagio.repository.ClientePjRepository;
 import com.thiago.desafio_estagio.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ClientePjService {
 
-    @Autowired
-    private ClientePjRepository clientePjRepository;
+    private final ClientePjRepository clientePjRepository;
+    private final ClienteRepository clienteRepository;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
-
+    // Cria um Cliente PJ validando unicidade de email (cobrindo PF e PJ via tabela pai), CNPJ e razao social.
+    // CNPJ eh normalizado para apenas digitos para garantir consistencia entre checagem de unicidade e armazenamento.
     @Transactional
-    public ClientePj criar(ClientePjCreateDto dto) {
-        if (clientePjRepository.existsByEmail(dto.getEmail())) {
+    public ClientePjDto criar(ClientePjCreateDto dto) {
+        String cnpj = dto.cnpj().replaceAll("[^0-9]", "");
+
+        if (clienteRepository.existsByEmail(dto.email())) {
             throw new EmailJaCadastradoException();
         }
-        if (clientePjRepository.existsByCnpj(dto.getCnpj())) {
+        if (clientePjRepository.existsByCnpj(cnpj)) {
             throw new CnpjJaCadastradoException();
         }
-        if (clientePjRepository.existsByRazaoSocial(dto.getRazaoSocial())) {
+        if (clientePjRepository.existsByRazaoSocial(dto.razaoSocial())) {
             throw new RazaoSocialJaCadastradaException();
         }
 
         ClientePj clientePj = new ClientePj();
         clientePj.setTipoPessoa(TipoPessoa.JURIDICA);
-        clientePj.setEmail(dto.getEmail());
-        clientePj.setCnpj(dto.getCnpj());
-        clientePj.setRazaoSocial(dto.getRazaoSocial());
-        clientePj.setInscricaoEstatual(dto.getInscricaoEstatual());
-        clientePj.setDataCriacao(dto.getDataCriacao());
+        clientePj.setEmail(dto.email());
+        clientePj.setCnpj(cnpj);
+        clientePj.setRazaoSocial(dto.razaoSocial());
+        clientePj.setInscricaoEstadual(dto.inscricaoEstadual());
+        clientePj.setDataCriacao(dto.dataCriacao());
 
-        if (dto.getEnderecos() != null) {
-            List<Endereco> enderecos = dto.getEnderecos().stream()
-                    .map(enderecoDto -> mapearEndereco(enderecoDto, clientePj))
-                    .toList();
-            clientePj.getEnderecos().addAll(enderecos);
-        }
-
-        return clientePjRepository.save(clientePj);
+        return ClientePjDto.from(clientePjRepository.save(clientePj));
     }
 
     @Transactional
-    public ClientePj atualizar(UUID id, ClientePjUpdateDto dto) {
+    public ClientePjDto atualizar(UUID id, ClientePjUpdateDto dto) {
         ClientePj clientePj = clientePjRepository.findById(id)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
-        if (dto.getEmail() != null && !dto.getEmail().equals(clientePj.getEmail())) {
-            if (clienteRepository.existsByEmailAndIdNot(dto.getEmail(), id)) {
+        if (dto.email() != null && !dto.email().equals(clientePj.getEmail())) {
+            if (clienteRepository.existsByEmailAndIdNot(dto.email(), id)) {
                 throw new EmailJaCadastradoException();
             }
-            clientePj.setEmail(dto.getEmail());
+            clientePj.setEmail(dto.email());
         }
 
-        if (dto.getAtivo() != null) {
-            clientePj.setAtivo(dto.getAtivo());
+        // Razao social tambem precisa ser unica: rejeita se outro cliente ja a usa.
+        if (dto.razaoSocial() != null && !dto.razaoSocial().equals(clientePj.getRazaoSocial())) {
+            if (clientePjRepository.existsByRazaoSocial(dto.razaoSocial())) {
+                throw new RazaoSocialJaCadastradaException();
+            }
+            clientePj.setRazaoSocial(dto.razaoSocial());
         }
 
-        return clientePjRepository.save(clientePj);
-    }
+        if (dto.inscricaoEstadual() != null) {
+            clientePj.setInscricaoEstadual(dto.inscricaoEstadual());
+        }
 
-    private Endereco mapearEndereco(EnderecoCreateDto dto, ClientePj clientePj) {
-        Endereco endereco = new Endereco();
-        endereco.setLogradouro(dto.getLogradouro());
-        endereco.setNumero(dto.getNumero());
-        endereco.setCep(dto.getCep());
-        endereco.setBairro(dto.getBairro());
-        endereco.setTelefone(dto.getTelefone());
-        endereco.setCidade(dto.getCidade());
-        endereco.setEstado(dto.getEstado());
-        endereco.setEnderecoPrincipal(dto.getEnderecoPrincipal());
-        endereco.setComplemento(dto.getComplemento());
-        endereco.setCliente(clientePj);
-        return endereco;
+        if (dto.ativo() != null) {
+            clientePj.setAtivo(dto.ativo());
+        }
+
+        return ClientePjDto.from(clientePjRepository.save(clientePj));
     }
 }
