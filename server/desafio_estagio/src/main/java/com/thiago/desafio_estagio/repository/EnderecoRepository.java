@@ -14,11 +14,9 @@ public interface EnderecoRepository extends JpaRepository<Endereco, UUID> {
 
     boolean existsByClienteIdAndCep(UUID clienteId, String cep);
 
-    // Busca todos os endereços vinculados a um cliente (relação unidirecional N:1).
     List<Endereco> findByClienteId(UUID clienteId);
 
-    // Desmarca todos os endereços principais de um cliente em uma única operação.
-    // Usado antes de gravar um novo endereço principal, garantindo a invariante de no maximo um principal por cliente.
+    // Desmarca o endereço principal do cliente
     @Modifying
     @Query("UPDATE Endereco e SET e.enderecoPrincipal = false WHERE e.cliente.id = :clienteId")
     void desmarcarTodosPrincipaisDoCliente(UUID clienteId);

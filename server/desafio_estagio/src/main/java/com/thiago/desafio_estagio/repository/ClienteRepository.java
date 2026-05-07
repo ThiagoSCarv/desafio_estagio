@@ -10,7 +10,7 @@ import java.util.UUID;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, UUID>, JpaSpecificationExecutor<Cliente> {
 
-    // Verifica unicidade de email em toda a tabela pai (clientes), cobrindo PF e PJ.
+    //Verifica em toda a tabela Cliente se existe somente um email
     boolean existsByEmail(String email);
 
     boolean existsByEmailAndIdNot(String email, UUID id);

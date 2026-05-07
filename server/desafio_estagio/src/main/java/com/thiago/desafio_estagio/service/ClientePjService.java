@@ -13,6 +13,8 @@ import com.thiago.desafio_estagio.repository.ClientePjRepository;
 import com.thiago.desafio_estagio.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -24,8 +26,8 @@ public class ClientePjService {
     private final ClientePjRepository clientePjRepository;
     private final ClienteRepository clienteRepository;
 
-    // Cria um Cliente PJ validando unicidade de email (cobrindo PF e PJ via tabela pai), CNPJ e razao social.
-    // CNPJ eh normalizado para apenas digitos para garantir consistencia entre checagem de unicidade e armazenamento.
+    //Cria um novo Cliente PJ validando que não existe outro email igual já cadastrado na tabela Cliente
+    //CNPJ é normalizado garantindo que mesmo que os clientes enviem com mascara o dado seja armazenado da maneira correta.
     @Transactional
     public ClientePjDto criar(ClientePjCreateDto dto) {
         String cnpj = dto.cnpj().replaceAll("[^0-9]", "");
@@ -48,7 +50,7 @@ public class ClientePjService {
         clientePj.setInscricaoEstadual(dto.inscricaoEstadual());
         clientePj.setDataCriacao(dto.dataCriacao());
 
-        return ClientePjDto.from(clientePjRepository.save(clientePj));
+        return ClientePjDto.from(clientePjRepository.save(clientePj), List.of());
     }
 
     @Transactional
@@ -79,6 +81,6 @@ public class ClientePjService {
             clientePj.setAtivo(dto.ativo());
         }
 
-        return ClientePjDto.from(clientePjRepository.save(clientePj));
+        return ClientePjDto.from(clientePjRepository.save(clientePj), List.of());
     }
 }

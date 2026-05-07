@@ -13,6 +13,8 @@ import com.thiago.desafio_estagio.repository.ClientePfRepository;
 import com.thiago.desafio_estagio.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -24,9 +26,8 @@ public class ClientePfService {
     private final ClientePfRepository clientePfRepository;
     private final ClienteRepository clienteRepository;
 
-    // Cria um novo Cliente PF validando unicidade de email (cobrindo PF e PJ via tabela pai), CPF e RG.
-    // CPF eh normalizado para apenas digitos e RG para alfanumerico maiusculo, garantindo que a checagem
-    // de unicidade e o armazenamento sejam consistentes mesmo se o cliente enviar com mascara.
+    //Cria um novo Cliente PF validando que não existe outro email igual já cadastrado na tabela Cliente
+    //CPF e RG são normalizados garantindo que mesmo que os clientes enviem com mascara o dado seja armazenado da maneira correta.
     @Transactional
     public ClientePfDto criar(ClientePfCreateDto dto) {
         String cpf = dto.cpf().replaceAll("[^0-9]", "");
@@ -50,7 +51,7 @@ public class ClientePfService {
         clientePf.setRg(rg);
         clientePf.setDataNascimento(dto.dataNascimento());
 
-        return ClientePfDto.from(clientePfRepository.save(clientePf));
+        return ClientePfDto.from(clientePfRepository.save(clientePf), List.of());
     }
 
     @Transactional
@@ -73,6 +74,6 @@ public class ClientePfService {
             clientePf.setAtivo(dto.ativo());
         }
 
-        return ClientePfDto.from(clientePfRepository.save(clientePf));
+        return ClientePfDto.from(clientePfRepository.save(clientePf), List.of());
     }
 }

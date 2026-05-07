@@ -4,7 +4,7 @@ import com.thiago.desafio_estagio.models.Endereco;
 
 import java.util.UUID;
 
-// Resposta de Endereco. Nao expoe a entidade nem a referencia ao Cliente.
+//Response de Endereco. Nao expoe a entidade nem a referencia ao Cliente.
 public record EnderecoDto(
         UUID id,
         String logradouro,

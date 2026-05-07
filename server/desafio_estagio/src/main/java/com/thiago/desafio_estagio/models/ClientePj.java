@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ClientePj extends Cliente {
 
-    // Persistido apenas com digitos (sem mascara), normalizado no service.
     @Column(nullable = false, unique = true, length = 14)
     private String cnpj;
 

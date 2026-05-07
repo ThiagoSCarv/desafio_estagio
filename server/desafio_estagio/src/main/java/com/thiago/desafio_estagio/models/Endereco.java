@@ -18,8 +18,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.UUID;
 
-// Endereço pertence a um Cliente via FK cliente_id (relação unidirecional N:1).
-// O cascade ON DELETE no banco garante que ao remover um cliente seus endereços sejam apagados.
+// Endereço pertence a um Cliente pela chave estrangeira cliente_id 
+// O cascade ON DELETE ao remover um cliente seus endereços também apagados.
 @Entity
 @Table(name = "enderecos")
 @Getter
@@ -56,7 +56,6 @@ public class Endereco {
 
     private String complemento;
 
-    // Lado dono da relação. Ignorado na serialização para evitar exposição do cliente em respostas de Endereco.
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)

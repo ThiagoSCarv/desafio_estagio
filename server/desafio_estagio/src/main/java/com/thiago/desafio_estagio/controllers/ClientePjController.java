@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+//Rota especifica para clientes do tipo pessoa juridica
 @RestController
 @RequestMapping("/clientes/pj")
 @RequiredArgsConstructor

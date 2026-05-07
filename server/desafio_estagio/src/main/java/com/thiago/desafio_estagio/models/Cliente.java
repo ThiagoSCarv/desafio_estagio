@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 // Entidade base de Cliente (PF/PJ) usando estrategia JOINED para herança em tabelas separadas.
-// A relação com Endereco é unidirecional 1:N — navegada apenas a partir de Endereco.cliente.
 @Entity
 @Table(name = "clientes")
 @Inheritance(strategy = InheritanceType.JOINED)

@@ -21,7 +21,6 @@ public class ClientePf extends Cliente {
     @Column(nullable = false)
     private String nome;
 
-    // Persistido apenas com digitos (sem mascara), normalizado no service.
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
 

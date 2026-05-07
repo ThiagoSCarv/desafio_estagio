@@ -69,4 +69,10 @@ public class ExceptionHandlerController {
   public ErrorMessageDTO handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
     return new ErrorMessageDTO("id", ex.getMessage());
   }
+
+  @ExceptionHandler(EnderecoNaoEncontradoException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public ErrorMessageDTO handleEnderecoNaoEncontrado(EnderecoNaoEncontradoException ex) {
+    return new ErrorMessageDTO("id", ex.getMessage());
+  }
 }

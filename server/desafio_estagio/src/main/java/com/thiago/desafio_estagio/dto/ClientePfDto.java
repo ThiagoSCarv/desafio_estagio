@@ -5,9 +5,10 @@ import com.thiago.desafio_estagio.models.TipoPessoa;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
-// Resposta para clientes do tipo Pessoa Fisica.
+//Response para clientes do tipo Pessoa Fisica.
 public record ClientePfDto(
         UUID id,
         TipoPessoa tipoPessoa,
@@ -18,15 +19,17 @@ public record ClientePfDto(
         String nome,
         String cpf,
         String rg,
-        LocalDate dataNascimento
+        LocalDate dataNascimento,
+        List<EnderecoDto> enderecos
 ) implements ClienteDto {
 
-    // Fabrica para converter a entidade ClientePf no DTO de resposta.
-    public static ClientePfDto from(ClientePf pf) {
+    //Converte a entidade ClientePf no DTO de resposta.
+    public static ClientePfDto from(ClientePf pf, List<EnderecoDto> enderecos) {
         return new ClientePfDto(
                 pf.getId(), pf.getTipoPessoa(), pf.getEmail(), pf.isAtivo(),
                 pf.getCriadoEm(), pf.getAtualizadoEm(),
-                pf.getNome(), pf.getCpf(), pf.getRg(), pf.getDataNascimento()
+                pf.getNome(), pf.getCpf(), pf.getRg(), pf.getDataNascimento(),
+                enderecos
         );
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
+//Cria Specifications para consultas dinâmicas de Cliente, cada filtro é opcional
 public class ClienteSpecification {
 
     public static Specification<Cliente> comFiltros(TipoPessoa tipoPessoa, String documento, String nome) {
@@ -21,6 +22,8 @@ public class ClienteSpecification {
             }
 
             if (documento != null && !documento.isBlank()) {
+                /*cb.treat() permite acessar campos de ClientePf (cpf) e ClientePj (cnpj) numa unica query.
+                O OR garante que a busca funciona independente do tipo do cliente.*/ 
                 Predicate porCpf = cb.like(
                         cb.treat(root, ClientePf.class).<String>get("cpf"),
                         "%" + documento + "%"
@@ -43,6 +46,7 @@ public class ClienteSpecification {
                 predicates.add(cb.or(porNome, porRazaoSocial));
             }
 
+            // AND entre todos os filtros, caso não tenha filtros retorna todos os registros.
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
