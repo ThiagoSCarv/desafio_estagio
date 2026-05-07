@@ -1,11 +1,11 @@
 package com.thiago.desafio_estagio.controllers;
 
 import com.thiago.desafio_estagio.dto.ClientePjCreateDto;
+import com.thiago.desafio_estagio.dto.ClientePjDto;
 import com.thiago.desafio_estagio.dto.ClientePjUpdateDto;
-import com.thiago.desafio_estagio.models.ClientePj;
 import com.thiago.desafio_estagio.service.ClientePjService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,29 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/clientes/pj")
+@RequiredArgsConstructor
 public class ClientePjController {
 
-    @Autowired
-    private ClientePjService clientePjService;
+    private final ClientePjService clientePjService;
 
-    @PostMapping("/pj")
-    public ResponseEntity<?> criar(@RequestBody @Valid ClientePjCreateDto dto) {
-        try {
-            ClientePj clientePj = clientePjService.criar(dto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(clientePj);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    @PostMapping
+    public ResponseEntity<ClientePjDto> criar(@RequestBody @Valid ClientePjCreateDto dto) {
+        ClientePjDto clientePj = clientePjService.criar(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientePj);
     }
 
-    @PatchMapping("/pj/{id}")
-    public ResponseEntity<?> atualizar(@PathVariable UUID id, @RequestBody @Valid ClientePjUpdateDto dto) {
-        try {
-            ClientePj clientePj = clientePjService.atualizar(id, dto);
-            return ResponseEntity.ok(clientePj);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+    @PatchMapping("/{id}")
+    public ResponseEntity<ClientePjDto> atualizar(@PathVariable UUID id, @RequestBody @Valid ClientePjUpdateDto dto) {
+        ClientePjDto clientePj = clientePjService.atualizar(id, dto);
+        return ResponseEntity.ok(clientePj);
     }
 }
