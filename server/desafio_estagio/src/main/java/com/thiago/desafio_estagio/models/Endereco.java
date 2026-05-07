@@ -1,6 +1,6 @@
 package com.thiago.desafio_estagio.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,9 +13,13 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.UUID;
 
+// Endereço pertence a um Cliente via FK cliente_id (relação unidirecional N:1).
+// O cascade ON DELETE no banco garante que ao remover um cliente seus endereços sejam apagados.
 @Entity
 @Table(name = "enderecos")
 @Getter
@@ -52,8 +56,10 @@ public class Endereco {
 
     private String complemento;
 
-    @JsonBackReference
+    // Lado dono da relação. Ignorado na serialização para evitar exposição do cliente em respostas de Endereco.
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Cliente cliente;
 }
