@@ -18,14 +18,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ClientePj extends Cliente {
 
-    @Column(nullable = false, unique = true, length = 18)
+    // Persistido apenas com digitos (sem mascara), normalizado no service.
+    @Column(nullable = false, unique = true, length = 14)
     private String cnpj;
 
-    @Column(name = "razao_social", nullable = false)
+    @Column(name = "razao_social", nullable = false, unique = true)
     private String razaoSocial;
 
-    @Column(name = "inscricao_estatual")
-    private String inscricaoEstatual;
+    @Column(name = "inscricao_estadual")
+    private String inscricaoEstadual;
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDate dataCriacao;
