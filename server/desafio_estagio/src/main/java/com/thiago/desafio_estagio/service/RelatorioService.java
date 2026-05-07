@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,35 +29,54 @@ public class RelatorioService {
 
     private final DataSource dataSource;
 
-    private JasperReport jasperReport;
+    private JasperReport jasperReportLista;
+    private JasperReport jasperReportDetalhe;
 
-    // Compila o .jrxml uma vez no startup e mantém em memória para reutilização
+    // Compila os .jrxml uma vez no startup e mantém em memória para reutilização
     @PostConstruct
     public void init() {
-        ClassPathResource resource = new ClassPathResource("reports/ModeloReportEstagio.jrxml");
+        jasperReportLista = compilar("reports/ModeloReportEstagio.jrxml", "relatório de clientes");
+        jasperReportDetalhe = compilar("reports/RelatorioClienteDetalhe.jrxml", "relatório de cliente detalhe");
+    }
+
+    private JasperReport compilar(@lombok.NonNull String classpath, String nome) {
+        ClassPathResource resource = new ClassPathResource(classpath);
         if (!resource.exists()) {
-            throw new RuntimeException("Arquivo de relatório não encontrado no classpath: reports/ModeloReportEstagio.jrxml");
+            throw new RuntimeException("Arquivo de relatório não encontrado: " + classpath);
         }
         try (InputStream stream = resource.getInputStream()) {
-            jasperReport = JasperCompileManager.compileReport(stream);
+            return JasperCompileManager.compileReport(stream);
         } catch (JRException | IOException e) {
-            throw new RuntimeException("Falha ao compilar relatório de clientes", e);
+            throw new RuntimeException("Falha ao compilar " + nome, e);
         }
+    }
+
+    private byte[] exportarPdf(JasperPrint jasperPrint) throws JRException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        JRPdfExporter exporter = new JRPdfExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
+        exporter.exportReport();
+        return outputStream.toByteArray();
     }
 
     public byte[] gerarRelatorioClientes() {
         try (Connection connection = dataSource.getConnection()) {
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), connection);
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            JRPdfExporter exporter = new JRPdfExporter();
-            exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputStream));
-            exporter.exportReport();
-
-            return outputStream.toByteArray();
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReportLista, new HashMap<>(), connection);
+            return exportarPdf(jasperPrint);
         } catch (JRException | SQLException e) {
             throw new RuntimeException("Erro ao gerar relatório de clientes", e);
+        }
+    }
+
+    public byte[] gerarRelatorioClienteDetalhe(UUID clienteId) {
+        try (Connection connection = dataSource.getConnection()) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("clienteId", clienteId.toString());
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReportDetalhe, params, connection);
+            return exportarPdf(jasperPrint);
+        } catch (JRException | SQLException e) {
+            throw new RuntimeException("Erro ao gerar relatório de cliente", e);
         }
     }
 }

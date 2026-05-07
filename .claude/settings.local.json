@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Set-Location \"c:\\\\Users\\\\Unika Dev 3\\\\Documents\\\\repos\\\\desafio_estagio\"; \\(Get-ChildItem mvnw.cmd\\).FullName)",
+      "PowerShell(Set-Location \"c:\\\\Users\\\\Unika Dev 3\\\\Documents\\\\repos\\\\desafio_estagio\\\\server\\\\desafio_estagio\"; $output = .\\\\mvnw.cmd spring-boot:run -DskipTests 2>&1 | Out-String; $idx = $output.IndexOf\\(\"Falha ao compilar\"\\); if \\($idx -ge 0\\) { $output.Substring\\($idx, [Math]::Min\\(4000, $output.Length - $idx\\)\\) })",
+      "Bash(./mvnw spring-boot:run)",
+      "Bash(rm -f app.log)",
+      "Bash(./mvnw -q spring-boot:run)",
+      "Bash(echo \"PID=$!\")"
+    ]
+  }
+}

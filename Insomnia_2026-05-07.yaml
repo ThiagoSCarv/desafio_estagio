@@ -1,0 +1,377 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Desafio Estagio
+meta:
+  id: wrk_640de50beb8d4c0db11eb8821bcda37f
+  created: 1777906433458
+  modified: 1777906433458
+  description: ""
+collection:
+  - name: Cliente
+    meta:
+      id: fld_26e69061cc9545a0b3c2ff947b845ab2
+      created: 1777908744007
+      modified: 1777980217182
+      sortKey: -1777908744007
+      description: ""
+    children:
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/pf"
+        name: CRIAR NOVO CLIENTE PF
+        meta:
+          id: req_11a020873cb744aa8779605b86fd7a3b
+          created: 1777908751304
+          modified: 1778155243265
+          isPrivate: false
+          description: ""
+          sortKey: -1777908755208
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "marisa2@gmail.com",
+              "nome": "thais",
+              "cpf": "759.826.040-03",
+              "rg": "18.856.399-4",
+              "dataNascimento": "1990-05-20"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/pj"
+        name: CRIAR NOVO CLIENTE PJ
+        meta:
+          id: req_b06182774cd643e9b863357e3ac7f11f
+          created: 1777981290713
+          modified: 1778155061107
+          isPrivate: false
+          description: ""
+          sortKey: -1777981290713
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "contato@empresa.com",
+              "cnpj": "85.535.731/0001-94",
+              "razaoSocial": "Empresa Exemplo LTDA",
+              "inscricaoEstatual": "52.598.987/0001-91",
+              "dataCriacao": "2020-03-15"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}"
+        name: LISTAGEM CLIENTES
+        meta:
+          id: req_1c3564f116af4c57b24e18724b488f48
+          created: 1777988182790
+          modified: 1777995337882
+          isPrivate: false
+          description: ""
+          sortKey: -1777988182790
+        method: GET
+        parameters:
+          - name: nome
+            value: thiago
+            description: ""
+            disabled: true
+          - name: tipoPessoa
+            value: JURIDICA
+            description: ""
+            disabled: true
+          - name: documento
+            value: "704"
+            description: ""
+            disabled: true
+          - name: page
+            value: "0"
+            description: ""
+            disabled: true
+          - name: size
+            value: "5"
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/pf/0ca0368b-77a9-48d9-b9e2-32a438da1ffd"
+        name: ATUALIZANDO CLIENTE PF
+        meta:
+          id: req_bdadd5aa65fc479a853eaf3ec3c96aa2
+          created: 1777991288240
+          modified: 1778155337888
+          isPrivate: false
+          description: ""
+          sortKey: -1777991288240
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            { 
+            	"nome": "Marisa Soares",
+             	"email": "thiagocarv4@gmail.com", 
+             	"ativo": false
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/pj/d40d5407-11a0-4a99-af21-62ef22552aad"
+        name: ATUALIZANDO CLIENTE PJ
+        meta:
+          id: req_415ee5c279564f9c9baa6269bf402f83
+          created: 1777992687578
+          modified: 1778155362806
+          isPrivate: false
+          description: ""
+          sortKey: -1777992687578
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "thaisdesc@gmail.com",
+            	"ativo": false
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/d40d5407-11a0-4a99-af21-62ef22552aad"
+        name: DELETANDO CLIENTE
+        meta:
+          id: req_7cedc90f76724728a91a615d4d33a25b
+          created: 1777995242795
+          modified: 1778155379804
+          isPrivate: false
+          description: ""
+          sortKey: -1777995242795
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/0ca0368b-77a9-48d9-b9e2-32a438da1ffd"
+        name: LISTANDO CLIENTE ESPECIFICO
+        meta:
+          id: req_3de0ec00ef744cfebe93251827e20682
+          created: 1778071913755
+          modified: 1778155403349
+          isPrivate: false
+          description: ""
+          sortKey: -1778071913755
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    environment:
+      ROUTE: clientes
+  - name: Endereços
+    meta:
+      id: fld_e60e94abe46e493e9751710b8b9698c7
+      created: 1777985422958
+      modified: 1777985451624
+      sortKey: -1777985422958
+      description: ""
+    children:
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/d9c741c3-4836-4b08-88ba-4382b6495219"
+        name: CRIAR NOVO ENDEREÇO
+        meta:
+          id: req_e06cad0596b04aa98b783eaefee70bec
+          created: 1777985458595
+          modified: 1778160526216
+          isPrivate: false
+          description: ""
+          sortKey: -1777985458595
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "logradouro": "Avenida Paulista",
+                "numero": "1578",
+                "cep": "57073-538",
+                "bairro": "Bela Vista",
+                "telefone": "(11) 98765-4321",
+                "cidade": "São Paulo",
+                "estado": "SP",
+                "enderecoPrincipal": true,
+                "complemento": "Apto 102"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/d3e0d40f-0a2c-4a6f-a7d4-7447de9ec769"
+        name: ATUALIZANDO ENDEREÇO
+        meta:
+          id: req_5146277e6c104906b03007291f052d28
+          created: 1778077368626
+          modified: 1778156900110
+          isPrivate: false
+          description: ""
+          sortKey: -1778077368626
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "numero": "1520",
+              "cep": "01310-100",
+              "telefone": "(11) 98765-4321",
+              "enderecoPrincipal": true,
+              "complemento": "Apto 42"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.BASE_URL }}/{{ _.ROUTE }}/d3e0d40f-0a2c-4a6f-a7d4-7447de9ec769"
+        name: DELETANDO ENDEREÇO
+        meta:
+          id: req_7bb0a6a917d243f6a53879df50b3c0bf
+          created: 1778077489342
+          modified: 1778157638985
+          isPrivate: false
+          description: ""
+          sortKey: -1778077489342
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    environment:
+      ROUTE: endereco
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_2a26320f5e5e14b82dc54943a13ad42b18304437
+    created: 1777906433460
+    modified: 1777906433460
+environments:
+  name: Base Environment
+  meta:
+    id: env_2a26320f5e5e14b82dc54943a13ad42b18304437
+    created: 1777906433459
+    modified: 1777906445995
+    isPrivate: false
+  data:
+    DEV: ""
+  subEnvironments:
+    - name: DEV
+      meta:
+        id: env_d751159078e745abb15610f31fc2a637
+        created: 1777906451337
+        modified: 1777980178706
+        isPrivate: false
+        sortKey: 1777906451337
+      data:
+        BASE_URL: localhost:8080
+      color: "#04ff00"
