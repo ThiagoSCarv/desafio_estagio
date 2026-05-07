@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,5 +36,11 @@ public class EnderecoController {
     public ResponseEntity<EnderecoDto> atualizar(@PathVariable UUID id, @RequestBody @Valid EnderecoUpdateDto dto) {
         EnderecoDto endereco = enderecoService.atualizar(id, dto);
         return ResponseEntity.ok(endereco);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable UUID id) {
+        enderecoService.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }

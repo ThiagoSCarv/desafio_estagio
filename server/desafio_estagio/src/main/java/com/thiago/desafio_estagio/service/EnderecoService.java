@@ -81,4 +81,12 @@ public class EnderecoService {
 
         return EnderecoDto.from(enderecoRepository.save(endereco));
     }
+
+    @Transactional
+    public void deletar(UUID enderecoId) {
+        Endereco endereco = enderecoRepository.findById(enderecoId)
+                .orElseThrow(EnderecoNaoEncontradoException::new);
+
+        enderecoRepository.delete(endereco);
+    }
 }
