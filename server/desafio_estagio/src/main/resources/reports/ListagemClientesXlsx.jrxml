@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Template XLSX da listagem de clientes.
+  Layout puramente tabular: apenas columnHeader + detail. Sem título, frames, linhas
+  decorativas ou pageHeader/pageFooter — qualquer um desses elementos largura-cheia
+  faz o detector de colunas do JRXlsxExporter mesclar todas as células do detail num
+  bloco único, é por isso que o template do PDF não pode ser reaproveitado.
+-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="ListagemClientesXlsx"
+              pageWidth="800" pageHeight="842" columnWidth="800"
+              leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0"
+              uuid="d720d812-be14-4a9a-ae44-000000000010">
+
+	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+
+	<queryString language="SQL">
+		<![CDATA[SELECT
+    c.email,
+    c.tipo_pessoa,
+    COALESCE(pf.nome, pj.razao_social) AS nome_razao,
+    COALESCE(pf.cpf, pj.cnpj) AS documento,
+    e.telefone,
+    e.cep,
+    e.cidade,
+    e.estado
+FROM desafio_estagio.clientes c
+INNER JOIN desafio_estagio.enderecos e ON c.id = e.cliente_id
+LEFT JOIN desafio_estagio.clientes_pf pf ON c.id = pf.id
+LEFT JOIN desafio_estagio.clientes_pj pj ON c.id = pj.id]]>
+	</queryString>
+
+	<field name="nome_razao" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="tipo_pessoa" class="java.lang.String"/>
+	<field name="documento" class="java.lang.String"/>
+	<field name="telefone" class="java.lang.String"/>
+	<field name="cep" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+
+	<columnHeader>
+		<band height="22">
+			<staticText>
+				<reportElement mode="Opaque" x="0"   y="0" width="160" height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000001"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Nome / Razão Social]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="160" y="0" width="180" height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000002"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="340" y="0" width="60"  height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000003"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Tipo (PF/PJ)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="400" y="0" width="110" height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000004"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="510" y="0" width="100" height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000005"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Telefone]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="610" y="0" width="80"  height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000006"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[CEP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="690" y="0" width="80"  height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000007"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="770" y="0" width="30"  height="22" backcolor="#E6E6E6" forecolor="#006699" uuid="ec010000-0000-0000-0000-000000000008"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="10" isBold="true"/></textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+
+	<detail>
+		<band height="20">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0"   y="0" width="160" height="20" uuid="ed010000-0000-0000-0000-000000000001"/>
+				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{nome_razao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="160" y="0" width="180" height="20" uuid="ed010000-0000-0000-0000-000000000002"/>
+				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="340" y="0" width="60"  height="20" uuid="ed010000-0000-0000-0000-000000000003"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{tipo_pessoa}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="400" y="0" width="110" height="20" uuid="ed010000-0000-0000-0000-000000000004"/>
+				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="510" y="0" width="100" height="20" uuid="ed010000-0000-0000-0000-000000000005"/>
+				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{telefone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="610" y="0" width="80"  height="20" uuid="ed010000-0000-0000-0000-000000000006"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{cep}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="690" y="0" width="80"  height="20" uuid="ed010000-0000-0000-0000-000000000007"/>
+				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{cidade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="770" y="0" width="30"  height="20" uuid="ed010000-0000-0000-0000-000000000008"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"><font size="9"/></textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

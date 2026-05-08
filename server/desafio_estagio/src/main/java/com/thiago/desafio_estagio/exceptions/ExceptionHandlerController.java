@@ -81,4 +81,10 @@ public class ExceptionHandlerController {
   public ErrorMessageDTO handleEnderecoPrincipal(EnderecoPrincipalException ex) {
     return new ErrorMessageDTO("enderecoPrincipal", ex.getMessage());
   }
+
+  @ExceptionHandler(FormatoRelatorioInvalidoException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErrorMessageDTO handleFormatoRelatorioInvalido(FormatoRelatorioInvalidoException ex) {
+    return new ErrorMessageDTO("formato", ex.getMessage());
+  }
 }
