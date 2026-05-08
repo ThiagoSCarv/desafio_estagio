@@ -75,4 +75,10 @@ public class ExceptionHandlerController {
   public ErrorMessageDTO handleEnderecoNaoEncontrado(EnderecoNaoEncontradoException ex) {
     return new ErrorMessageDTO("id", ex.getMessage());
   }
+
+  @ExceptionHandler(EnderecoPrincipalException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErrorMessageDTO handleEnderecoPrincipal(EnderecoPrincipalException ex) {
+    return new ErrorMessageDTO("enderecoPrincipal", ex.getMessage());
+  }
 }

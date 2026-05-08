@@ -6,6 +6,7 @@ import com.thiago.desafio_estagio.dto.EnderecoUpdateDto;
 import com.thiago.desafio_estagio.exceptions.CepJaCadastradoException;
 import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.exceptions.EnderecoNaoEncontradoException;
+import com.thiago.desafio_estagio.exceptions.EnderecoPrincipalException;
 import com.thiago.desafio_estagio.models.Cliente;
 import com.thiago.desafio_estagio.models.Endereco;
 import com.thiago.desafio_estagio.repository.ClienteRepository;
@@ -73,6 +74,11 @@ public class EnderecoService {
 
         if (dto.enderecoPrincipal() != null) {
             boolean tornarPrincipal = Boolean.TRUE.equals(dto.enderecoPrincipal());
+            // Bloqueia desmarcar o endereço principal diretamente — sempre deve existir um
+            // principal por cliente. Para trocar, marca-se outro endereço como principal.
+            if (!tornarPrincipal && endereco.isEnderecoPrincipal()) {
+                throw new EnderecoPrincipalException();
+            }
             if (tornarPrincipal && !endereco.isEnderecoPrincipal()) {
                 enderecoRepository.desmarcarTodosPrincipaisDoCliente(endereco.getCliente().getId());
             }
@@ -86,6 +92,11 @@ public class EnderecoService {
     public void deletar(UUID enderecoId) {
         Endereco endereco = enderecoRepository.findById(enderecoId)
                 .orElseThrow(EnderecoNaoEncontradoException::new);
+
+        // Não permite deletar o endereço principal — o cliente precisa sempre ter um.
+        if (endereco.isEnderecoPrincipal()) {
+            throw new EnderecoPrincipalException();
+        }
 
         enderecoRepository.delete(endereco);
     }
