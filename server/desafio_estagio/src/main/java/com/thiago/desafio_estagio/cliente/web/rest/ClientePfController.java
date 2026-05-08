@@ -1,9 +1,9 @@
-package com.thiago.desafio_estagio.controllers;
+package com.thiago.desafio_estagio.cliente.web.rest;
 
-import com.thiago.desafio_estagio.dto.ClientePfCreateDto;
-import com.thiago.desafio_estagio.dto.ClientePfDto;
-import com.thiago.desafio_estagio.dto.ClientePfUpdateDto;
-import com.thiago.desafio_estagio.service.ClientePfService;
+import com.thiago.desafio_estagio.cliente.application.ClientePfCreateDto;
+import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
+import com.thiago.desafio_estagio.cliente.application.ClientePfService;
+import com.thiago.desafio_estagio.cliente.application.ClientePfUpdateDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

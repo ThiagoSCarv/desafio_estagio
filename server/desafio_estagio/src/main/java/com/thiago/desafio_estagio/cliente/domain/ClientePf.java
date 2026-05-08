@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.models;
+package com.thiago.desafio_estagio.cliente.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

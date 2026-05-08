@@ -1,9 +1,5 @@
-package com.thiago.desafio_estagio.repository;
+package com.thiago.desafio_estagio.cliente.domain;
 
-import com.thiago.desafio_estagio.models.Cliente;
-import com.thiago.desafio_estagio.models.ClientePf;
-import com.thiago.desafio_estagio.models.ClientePj;
-import com.thiago.desafio_estagio.models.TipoPessoa;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -22,17 +18,22 @@ public class ClienteSpecification {
             }
 
             if (documento != null && !documento.isBlank()) {
-                /*cb.treat() permite acessar campos de ClientePf (cpf) e ClientePj (cnpj) numa unica query.
-                O OR garante que a busca funciona independente do tipo do cliente.*/ 
-                Predicate porCpf = cb.like(
-                        cb.treat(root, ClientePf.class).<String>get("cpf"),
-                        "%" + documento + "%"
-                );
-                Predicate porCnpj = cb.like(
-                        cb.treat(root, ClientePj.class).<String>get("cnpj"),
-                        "%" + documento + "%"
-                );
-                predicates.add(cb.or(porCpf, porCnpj));
+                // Documentos sao persistidos so com digitos; normalizamos o filtro para
+                // que o usuario possa enviar com mascara (123.456.789-00) sem quebrar a busca.
+                String docNormalizado = documento.replaceAll("[^0-9]", "");
+                if (!docNormalizado.isEmpty()) {
+                    /*cb.treat() permite acessar campos de ClientePf (cpf) e ClientePj (cnpj) numa unica query.
+                    O OR garante que a busca funciona independente do tipo do cliente.*/
+                    Predicate porCpf = cb.like(
+                            cb.treat(root, ClientePf.class).<String>get("cpf"),
+                            "%" + docNormalizado + "%"
+                    );
+                    Predicate porCnpj = cb.like(
+                            cb.treat(root, ClientePj.class).<String>get("cnpj"),
+                            "%" + docNormalizado + "%"
+                    );
+                    predicates.add(cb.or(porCpf, porCnpj));
+                }
             }
 
             if (nome != null && !nome.isBlank()) {

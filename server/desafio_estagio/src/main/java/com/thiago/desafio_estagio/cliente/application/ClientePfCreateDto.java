@@ -1,7 +1,7 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.cliente.application;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCpf;
-import com.thiago.desafio_estagio.validation.annotation.ValidRg;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidCpf;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidRg;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,16 +1,12 @@
-package com.thiago.desafio_estagio.service;
+package com.thiago.desafio_estagio.endereco.application;
 
-import com.thiago.desafio_estagio.dto.EnderecoCreateDto;
-import com.thiago.desafio_estagio.dto.EnderecoDto;
-import com.thiago.desafio_estagio.dto.EnderecoUpdateDto;
-import com.thiago.desafio_estagio.exceptions.CepJaCadastradoException;
-import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
-import com.thiago.desafio_estagio.exceptions.EnderecoNaoEncontradoException;
-import com.thiago.desafio_estagio.exceptions.EnderecoPrincipalException;
-import com.thiago.desafio_estagio.models.Cliente;
-import com.thiago.desafio_estagio.models.Endereco;
-import com.thiago.desafio_estagio.repository.ClienteRepository;
-import com.thiago.desafio_estagio.repository.EnderecoRepository;
+import com.thiago.desafio_estagio.cliente.domain.Cliente;
+import com.thiago.desafio_estagio.cliente.domain.ClienteRepository;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontradoException;
+import com.thiago.desafio_estagio.endereco.domain.Endereco;
+import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoNaoEncontradoException;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,19 +20,18 @@ public class EnderecoService {
     private final EnderecoRepository enderecoRepository;
     private final ClienteRepository clienteRepository;
 
-    // Cadastra um novo endereco para o cliente informado pelo id
-    // Garante que somente um endereço é o principal, desmarcando caso encontre um endereço principal existente
+    // Cadastra um novo endereco para o cliente informado pelo id.
+    // Invariante: todo cliente tem exatamente um endereço principal. Por isso o primeiro
+    // endereço cadastrado é sempre marcado como principal, ignorando o que veio no DTO.
+    // Quando o cliente já tem outros endereços e o novo é principal, os demais são desmarcados.
     @Transactional
     public EnderecoDto criar(UUID clienteId, EnderecoCreateDto dto) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
-        if (enderecoRepository.existsByClienteIdAndCep(clienteId, dto.cep())) {
-            throw new CepJaCadastradoException();
-        }
-
-        boolean principal = Boolean.TRUE.equals(dto.enderecoPrincipal());
-        if (principal) {
+        boolean primeiroEndereco = !enderecoRepository.existsByClienteId(clienteId);
+        boolean principal = primeiroEndereco || Boolean.TRUE.equals(dto.enderecoPrincipal());
+        if (principal && !primeiroEndereco) {
             enderecoRepository.desmarcarTodosPrincipaisDoCliente(clienteId);
         }
 

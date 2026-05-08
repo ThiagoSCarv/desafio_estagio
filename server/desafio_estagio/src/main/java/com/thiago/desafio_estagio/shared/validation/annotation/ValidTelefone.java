@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.validation.annotation;
+package com.thiago.desafio_estagio.shared.validation.annotation;
 
-import com.thiago.desafio_estagio.validation.validator.TelefoneValidator;
+import com.thiago.desafio_estagio.shared.validation.validator.TelefoneValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

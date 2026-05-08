@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.validation.validator;
+package com.thiago.desafio_estagio.shared.validation.validator;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCep;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidCep;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

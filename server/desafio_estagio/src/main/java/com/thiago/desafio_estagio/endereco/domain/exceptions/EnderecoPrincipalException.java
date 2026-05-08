@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.exceptions;
+package com.thiago.desafio_estagio.endereco.domain.exceptions;
 
 // Lançada quando o usuário tenta deletar o endereço principal ou desmarcá-lo diretamente.
 // Sempre deve existir um endereço principal por cliente — para trocar, basta marcar outro como

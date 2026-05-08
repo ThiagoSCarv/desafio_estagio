@@ -1,16 +1,13 @@
-package com.thiago.desafio_estagio.service;
+package com.thiago.desafio_estagio.cliente.application;
 
-import com.thiago.desafio_estagio.dto.ClientePfCreateDto;
-import com.thiago.desafio_estagio.dto.ClientePfDto;
-import com.thiago.desafio_estagio.dto.ClientePfUpdateDto;
-import com.thiago.desafio_estagio.exceptions.ClienteNaoEncontradoException;
-import com.thiago.desafio_estagio.models.ClientePf;
-import com.thiago.desafio_estagio.models.TipoPessoa;
-import com.thiago.desafio_estagio.exceptions.CpfJaCadastradoException;
-import com.thiago.desafio_estagio.exceptions.EmailJaCadastradoException;
-import com.thiago.desafio_estagio.exceptions.RgJaCadastradoException;
-import com.thiago.desafio_estagio.repository.ClientePfRepository;
-import com.thiago.desafio_estagio.repository.ClienteRepository;
+import com.thiago.desafio_estagio.cliente.domain.ClientePf;
+import com.thiago.desafio_estagio.cliente.domain.ClientePfRepository;
+import com.thiago.desafio_estagio.cliente.domain.ClienteRepository;
+import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.CpfJaCadastradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.EmailJaCadastradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.RgJaCadastradoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

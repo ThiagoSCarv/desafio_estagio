@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.endereco.application;
 
-import com.thiago.desafio_estagio.models.Endereco;
+import com.thiago.desafio_estagio.endereco.domain.Endereco;
 
 import java.util.UUID;
 

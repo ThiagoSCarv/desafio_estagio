@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.validation.validator;
+package com.thiago.desafio_estagio.shared.validation.validator;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCnpj;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidCnpj;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

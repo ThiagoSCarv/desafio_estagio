@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.exceptions;
+package com.thiago.desafio_estagio.shared.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

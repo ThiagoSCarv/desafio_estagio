@@ -1,7 +1,7 @@
-package com.thiago.desafio_estagio.controllers;
+package com.thiago.desafio_estagio.relatorio.web.rest;
 
-import com.thiago.desafio_estagio.service.FormatoRelatorio;
-import com.thiago.desafio_estagio.service.RelatorioService;
+import com.thiago.desafio_estagio.relatorio.application.FormatoRelatorio;
+import com.thiago.desafio_estagio.relatorio.application.RelatorioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.endereco.application;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCep;
-import com.thiago.desafio_estagio.validation.annotation.ValidTelefone;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidCep;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidTelefone;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

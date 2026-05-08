@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.exceptions;
+package com.thiago.desafio_estagio.relatorio.application.exceptions;
 
 public class FormatoRelatorioInvalidoException extends RuntimeException {
 

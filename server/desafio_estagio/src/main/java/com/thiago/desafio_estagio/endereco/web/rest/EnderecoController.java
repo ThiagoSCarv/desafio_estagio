@@ -1,9 +1,9 @@
-package com.thiago.desafio_estagio.controllers;
+package com.thiago.desafio_estagio.endereco.web.rest;
 
-import com.thiago.desafio_estagio.dto.EnderecoCreateDto;
-import com.thiago.desafio_estagio.dto.EnderecoDto;
-import com.thiago.desafio_estagio.dto.EnderecoUpdateDto;
-import com.thiago.desafio_estagio.service.EnderecoService;
+import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
+import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
+import com.thiago.desafio_estagio.endereco.application.EnderecoService;
+import com.thiago.desafio_estagio.endereco.application.EnderecoUpdateDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

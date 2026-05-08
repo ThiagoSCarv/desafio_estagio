@@ -1,5 +1,14 @@
-package com.thiago.desafio_estagio.exceptions;
+package com.thiago.desafio_estagio.shared.exceptions;
 
+import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.CnpjJaCadastradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.CpfJaCadastradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.EmailJaCadastradoException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.RazaoSocialJaCadastradaException;
+import com.thiago.desafio_estagio.cliente.domain.exceptions.RgJaCadastradoException;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoNaoEncontradoException;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
+import com.thiago.desafio_estagio.relatorio.application.exceptions.FormatoRelatorioInvalidoException;
 import java.util.List;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -9,6 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+// Centraliza o tratamento de excecoes da API. Todas as respostas seguem o mesmo
+// envelope ErrorResponse, contendo uma lista de { field, message }.
 @RestControllerAdvice
 public class ExceptionHandlerController {
 
@@ -20,71 +31,66 @@ public class ExceptionHandlerController {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public List<ErrorMessageDTO> handleValidationErrors(MethodArgumentNotValidException ex) {
-    return ex.getBindingResult().getFieldErrors().stream()
+  public ErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
+    List<ErrorMessageDTO> erros = ex.getBindingResult().getFieldErrors().stream()
         .map(error -> new ErrorMessageDTO(
             error.getField(),
             messageSource.getMessage(error, LocaleContextHolder.getLocale())))
         .toList();
+    return ErrorResponse.of(erros);
   }
 
   @ExceptionHandler(EmailJaCadastradoException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleEmailJaCadastrado(EmailJaCadastradoException ex) {
-    return new ErrorMessageDTO("email", ex.getMessage());
+  public ErrorResponse handleEmailJaCadastrado(EmailJaCadastradoException ex) {
+    return ErrorResponse.of("email", ex.getMessage());
   }
 
   @ExceptionHandler(CpfJaCadastradoException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleCpfJaCadastrado(CpfJaCadastradoException ex) {
-    return new ErrorMessageDTO("cpf", ex.getMessage());
+  public ErrorResponse handleCpfJaCadastrado(CpfJaCadastradoException ex) {
+    return ErrorResponse.of("cpf", ex.getMessage());
   }
 
   @ExceptionHandler(RgJaCadastradoException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleRgJaCadastrado(RgJaCadastradoException ex) {
-    return new ErrorMessageDTO("rg", ex.getMessage());
+  public ErrorResponse handleRgJaCadastrado(RgJaCadastradoException ex) {
+    return ErrorResponse.of("rg", ex.getMessage());
   }
 
   @ExceptionHandler(CnpjJaCadastradoException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleCnpjJaCadastrado(CnpjJaCadastradoException ex) {
-    return new ErrorMessageDTO("cnpj", ex.getMessage());
+  public ErrorResponse handleCnpjJaCadastrado(CnpjJaCadastradoException ex) {
+    return ErrorResponse.of("cnpj", ex.getMessage());
   }
 
   @ExceptionHandler(RazaoSocialJaCadastradaException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleRazaoSocialJaCadastrada(RazaoSocialJaCadastradaException ex) {
-    return new ErrorMessageDTO("razaoSocial", ex.getMessage());
-  }
-
-  @ExceptionHandler(CepJaCadastradoException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleCepJaCadastrado(CepJaCadastradoException ex) {
-    return new ErrorMessageDTO("cep", ex.getMessage());
+  public ErrorResponse handleRazaoSocialJaCadastrada(RazaoSocialJaCadastradaException ex) {
+    return ErrorResponse.of("razaoSocial", ex.getMessage());
   }
 
   @ExceptionHandler(ClienteNaoEncontradoException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ErrorMessageDTO handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
-    return new ErrorMessageDTO("id", ex.getMessage());
+  public ErrorResponse handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
+    return ErrorResponse.of("id", ex.getMessage());
   }
 
   @ExceptionHandler(EnderecoNaoEncontradoException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ErrorMessageDTO handleEnderecoNaoEncontrado(EnderecoNaoEncontradoException ex) {
-    return new ErrorMessageDTO("id", ex.getMessage());
+  public ErrorResponse handleEnderecoNaoEncontrado(EnderecoNaoEncontradoException ex) {
+    return ErrorResponse.of("id", ex.getMessage());
   }
 
   @ExceptionHandler(EnderecoPrincipalException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorMessageDTO handleEnderecoPrincipal(EnderecoPrincipalException ex) {
-    return new ErrorMessageDTO("enderecoPrincipal", ex.getMessage());
+  public ErrorResponse handleEnderecoPrincipal(EnderecoPrincipalException ex) {
+    return ErrorResponse.of("enderecoPrincipal", ex.getMessage());
   }
 
   @ExceptionHandler(FormatoRelatorioInvalidoException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ErrorMessageDTO handleFormatoRelatorioInvalido(FormatoRelatorioInvalidoException ex) {
-    return new ErrorMessageDTO("formato", ex.getMessage());
+  public ErrorResponse handleFormatoRelatorioInvalido(FormatoRelatorioInvalidoException ex) {
+    return ErrorResponse.of("formato", ex.getMessage());
   }
 }

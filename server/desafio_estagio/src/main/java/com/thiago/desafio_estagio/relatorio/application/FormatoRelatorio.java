@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.service;
+package com.thiago.desafio_estagio.relatorio.application;
 
-import com.thiago.desafio_estagio.exceptions.FormatoRelatorioInvalidoException;
+import com.thiago.desafio_estagio.relatorio.application.exceptions.FormatoRelatorioInvalidoException;
 import org.springframework.http.MediaType;
 
 // Formatos suportados para a geração de relatórios.

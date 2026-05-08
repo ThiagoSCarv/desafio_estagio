@@ -1,6 +1,7 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.cliente.application;
 
-import com.thiago.desafio_estagio.models.TipoPessoa;
+import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
+import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

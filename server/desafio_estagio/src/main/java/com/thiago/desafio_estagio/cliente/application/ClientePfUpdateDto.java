@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.cliente.application;
 
 import jakarta.validation.constraints.Email;
 

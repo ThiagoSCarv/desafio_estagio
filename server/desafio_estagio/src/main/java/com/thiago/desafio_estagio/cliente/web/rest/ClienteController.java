@@ -1,8 +1,8 @@
-package com.thiago.desafio_estagio.controllers;
+package com.thiago.desafio_estagio.cliente.web.rest;
 
-import com.thiago.desafio_estagio.dto.ClienteDto;
-import com.thiago.desafio_estagio.models.TipoPessoa;
-import com.thiago.desafio_estagio.service.ClienteService;
+import com.thiago.desafio_estagio.cliente.application.ClienteDto;
+import com.thiago.desafio_estagio.cliente.application.ClienteService;
+import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;

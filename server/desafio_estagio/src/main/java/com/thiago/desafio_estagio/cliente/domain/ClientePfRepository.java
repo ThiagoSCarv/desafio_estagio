@@ -1,6 +1,5 @@
-package com.thiago.desafio_estagio.repository;
+package com.thiago.desafio_estagio.cliente.domain;
 
-import com.thiago.desafio_estagio.models.ClientePf;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

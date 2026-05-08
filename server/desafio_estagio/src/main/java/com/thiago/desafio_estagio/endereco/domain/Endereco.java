@@ -1,6 +1,7 @@
-package com.thiago.desafio_estagio.models;
+package com.thiago.desafio_estagio.endereco.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.thiago.desafio_estagio.cliente.domain.Cliente;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

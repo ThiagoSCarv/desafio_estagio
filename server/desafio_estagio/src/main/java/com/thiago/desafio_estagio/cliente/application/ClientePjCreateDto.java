@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.cliente.application;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidCnpj;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidCnpj;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

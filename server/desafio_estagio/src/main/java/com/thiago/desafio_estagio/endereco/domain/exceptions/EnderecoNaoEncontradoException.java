@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.exceptions;
+package com.thiago.desafio_estagio.endereco.domain.exceptions;
 
 public class EnderecoNaoEncontradoException extends RuntimeException {
 

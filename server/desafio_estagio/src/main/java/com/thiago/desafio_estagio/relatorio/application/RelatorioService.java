@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.service;
+package com.thiago.desafio_estagio.relatorio.application;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

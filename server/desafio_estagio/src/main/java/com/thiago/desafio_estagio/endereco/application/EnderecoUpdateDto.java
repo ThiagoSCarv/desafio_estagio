@@ -1,6 +1,6 @@
-package com.thiago.desafio_estagio.dto;
+package com.thiago.desafio_estagio.endereco.application;
 
-import com.thiago.desafio_estagio.validation.annotation.ValidTelefone;
+import com.thiago.desafio_estagio.shared.validation.annotation.ValidTelefone;
 
 public record EnderecoUpdateDto(
         String numero,
