@@ -6,7 +6,8 @@
       "Bash(./mvnw spring-boot:run)",
       "Bash(rm -f app.log)",
       "Bash(./mvnw -q spring-boot:run)",
-      "Bash(echo \"PID=$!\")"
+      "Bash(echo \"PID=$!\")",
+      "Bash(./mvnw test *)"
     ]
   }
 }
