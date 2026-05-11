@@ -15,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,8 +23,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import org.mockito.ArgumentMatchers;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -90,7 +89,7 @@ class ClienteServiceTest {
         assertThatThrownBy(() -> clienteService.deletar(id))
                 .isInstanceOf(ClienteNaoEncontradoException.class);
 
-        verify(clienteRepository, never()).delete(ArgumentMatchers.<Cliente>any());
+        verify(clienteRepository, never()).delete(any(Cliente.class));
     }
 
     @Test
@@ -101,19 +100,16 @@ class ClienteServiceTest {
 
         clienteService.deletar(id);
 
-        // ArgumentMatchers.<Cliente>any() força o compilador a escolher delete(T) de CrudRepository
-        // em vez de delete(Specification<T>) de JpaSpecificationExecutor, eliminando a ambiguidade
-        verify(clienteRepository).delete(ArgumentMatchers.<Cliente>any());
+        verify(clienteRepository).delete(any(Cliente.class));
     }
 
     // --- listarTodos ---
 
     @Test
-    @SuppressWarnings("unchecked")
     void listarTodos_deveDelegarParaRepositoryEMapearResultados() {
         ClientePf pf = clientePfExistente(UUID.randomUUID());
-        Page<com.thiago.desafio_estagio.cliente.domain.Cliente> page = new PageImpl<>(List.of(pf));
-        when(clienteRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(page);
+        Page<Cliente> page = new PageImpl<>(List.of(pf));
+        when(clienteRepository.buscarComFiltros(any(), any(), any(), any(PageRequest.class))).thenReturn(page);
 
         PageRequest pageable = PageRequest.of(0, 10);
         Page<ClienteDto> resultado = clienteService.listarTodos(null, null, null, pageable);
@@ -123,9 +119,8 @@ class ClienteServiceTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     void listarTodos_semResultados_deveRetornarPaginaVazia() {
-        when(clienteRepository.findAll(any(Specification.class), any(PageRequest.class)))
+        when(clienteRepository.buscarComFiltros(eq(TipoPessoa.FISICA), any(), any(), any(PageRequest.class)))
                 .thenReturn(Page.empty());
 
         Page<ClienteDto> resultado = clienteService.listarTodos(TipoPessoa.FISICA, null, null, PageRequest.of(0, 10));

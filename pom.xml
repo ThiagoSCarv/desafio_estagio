@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.thiago</groupId>
+    <artifactId>desafio-estagio-root</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>desafio-estagio-root</name>
+
+    <!--
+        Agregador do monorepo. Apenas orquestra o build dos módulos —
+        cada módulo mantém seu próprio <parent> (spring-boot-starter-parent).
+        Para construir tudo: mvn install (na raiz)
+        Para construir só o server: mvn install -pl server/desafio_estagio
+    -->
+    <modules>
+        <module>server/desafio_estagio</module>
+    </modules>
+
+</project>
