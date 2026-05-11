@@ -4,7 +4,6 @@ import com.thiago.desafio_estagio.cliente.domain.Cliente;
 import com.thiago.desafio_estagio.cliente.domain.ClientePf;
 import com.thiago.desafio_estagio.cliente.domain.ClientePj;
 import com.thiago.desafio_estagio.cliente.domain.ClienteRepository;
-import com.thiago.desafio_estagio.cliente.domain.ClienteSpecification;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
 import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontradoException;
 import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
@@ -12,7 +11,6 @@ import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,8 +26,7 @@ public class ClienteService {
 
     @Transactional(readOnly = true)
     public Page<ClienteDto> listarTodos(TipoPessoa tipoPessoa, String documento, String nome, Pageable pageable) {
-        Specification<Cliente> spec = ClienteSpecification.comFiltros(tipoPessoa, documento, nome);
-        return clienteRepository.findAll(spec, pageable).map(c -> toDto(c, List.of()));
+        return clienteRepository.buscarComFiltros(tipoPessoa, documento, nome, pageable).map(c -> toDto(c, List.of()));
     }
 
     @Transactional(readOnly = true)
