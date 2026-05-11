@@ -7,7 +7,9 @@
       "Bash(rm -f app.log)",
       "Bash(./mvnw -q spring-boot:run)",
       "Bash(echo \"PID=$!\")",
-      "Bash(./mvnw test *)"
+      "Bash(./mvnw test *)",
+      "mcp__claude_ai_Figma__get_variable_defs",
+      "mcp__claude_ai_Figma__get_design_context"
     ]
   }
 }

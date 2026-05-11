@@ -25,6 +25,16 @@ public class ClienteService {
     private final EnderecoRepository enderecoRepository;
 
     @Transactional(readOnly = true)
+    public long contarTotal() {
+        return clienteRepository.count();
+    }
+
+    @Transactional(readOnly = true)
+    public long contarAtivos() {
+        return clienteRepository.countByAtivoTrue();
+    }
+
+    @Transactional(readOnly = true)
     public Page<ClienteDto> listarTodos(TipoPessoa tipoPessoa, String documento, String nome, Pageable pageable) {
         return clienteRepository.buscarComFiltros(tipoPessoa, documento, nome, pageable).map(c -> toDto(c, List.of()));
     }

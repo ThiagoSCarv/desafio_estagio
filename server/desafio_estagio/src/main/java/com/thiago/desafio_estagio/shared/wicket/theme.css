@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&display=swap');
+
+/* ─── Tokens do design ─────────────────────────────────────────────────────── */
+:root {
+  /* Superfícies */
+  --erp-bg:            #14110f;
+  --erp-surface:       #1c1815;
+  --erp-surface-muted: rgba(255, 245, 230, 0.04);
+
+  /* Texto */
+  --erp-text:          #efe9e2;
+  --erp-text-secondary: rgba(239, 233, 226, 0.62);
+  --erp-text-muted:    rgba(239, 233, 226, 0.38);
+  --erp-text-on-primary: #1a0f08;
+
+  /* Acento principal (laranja-terracota) */
+  --erp-accent:        #d97757;
+  --erp-accent-bg:     rgba(217, 119, 87, 0.13);
+  --erp-accent-border: rgba(217, 119, 87, 0.28);
+
+  /* Status ativo (verde) */
+  --erp-success:       #6dbc8a;
+  --erp-success-glow:  rgba(109, 188, 138, 0.12);
+
+  /* Bordas */
+  --erp-border:        rgba(255, 245, 230, 0.08);
+  --erp-border-strong: rgba(255, 245, 230, 0.16);
+
+  /* Tipografia */
+  --erp-font-sans: 'Geist', system-ui, sans-serif;
+  --erp-font-mono: 'Geist Mono', 'Noto Sans Mono', monospace;
+
+  /* ─── Override Bootstrap 5 ──────────────────────────────────────────────── */
+  --bs-body-font-family:    var(--erp-font-sans);
+  --bs-body-bg:             var(--erp-bg);
+  --bs-body-color:          var(--erp-text);
+
+  --bs-primary:             var(--erp-accent);
+  --bs-primary-rgb:         217, 119, 87;
+
+  --bs-success:             var(--erp-success);
+  --bs-success-rgb:         109, 188, 138;
+
+  --bs-secondary-color:     var(--erp-text-secondary);
+
+  --bs-border-color:        var(--erp-border);
+
+  --bs-card-bg:             var(--erp-surface);
+  --bs-card-border-color:   var(--erp-border);
+  --bs-card-border-radius:  0.75rem;
+
+  --bs-input-bg:            var(--erp-surface-muted);
+  --bs-input-border-color:  var(--erp-border);
+  --bs-input-color:         var(--erp-text);
+  --bs-input-placeholder-color: var(--erp-text-muted);
+  --bs-input-focus-border-color: var(--erp-accent);
+  --bs-input-focus-box-shadow: 0 0 0 0.2rem rgba(217, 119, 87, 0.15);
+
+  --bs-btn-font-family:     var(--erp-font-sans);
+  --bs-link-color:          var(--erp-accent);
+  --bs-link-hover-color:    #e8896a;
+}
+
+/* ─── Base ─────────────────────────────────────────────────────────────────── */
+body {
+  background-color: var(--erp-bg);
+  color: var(--erp-text);
+  font-family: var(--erp-font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+code, kbd, pre, .font-mono {
+  font-family: var(--erp-font-mono);
+}
+
+/* ─── Botão primário (laranja) ─────────────────────────────────────────────── */
+.btn-primary {
+  background-color: var(--erp-accent);
+  border-color: transparent;
+  color: var(--erp-text-on-primary);
+  font-weight: 500;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #e8896a;
+  border-color: transparent;
+  color: var(--erp-text-on-primary);
+}
+
+/* ─── Botão secundário (outline warm) ─────────────────────────────────────── */
+.btn-secondary {
+  background-color: transparent;
+  border-color: var(--erp-border);
+  color: var(--erp-text);
+  font-weight: 500;
+}
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: var(--erp-surface-muted);
+  border-color: var(--erp-border-strong);
+  color: var(--erp-text);
+}
+
+/* ─── Inputs ───────────────────────────────────────────────────────────────── */
+.form-control,
+.form-select {
+  background-color: var(--erp-surface-muted);
+  border-color: var(--erp-border);
+  color: var(--erp-text);
+  border-radius: 0.625rem;
+}
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--erp-surface-muted);
+  border-color: var(--erp-accent);
+  color: var(--erp-text);
+  box-shadow: 0 0 0 0.2rem rgba(217, 119, 87, 0.15);
+}
+.form-control::placeholder {
+  color: var(--erp-text-muted);
+}
+
+/* ─── Cards / painéis ──────────────────────────────────────────────────────── */
+.card {
+  background-color: var(--erp-surface);
+  border-color: var(--erp-border);
+}
+.card-header,
+.card-footer {
+  background-color: transparent;
+  border-color: var(--erp-border);
+}
+
+/* ─── Tabelas ──────────────────────────────────────────────────────────────── */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--erp-text);
+  --bs-table-border-color: var(--erp-border);
+  --bs-table-striped-bg: rgba(255, 245, 230, 0.02);
+  --bs-table-hover-bg: rgba(255, 245, 230, 0.04);
+}
+
+/* ─── FeedbackPanel (Wicket) ───────────────────────────────────────────────── */
+.feedbackPanel {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.feedbackPanel li {
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+.feedbackPanelINFO    { background-color: rgba(217, 119, 87, 0.10); border: 1px solid var(--erp-accent-border); color: var(--erp-accent); }
+.feedbackPanelSUCCESS { background-color: rgba(109, 188, 138, 0.10); border: 1px solid rgba(109, 188, 138, 0.28); color: var(--erp-success); }
+.feedbackPanelERROR   { background-color: rgba(220, 80, 80, 0.10);  border: 1px solid rgba(220, 80, 80, 0.28);  color: #e07070; }
+.feedbackPanelWARNING { background-color: rgba(230, 180, 60, 0.10); border: 1px solid rgba(230, 180, 60, 0.28); color: #e6b43c; }
+
+/* ─── Badge de status ──────────────────────────────────────────────────────── */
+.erp-status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+}
+.erp-status-dot.ativo   { background-color: var(--erp-success); box-shadow: 0 0 0 3px var(--erp-success-glow); }
+.erp-status-dot.inativo { box-shadow: inset 0 0 0 1.5px var(--erp-text-muted); }
+
+/* ─── Texto auxiliar ───────────────────────────────────────────────────────── */
+.text-secondary { color: var(--erp-text-secondary) !important; }
+.text-muted     { color: var(--erp-text-muted) !important; }
+.text-accent    { color: var(--erp-accent) !important; }
+.text-success   { color: var(--erp-success) !important; }
+
+/* ─── Navegação / breadcrumb ───────────────────────────────────────────────── */
+.breadcrumb-item,
+.breadcrumb-item a {
+  color: var(--erp-text-muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.breadcrumb-item.active { color: var(--erp-text-secondary); }
+.breadcrumb-item + .breadcrumb-item::before { color: var(--erp-text-muted); }
+
+/* ─── Layout da página ─────────────────────────────────────────────────────── */
+.erp-shell {
+  min-height: 100vh;
+  background-color: var(--erp-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.erp-main {
+  flex: 1;
+  padding: 2rem 2.5rem;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+.erp-head {
+  padding: 1.75rem 2.5rem 1.25rem;
+  border-bottom: 1px solid var(--erp-border);
+}
+
+.erp-eyebrow {
+  font-family: var(--erp-font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--erp-text-secondary);
+  margin-bottom: 0.625rem;
+}
+
+.erp-head-body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.erp-head-title-group {
+  line-height: 1.1;
+}
+
+.erp-title {
+  font-family: var(--erp-font-sans);
+  font-size: 2.75rem;
+  font-weight: 400;
+  color: var(--erp-text);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.erp-title--italic {
+  font-style: italic;
+  color: var(--erp-success);
+  font-weight: 400;
+}
+
+.erp-stats {
+  display: flex;
+  gap: 2rem;
+  padding-bottom: 0.25rem;
+}
+
+.erp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.125rem;
+}
+
+.erp-stat__label {
+  font-family: var(--erp-font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--erp-text-muted);
+}
+
+.erp-stat__value {
+  font-family: var(--erp-font-mono);
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--erp-text);
+  letter-spacing: 0.04em;
+}
+
+/* ─── Paginação ────────────────────────────────────────────────────────────── */
+.pagination {
+  --bs-pagination-bg: transparent;
+  --bs-pagination-color: var(--erp-text-secondary);
+  --bs-pagination-border-color: var(--erp-border);
+  --bs-pagination-hover-bg: var(--erp-surface-muted);
+  --bs-pagination-hover-color: var(--erp-text);
+  --bs-pagination-hover-border-color: var(--erp-border);
+  --bs-pagination-active-bg: var(--erp-accent);
+  --bs-pagination-active-border-color: transparent;
+  --bs-pagination-disabled-color: var(--erp-text-muted);
+  --bs-pagination-disabled-bg: transparent;
+}
