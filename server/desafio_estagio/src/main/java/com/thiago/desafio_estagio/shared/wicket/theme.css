@@ -164,8 +164,8 @@ code, kbd, pre, .font-mono {
   height: 8px;
   border-radius: 4px;
 }
-.erp-status-dot.ativo   { background-color: var(--erp-success); box-shadow: 0 0 0 3px var(--erp-success-glow); }
-.erp-status-dot.inativo { box-shadow: inset 0 0 0 1.5px var(--erp-text-muted); }
+.erp-status--ativo   .erp-status-dot { background-color: var(--erp-success); box-shadow: 0 0 0 3px var(--erp-success-glow); }
+.erp-status--inativo .erp-status-dot { box-shadow: inset 0 0 0 1.5px var(--erp-text-muted); }
 
 /* ─── Texto auxiliar ───────────────────────────────────────────────────────── */
 .text-secondary { color: var(--erp-text-secondary) !important; }
@@ -429,10 +429,29 @@ code, kbd, pre, .font-mono {
 .erp-list-header,
 .erp-list-row {
   display: grid;
-  grid-template-columns: 2.5rem 5.5rem 1fr 8rem 7rem;
+  grid-template-columns: 2.5rem 1fr 8rem 7rem;
   align-items: center;
   gap: 1rem;
   padding: 0 1.25rem;
+}
+
+.erp-list-body {
+  counter-reset: erp-row;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.erp-list-row {
+  counter-increment: erp-row;
+}
+
+.erp-list-row::before {
+  content: counter(erp-row, decimal-leading-zero);
+  font-family: var(--erp-font-mono);
+  font-size: 0.6875rem;
+  color: var(--erp-text-muted);
+  text-align: right;
 }
 
 .erp-list-header {
@@ -455,21 +474,6 @@ code, kbd, pre, .font-mono {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 0.6875rem;
-}
-
-/* Número da linha */
-.erp-list-col--num {
-  font-family: var(--erp-font-mono);
-  font-size: 0.6875rem;
-  color: var(--erp-text-muted);
-  text-align: right;
-}
-
-/* Código */
-.erp-list-col--codigo {
-  font-family: var(--erp-font-mono);
-  font-size: 0.75rem;
-  color: var(--erp-text-muted);
 }
 
 /* Nome */
