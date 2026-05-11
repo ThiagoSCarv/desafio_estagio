@@ -39,7 +39,194 @@
     </header>
 
     <main class="erp-main">
-        <!-- conteúdo da página virá aqui -->
+
+        <div class="erp-toolbar">
+
+            <div class="erp-search-wrap">
+                <div class="erp-search">
+                    <svg class="erp-search__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" class="erp-search__input" placeholder="Nome / Razão Social"/>
+                </div>
+            </div>
+
+            <div class="erp-filters">
+
+                <div class="erp-filter-group">
+                    <span class="erp-filter-group__label">Tipo</span>
+                    <div class="erp-filter-tabs" role="radiogroup">
+                        <label class="erp-filter-tab">
+                            <input type="radio" name="tipoPessoa" value="" checked/>
+                            todos
+                        </label>
+                        <label class="erp-filter-tab">
+                            <input type="radio" name="tipoPessoa" value="FISICA"/>
+                            física
+                        </label>
+                        <label class="erp-filter-tab">
+                            <input type="radio" name="tipoPessoa" value="JURIDICA"/>
+                            jurídica
+                        </label>
+                    </div>
+                </div>
+
+                <div class="erp-filter-group">
+                    <label class="erp-filter-group__label" for="filtroDocumento">Documento</label>
+                    <input type="text" id="filtroDocumento" class="erp-filter-input" placeholder="CPF ou CNPJ"/>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Lista de clientes -->
+        <div class="erp-list">
+
+            <div class="erp-list-header">
+                <span class="erp-list-col erp-list-col--num"></span>
+                <span class="erp-list-col erp-list-col--codigo">C&oacute;digo</span>
+                <span class="erp-list-col erp-list-col--nome">Nome do Cliente</span>
+                <span class="erp-list-col erp-list-col--status">Status</span>
+                <span class="erp-list-col erp-list-col--acoes">A&ccedil;&otilde;es</span>
+            </div>
+
+            <div class="erp-list-body">
+
+                <div class="erp-list-row">
+                    <span class="erp-list-col erp-list-col--num">01</span>
+                    <span class="erp-list-col erp-list-col--codigo">C-1842</span>
+                    <span class="erp-list-col erp-list-col--nome">Construtora Aurora Ltda.</span>
+                    <span class="erp-list-col erp-list-col--status">
+                        <span class="erp-status erp-status--ativo">
+                            <span class="erp-status-dot ativo"></span>Ativo
+                        </span>
+                    </span>
+                    <span class="erp-list-col erp-list-col--acoes">
+                        <button class="erp-action-btn" title="Editar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="erp-action-btn" title="Gerar relat&oacute;rio">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        </button>
+                        <button class="erp-action-btn erp-action-btn--danger" title="Excluir">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                        </button>
+                    </span>
+                </div>
+
+                <div class="erp-list-row">
+                    <span class="erp-list-col erp-list-col--num">02</span>
+                    <span class="erp-list-col erp-list-col--codigo">C-1843</span>
+                    <span class="erp-list-col erp-list-col--nome">Marina &amp; Filhos Com&eacute;rcio</span>
+                    <span class="erp-list-col erp-list-col--status">
+                        <span class="erp-status erp-status--ativo">
+                            <span class="erp-status-dot ativo"></span>Ativo
+                        </span>
+                    </span>
+                    <span class="erp-list-col erp-list-col--acoes">
+                        <button class="erp-action-btn" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="erp-action-btn" title="Gerar relat&oacute;rio"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></button>
+                        <button class="erp-action-btn erp-action-btn--danger" title="Excluir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+                    </span>
+                </div>
+
+                <div class="erp-list-row">
+                    <span class="erp-list-col erp-list-col--num">03</span>
+                    <span class="erp-list-col erp-list-col--codigo">C-1844</span>
+                    <span class="erp-list-col erp-list-col--nome">Editora Pl&ecirc;iades</span>
+                    <span class="erp-list-col erp-list-col--status">
+                        <span class="erp-status erp-status--inativo">
+                            <span class="erp-status-dot inativo"></span>Inativo
+                        </span>
+                    </span>
+                    <span class="erp-list-col erp-list-col--acoes">
+                        <button class="erp-action-btn" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="erp-action-btn" title="Gerar relat&oacute;rio"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></button>
+                        <button class="erp-action-btn erp-action-btn--danger" title="Excluir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+                    </span>
+                </div>
+
+                <div class="erp-list-row">
+                    <span class="erp-list-col erp-list-col--num">04</span>
+                    <span class="erp-list-col erp-list-col--codigo">C-1845</span>
+                    <span class="erp-list-col erp-list-col--nome">Cooperativa Vale Verde</span>
+                    <span class="erp-list-col erp-list-col--status">
+                        <span class="erp-status erp-status--ativo">
+                            <span class="erp-status-dot ativo"></span>Ativo
+                        </span>
+                    </span>
+                    <span class="erp-list-col erp-list-col--acoes">
+                        <button class="erp-action-btn" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="erp-action-btn" title="Gerar relat&oacute;rio"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></button>
+                        <button class="erp-action-btn erp-action-btn--danger" title="Excluir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+                    </span>
+                </div>
+
+                <div class="erp-list-row">
+                    <span class="erp-list-col erp-list-col--num">05</span>
+                    <span class="erp-list-col erp-list-col--codigo">C-1846</span>
+                    <span class="erp-list-col erp-list-col--nome">Renato Ferraz</span>
+                    <span class="erp-list-col erp-list-col--status">
+                        <span class="erp-status erp-status--ativo">
+                            <span class="erp-status-dot ativo"></span>Ativo
+                        </span>
+                    </span>
+                    <span class="erp-list-col erp-list-col--acoes">
+                        <button class="erp-action-btn" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="erp-action-btn" title="Gerar relat&oacute;rio"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></button>
+                        <button class="erp-action-btn erp-action-btn--danger" title="Excluir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+                    </span>
+                </div>
+
+                <div class="erp-list-row">
+                    <span class="erp-list-col erp-list-col--num">06</span>
+                    <span class="erp-list-col erp-list-col--codigo">C-1847</span>
+                    <span class="erp-list-col erp-list-col--nome">Padaria Santa F&eacute;</span>
+                    <span class="erp-list-col erp-list-col--status">
+                        <span class="erp-status erp-status--ativo">
+                            <span class="erp-status-dot ativo"></span>Ativo
+                        </span>
+                    </span>
+                    <span class="erp-list-col erp-list-col--acoes">
+                        <button class="erp-action-btn" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        <button class="erp-action-btn" title="Gerar relat&oacute;rio"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></button>
+                        <button class="erp-action-btn erp-action-btn--danger" title="Excluir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Rodapé: paginação + ações globais -->
+        <div class="erp-list-footer">
+
+            <div class="erp-pagination">
+                <span class="erp-pagination__info">01 / 02 &middot; 12 de 20 registros</span>
+                <div class="erp-pagination__nav">
+                    <button class="erp-page-btn" title="P&aacute;gina anterior">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button class="erp-page-btn" title="Pr&oacute;xima p&aacute;gina">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="erp-global-actions">
+                <button class="erp-btn-add">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Adicionar novo cliente
+                </button>
+                <button class="erp-btn-report">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Emitir relat&oacute;rio completo
+                </button>
+            </div>
+
+        </div>
+
     </main>
 
 </div>

@@ -4,24 +4,119 @@ Camada de frontend server-side usando **Apache Wicket** integrado ao Spring Boot
 
 ## Stack
 
-- Apache Wicket (integrado via `WicketConfig`)
-- Bootstrap (via CDN ou WebJar — classes utilitárias de layout/componentes)
+- Apache Wicket 10.x (`wicket-spring:10.2.0`) + Objenesis 3.4
+- Bootstrap 5.3 (via CDN — injetado pelo `renderHead` de cada página)
 - JavaScript: máscaras de input (`IMask` ou `jQuery Mask Plugin`), cálculos client-side
-- `FeedbackPanel` para mensagens de sucesso, erro, e alertas ao usuário
+- `FeedbackPanel` para mensagens de sucesso, erro e alertas ao usuário
 - `AjaxRequestTarget` para atualizações parciais de página sem reload
+
+## Dependências no pom.xml
+
+```xml
+<dependency>
+    <groupId>org.apache.wicket</groupId>
+    <artifactId>wicket-spring</artifactId>
+    <version>10.2.0</version>
+</dependency>
+<dependency>
+    <groupId>org.objenesis</groupId>
+    <artifactId>objenesis</artifactId>
+    <version>3.4</version>
+</dependency>
+```
+
+> **Objenesis é obrigatório.** Sem ele o Wicket não consegue criar proxies para beans Spring que não têm construtor padrão (ex: services com `@RequiredArgsConstructor`), lançando `Can't create proxy... without default constructor`.
+
+O `pom.xml` também precisa expor arquivos não-Java do `src/main/java` no classpath:
+
+```xml
+<build>
+    <resources>
+        <resource>
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.html</include>
+                <include>**/*.properties</include>
+                <include>**/*.css</include>
+            </includes>
+        </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+        </resource>
+    </resources>
+</build>
+```
 
 ## Estrutura de pacotes
 
 ```
 shared/wicket/
-├── WicketConfig.java          # configuração da aplicação Wicket (montagem de páginas, filtro)
+├── WicketApplication.java     # WebApplication @Component — registra SpringComponentInjector e monta recursos
+├── WicketConfig.java          # @Configuration — registra WicketFilter via FilterRegistrationBean
+├── theme.css                  # CSS do tema (PackageResource servido pelo Wicket)
 └── pages/
-    └── home/                  # página inicial
+    └── home/
         ├── HomePage.java
         └── HomePage.html
 ```
 
 Cada página e painel seguem a convenção Wicket: **arquivo `.html` com mesmo nome e mesmo pacote** que a classe Java correspondente.
+
+## Integração Spring Boot
+
+### WicketApplication
+
+```java
+@Component
+public class WicketApplication extends WebApplication {
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Override
+    public Class<? extends Page> getHomePage() {
+        return HomePage.class;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        // Habilita @SpringBean nas páginas e painéis
+        getComponentInstantiationListeners().add(
+            new SpringComponentInjector(this, applicationContext)
+        );
+        // Monta recursos CSS como PackageResourceReference para o Wicket servir diretamente
+        mountResource("/css/theme.css",
+            new PackageResourceReference(WicketApplication.class, "theme.css")
+        );
+    }
+}
+```
+
+### WicketConfig
+
+```java
+@Configuration
+public class WicketConfig {
+
+    @Bean
+    public FilterRegistrationBean<WicketFilter> wicketFilter() {
+        FilterRegistrationBean<WicketFilter> registration = new FilterRegistrationBean<>();
+        WicketFilter filter = new WicketFilter();
+        registration.setFilter(filter);
+        registration.addInitParameter(
+            WicketFilter.APP_FACT_PARAM,
+            "org.apache.wicket.spring.SpringWebApplicationFactory"
+        );
+        registration.addInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
+        registration.addUrlPatterns("/*");
+        registration.setOrder(1);
+        return registration;
+    }
+}
+```
+
+O `WicketFilter` em `/*` intercepta todos os requests. URLs que não correspondem a nenhuma página/recurso Wicket chamam `chain.doFilter()` automaticamente, permitindo que os endpoints REST (`/clientes`, `/endereco`, etc.) continuem funcionando normalmente via `DispatcherServlet`.
 
 ## Convenções de páginas e painéis
 
@@ -31,68 +126,45 @@ Cada página e painel seguem a convenção Wicket: **arquivo `.html` com mesmo n
 - Campos de input usam `TextField`, `DropDownChoice`, `DateTextField`, etc.
 - Nunca usar `setResponsePage` dentro de handlers Ajax — preferir `AjaxRequestTarget.add(component)`.
 
-## FeedbackPanel
+## CSS e JavaScript — como incluir
 
-Todo formulário deve ter um `FeedbackPanel` associado, com `setOutputMarkupId(true)` para permitir atualização via Ajax.
+**Nunca colocar `<link>` ou `<script>` diretamente no HTML.** Usar `renderHead()` na classe da página ou painel:
 
 ```java
-FeedbackPanel feedback = new FeedbackPanel("feedback");
-feedback.setOutputMarkupId(true);
-add(feedback);
+@Override
+public void renderHead(IHeaderResponse response) {
+    super.renderHead(response);
+    // Bootstrap via CDN
+    response.render(CssUrlReferenceHeaderItem.forUrl(
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    ));
+    // Tema do projeto (servido pelo Wicket como PackageResource)
+    response.render(CssHeaderItem.forReference(
+        new PackageResourceReference(WicketApplication.class, "theme.css")
+    ));
+    // Bootstrap JS via CDN
+    response.render(JavaScriptUrlReferenceHeaderItem.forUrl(
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ));
+}
 ```
 
-No HTML:
+O HTML deve ter `<wicket:head/>` dentro do `<head>` para Wicket injetar os itens:
+
 ```html
-<div wicket:id="feedback" class="mt-2"></div>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Título da Página</title>
+    <wicket:head/>
+</head>
 ```
 
-Mensagens são adicionadas via:
-```java
-// Sucesso
-success("Cliente cadastrado com sucesso.");
-
-// Erro
-error("E-mail já cadastrado.");
-```
-
-O `FeedbackPanel` é sempre adicionado ao `AjaxRequestTarget` após qualquer operação para exibir a mensagem atualizada.
-
-## AjaxRequestTarget
-
-Usar `AjaxRequestTarget` para atualizar componentes sem recarregar a página inteira.
-
-Padrão de uso em botões de submit Ajax:
-
-```java
-AjaxButton salvar = new AjaxButton("salvar") {
-    @Override
-    protected void onSubmit(AjaxRequestTarget target) {
-        // lógica de negócio
-        success("Salvo com sucesso.");
-        target.add(feedback);
-        target.add(outroComponente);
-    }
-
-    @Override
-    protected void onError(AjaxRequestTarget target) {
-        target.add(feedback);
-    }
-};
-```
-
-Sempre chamar `target.add(feedback)` tanto no `onSubmit` quanto no `onError`.
+> **Por que PackageResource e não `/static`?** O `WicketFilter` está mapeado em `/*` com prioridade 1. Como filtros sempre executam antes de servlets, requests para `/css/theme.css` chegam ao Wicket antes do `ResourceHttpRequestHandler` do Spring Boot. Ao montar o recurso no Wicket, ele serve o arquivo diretamente sem depender do handler estático.
 
 ## Tema e design tokens
 
-Arquivo de tema: `src/main/resources/static/css/theme.css`
-
-Todo template base deve incluir:
-```html
-<!-- Bootstrap 5 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css"/>
-<!-- Tema do projeto (sobrescreve variáveis Bootstrap + define tokens) -->
-<link rel="stylesheet" href="/css/theme.css"/>
-```
+O arquivo `theme.css` fica em `src/main/java/.../shared/wicket/theme.css` (mesmo pacote que `WicketApplication`).
 
 ### Fontes
 | Variável CSS | Família | Uso |
@@ -110,7 +182,7 @@ Todo template base deve incluir:
 | `--erp-text-secondary` | `rgba(239,233,226,0.62)` | Labels, metadados |
 | `--erp-text-muted` | `rgba(239,233,226,0.38)` | Placeholders, códigos |
 | `--erp-accent` | `#d97757` | Botão primário, acento |
-| `--erp-success` | `#6dbc8a` | Status ativo |
+| `--erp-success` | `#6dbc8a` | Status ativo, título itálico |
 | `--erp-border` | `rgba(255,245,230,0.08)` | Bordas sutis |
 
 Usar sempre os tokens CSS em vez de valores hexadecimais diretos nos templates.
@@ -134,38 +206,79 @@ Botões de ação:
 - Cancelar/Voltar: `btn btn-secondary`
 - Excluir: `btn btn-danger`
 
-Alertas do `FeedbackPanel` devem ser estilizados com classes Bootstrap (`alert alert-success`, `alert alert-danger`). Isso é feito sobrescrevendo `getCSSClass` no `FeedbackPanel` ou usando um `FeedbackPanel` customizado.
+## FeedbackPanel
+
+Todo formulário deve ter um `FeedbackPanel` com `setOutputMarkupId(true)`.
+
+```java
+FeedbackPanel feedback = new FeedbackPanel("feedback");
+feedback.setOutputMarkupId(true);
+add(feedback);
+```
+
+No HTML:
+```html
+<div wicket:id="feedback" class="mt-2"></div>
+```
+
+Mensagens são adicionadas via:
+```java
+success("Cliente cadastrado com sucesso.");
+error("E-mail já cadastrado.");
+```
+
+O `FeedbackPanel` é sempre adicionado ao `AjaxRequestTarget` após qualquer operação.
+
+## AjaxRequestTarget
+
+Usar `AjaxRequestTarget` para atualizar componentes sem recarregar a página.
+
+```java
+AjaxButton salvar = new AjaxButton("salvar") {
+    @Override
+    protected void onSubmit(AjaxRequestTarget target) {
+        // lógica de negócio
+        success("Salvo com sucesso.");
+        target.add(feedback);
+        target.add(outroComponente);
+    }
+
+    @Override
+    protected void onError(AjaxRequestTarget target) {
+        target.add(feedback);
+    }
+};
+```
+
+Sempre chamar `target.add(feedback)` tanto no `onSubmit` quanto no `onError`.
 
 ## JavaScript — Máscaras e Cálculos
 
-Scripts são incluídos via `JavaScriptHeaderItem` ou diretamente no `<head>` do template base.
+Scripts são incluídos via `renderHead` com `JavaScriptUrlReferenceHeaderItem` ou `JavaScriptHeaderItem`.
 
-Máscaras de input são aplicadas via `behavior` ou via script no `onDomReady`:
+Máscaras de input são aplicadas via `behavior` com atributo `data-mask`:
 
 ```java
-// Exemplo de behavior para máscara de CPF
 component.add(new AttributeAppender("data-mask", "000.000.000-00"));
 ```
 
-No HTML/JS (usando IMask ou jQuery Mask):
+No JS (usando IMask):
 ```javascript
 document.querySelectorAll('[data-mask]').forEach(el => {
     IMask(el, { mask: el.dataset.mask });
 });
 ```
 
-Cálculos automáticos (ex: totais, idades) são feitos via JavaScript escutando eventos `input` ou `change` nos campos relevantes, sem depender de roundtrip ao servidor.
+Cálculos automáticos (totais, idades) são feitos via JS escutando eventos `input`/`change`, sem roundtrip ao servidor.
 
-## Integração com a API REST
+## Integração com Services Spring
 
-O frontend Wicket pode consumir os services Spring diretamente via injeção de dependência (Spring gerencia os beans Wicket quando configurado com `@SpringBean`).
+Injetar services via `@SpringBean` (nunca repositórios diretamente):
 
 ```java
 @SpringBean
 private ClienteService clienteService;
 ```
-
-Nunca injetar repositórios diretamente nas páginas — sempre usar services.
 
 ## Mensagens de feedback por operação
 
