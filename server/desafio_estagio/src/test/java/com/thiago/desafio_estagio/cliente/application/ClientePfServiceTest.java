@@ -7,6 +7,7 @@ import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontrado
 import com.thiago.desafio_estagio.cliente.domain.exceptions.CpfJaCadastradoException;
 import com.thiago.desafio_estagio.cliente.domain.exceptions.EmailJaCadastradoException;
 import com.thiago.desafio_estagio.cliente.domain.exceptions.RgJaCadastradoException;
+import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,6 +32,9 @@ class ClientePfServiceTest {
 
     @Mock
     private ClienteRepository clienteRepository;
+
+    @Mock
+    private EnderecoRepository enderecoRepository;
 
     @InjectMocks
     private ClientePfService clientePfService;
@@ -161,7 +165,7 @@ class ClientePfServiceTest {
     // --- helpers ---
 
     private ClientePfCreateDto createDto(String cpf, String rg) {
-        return new ClientePfCreateDto("joao@email.com", "João Silva", cpf, rg, LocalDate.of(1990, 1, 1));
+        return new ClientePfCreateDto("joao@email.com", "João Silva", cpf, rg, LocalDate.of(1990, 1, 1), null);
     }
 
     private ClientePf clientePfExistente(UUID id, String email) {
