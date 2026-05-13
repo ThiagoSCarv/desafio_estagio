@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content erp-modal">
+
+            <div class="modal-header erp-modal-header-form">
+                <div>
+                    <p class="erp-modal-eyebrow" wicket:id="breadcrumb">atualizar cadastro · pessoa física</p>
+                    <h4 class="erp-modal-heading">
+                        Atualizar <em class="erp-title--italic" wicket:id="titulotipo">pessoa física</em>
+                    </h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <form wicket:id="form">
+                <div class="modal-body">
+                    <div wicket:id="feedback"></div>
+
+                    <div class="erp-client-badge mb-4">
+                        <span class="erp-client-badge__label" wicket:id="badgeLabel">CLIENTE</span>
+                        <span class="erp-client-badge__name" wicket:id="badgeName">—</span>
+                        <span class="erp-client-badge__code" wicket:id="badgeCodigo">—</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">01</span>
+                            <span wicket:id="emailLabel">E-MAIL</span>
+                        </label>
+                        <input wicket:id="email" type="email" class="form-control" />
+                    </div>
+
+                    <div wicket:id="pfCampos" class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">02</span> NOME COMPLETO
+                        </label>
+                        <input wicket:id="nome" type="text" class="form-control" />
+                    </div>
+
+                    <div wicket:id="pjCampos">
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">02</span> RAZ&Atilde;O SOCIAL
+                            </label>
+                            <input wicket:id="razaoSocial" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">03</span> INSCRI&Ccedil;&Atilde;O ESTADUAL
+                            </label>
+                            <input wicket:id="inscricaoEstadual" type="text" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="erp-field-label">
+                            <span class="erp-field-num" wicket:id="ativoNum">03</span> CLIENTE ATIVO
+                        </label>
+                        <div class="erp-toggle-row">
+                            <div class="form-check form-switch mb-0">
+                                <input wicket:id="ativo" type="checkbox" class="form-check-input erp-toggle-switch" />
+                            </div>
+                            <span class="erp-toggle-label">ATIVO</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button wicket:id="salvar" type="submit" class="btn btn-success">Salvar altera&ccedil;&otilde;es</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>
