@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content erp-modal">
+
+            <div class="modal-header erp-modal-header-form">
+                <div>
+                    <p class="erp-modal-eyebrow">cadastrar novo cliente</p>
+                    <h4 class="erp-modal-heading">
+                        Novo <em class="erp-title--italic">cliente</em>
+                    </h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <form wicket:id="form">
+                <div class="modal-body">
+                    <div wicket:id="feedback"></div>
+
+                    <div class="erp-tipo-selector mb-4">
+                        <a wicket:id="btnPf" class="erp-tipo-btn erp-tipo-btn--ativo" data-tipo="FISICA">Pessoa F&iacute;sica</a>
+                        <a wicket:id="btnPj" class="erp-tipo-btn" data-tipo="JURIDICA">Pessoa Jur&iacute;dica</a>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">01</span> E-MAIL
+                        </label>
+                        <input wicket:id="email" type="email" class="form-control" />
+                    </div>
+
+                    <div wicket:id="pfCampos">
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">02</span> NOME COMPLETO
+                            </label>
+                            <input wicket:id="nome" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">03</span> CPF
+                            </label>
+                            <input wicket:id="cpf" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">04</span> RG
+                            </label>
+                            <input wicket:id="rg" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">05</span> DATA DE NASCIMENTO
+                            </label>
+                            <input wicket:id="dataNascimento" type="text" class="form-control" placeholder="aaaa-mm-dd" />
+                        </div>
+                    </div>
+
+                    <div wicket:id="pjCampos">
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">02</span> CNPJ
+                            </label>
+                            <input wicket:id="cnpj" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">03</span> RAZ&Atilde;O SOCIAL
+                            </label>
+                            <input wicket:id="razaoSocial" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">04</span> INSCRI&Ccedil;&Atilde;O ESTADUAL
+                            </label>
+                            <input wicket:id="inscricaoEstadual" type="text" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">05</span> DATA DE CRIA&Ccedil;&Atilde;O DA EMPRESA
+                            </label>
+                            <input wicket:id="dataCriacao" type="text" class="form-control" placeholder="aaaa-mm-dd" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button wicket:id="salvar" type="submit" class="btn btn-primary">Cadastrar cliente</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Template XLSX da ficha de cliente.
-  Estrutura: o título traz um bloco label/valor com os dados do cliente (uma única
-  vez), o columnHeader traz os cabeçalhos das colunas de endereço e o detail repete
-  uma linha por endereço. Todas as posições X compartilham o mesmo grid de 9 colunas
-  para que o JRXlsxExporter gere uma planilha sem colunas mescladas indevidamente.
+  Estrutura: group header imprime os dados do cliente uma vez (durante a iteração de dados,
+  igual ao template PDF), garantindo que $F{...} seja preenchido corretamente.
+  O columnHeader traz os cabeçalhos de endereço e o detail repete uma linha por endereço.
 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -68,123 +67,142 @@ WHERE c.id = UUID_TO_BIN($P{clienteId})]]>
 	<field name="estado" class="java.lang.String"/>
 	<field name="principal" class="java.lang.String"/>
 
-	<title>
-		<band height="220">
-			<!-- Cabeçalho de seção: ocupa toda a largura, mesclando todas as 9 colunas no XLSX. -->
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="800" height="22" backcolor="#006699" forecolor="#FFFFFF" uuid="fe010000-0000-0000-0000-000000000001"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"><font size="11" isBold="true"/></textElement>
-				<text><![CDATA[ DADOS DO CLIENTE]]></text>
-			</staticText>
+	<variable name="VAR_NOME_RAZAO"         class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{nome_razao}]]></variableExpression></variable>
+	<variable name="VAR_TIPO_PESSOA"        class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{tipo_pessoa}]]></variableExpression></variable>
+	<variable name="VAR_EMAIL"              class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{email}]]></variableExpression></variable>
+	<variable name="VAR_DOCUMENTO"          class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{documento}]]></variableExpression></variable>
+	<variable name="VAR_RG"                 class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{rg}]]></variableExpression></variable>
+	<variable name="VAR_DATA_NASCIMENTO"    class="java.sql.Date"    calculation="First"><variableExpression><![CDATA[$F{data_nascimento}]]></variableExpression></variable>
+	<variable name="VAR_INSCRICAO_ESTADUAL" class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{inscricao_estadual}]]></variableExpression></variable>
+	<variable name="VAR_DATA_CRIACAO"       class="java.sql.Date"    calculation="First"><variableExpression><![CDATA[$F{data_criacao}]]></variableExpression></variable>
+	<variable name="VAR_ATIVO"              class="java.lang.String" calculation="First"><variableExpression><![CDATA[$F{ativo}]]></variableExpression></variable>
 
-			<!-- 9 linhas label/valor. Label na col 1 (x=0 w=160), valor mesclado nas cols 2-9 (x=160 w=640). -->
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="22" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000002"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Nome / Razão Social]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="22" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000003"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{nome_razao}]]></textFieldExpression>
-			</textField>
+	<group name="cliente">
+		<groupExpression><![CDATA["G"]]></groupExpression>
+		<groupHeader>
+			<band height="220">
+				<!-- Cabeçalho de seção: dados do cliente -->
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="800" height="22" backcolor="#006699" forecolor="#FFFFFF" uuid="fe010000-0000-0000-0000-000000000001"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"><font size="11" isBold="true"/></textElement>
+					<text><![CDATA[ DADOS DO CLIENTE]]></text>
+				</staticText>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="42" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000004"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Tipo de Pessoa]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="42" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000005"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{tipo_pessoa}]]></textFieldExpression>
-			</textField>
+				<!-- 9 linhas label/valor. Label na col 1 (x=0 w=160), valor nas cols 2+ (x=160 w=640). -->
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="22" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000002"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Nome / Razão Social]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="22" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000003"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_NOME_RAZAO}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="62" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000006"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ E-mail]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="62" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000007"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="42" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000004"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Tipo de Pessoa]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="42" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000005"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_TIPO_PESSOA}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="82" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000008"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Documento (CPF / CNPJ)]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="82" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000009"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="62" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000006"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ E-mail]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="62" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000007"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_EMAIL}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="102" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000010"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ RG]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="102" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000011"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{rg}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="82" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000008"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Documento (CPF / CNPJ)]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="82" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000009"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_DOCUMENTO}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="122" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000012"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Data de Nascimento]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="160" y="122" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000013"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{data_nascimento}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="102" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000010"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ RG]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="102" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000011"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_RG}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="142" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000014"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Inscrição Estadual]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="142" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000015"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{inscricao_estadual}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="122" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000012"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Data de Nascimento]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="122" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000013"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_DATA_NASCIMENTO}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="162" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000016"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Data de Criação da Empresa]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="160" y="162" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000017"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{data_criacao}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="142" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000014"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Inscrição Estadual]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="142" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000015"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_INSCRICAO_ESTADUAL}]]></textFieldExpression>
+				</textField>
 
-			<staticText>
-				<reportElement mode="Opaque" x="0"   y="182" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000018"/>
-				<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
-				<text><![CDATA[ Ativo]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="160" y="182" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000019"/>
-				<textElement verticalAlignment="Middle"><font size="9"/></textElement>
-				<textFieldExpression><![CDATA[$F{ativo}]]></textFieldExpression>
-			</textField>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="162" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000016"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Data de Criação da Empresa]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="162" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000017"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_DATA_CRIACAO}]]></textFieldExpression>
+				</textField>
 
-			<!-- Banner da seção de endereços, também ocupa todas as 9 colunas. -->
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="202" width="800" height="18" backcolor="#006699" forecolor="#FFFFFF" uuid="fe010000-0000-0000-0000-000000000020"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle"><font size="11" isBold="true"/></textElement>
-				<text><![CDATA[ ENDEREÇOS]]></text>
-			</staticText>
-		</band>
-	</title>
+				<staticText>
+					<reportElement mode="Opaque" x="0"   y="182" width="160" height="20" backcolor="#E6E6E6" uuid="fe010000-0000-0000-0000-000000000018"/>
+					<textElement verticalAlignment="Middle"><font size="9" isBold="true"/></textElement>
+					<text><![CDATA[ Ativo]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true" evaluationTime="Report">
+					<reportElement x="160" y="182" width="640" height="20" uuid="fe010000-0000-0000-0000-000000000019"/>
+					<textElement verticalAlignment="Middle"><font size="9"/></textElement>
+					<textFieldExpression><![CDATA[$V{VAR_ATIVO}]]></textFieldExpression>
+				</textField>
+
+				<!-- Banner da seção de endereços -->
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="202" width="800" height="18" backcolor="#006699" forecolor="#FFFFFF" uuid="fe010000-0000-0000-0000-000000000020"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"><font size="11" isBold="true"/></textElement>
+					<text><![CDATA[ ENDEREÇOS]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+
+	<background><band/></background>
+	<title><band/></title>
 
 	<columnHeader>
 		<band height="22">
