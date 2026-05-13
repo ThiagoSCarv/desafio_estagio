@@ -1,5 +1,6 @@
 package com.thiago.desafio_estagio.shared.wicket;
 
+import com.thiago.desafio_estagio.shared.utils.JsUtils;
 import com.thiago.desafio_estagio.shared.wicket.pages.home.HomePage;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -31,5 +32,6 @@ public class WicketApplication extends WebApplication {
                 WicketApplication.class, "theme.css"
             )
         );
+        mountResource("/js/masks.js", JsUtils.MASKS);
     }
 }

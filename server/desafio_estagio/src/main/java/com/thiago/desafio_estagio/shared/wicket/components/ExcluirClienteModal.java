@@ -59,7 +59,7 @@ public class ExcluirClienteModal extends Panel {
 
     private void ocultarModal(AjaxRequestTarget target) {
         target.appendJavaScript(
-            "bootstrap.Modal.getOrCreateInstance(document.getElementById('" + getMarkupId() + "')).hide();"
+            "(function(){var el=document.getElementById('" + getMarkupId() + "');if(el)bootstrap.Modal.getOrCreateInstance(el).hide();})();"
         );
     }
 

@@ -10,6 +10,7 @@ public class AcoesPanel extends Panel {
 
     private final ExcluirClienteModal modalExcluir;
     private final EditarClienteModal modalEditar;
+    private final RelatorioClienteModal modalRelatorio;
 
     public AcoesPanel(String id, IModel<ClienteDto> model) {
         super(id, model);
@@ -30,6 +31,9 @@ public class AcoesPanel extends Panel {
         };
         add(modalEditar);
 
+        modalRelatorio = new RelatorioClienteModal("modalRelatorio");
+        add(modalRelatorio);
+
         add(new AjaxLink<ClienteDto>("editar", model) {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -42,10 +46,9 @@ public class AcoesPanel extends Panel {
         add(new AjaxLink<ClienteDto>("relatorio", model) {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                String clienteId = getModelObject().id().toString();
-                target.appendJavaScript(
-                    "window.open('/relatorio/clientes/" + clienteId + "?formato=pdf', '_blank');"
-                );
+                modalRelatorio.setCliente(getModelObject());
+                target.add(modalRelatorio);
+                mostrarModal(target, modalRelatorio);
             }
         });
 

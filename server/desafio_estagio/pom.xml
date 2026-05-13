@@ -126,6 +126,7 @@
 					<include>**/*.html</include>
 					<include>**/*.properties</include>
 					<include>**/*.css</include>
+				<include>**/*.js</include>
 				</includes>
 			</resource>
 			<resource>
