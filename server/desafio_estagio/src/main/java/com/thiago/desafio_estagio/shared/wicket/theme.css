@@ -698,6 +698,17 @@ code, kbd, pre, .font-mono {
   font-size: 0.875rem;
 }
 
+/* form quebra o layout flex do modal-dialog-scrollable porque fica entre
+   modal-content (flex container) e modal-body (flex item scrollável).
+   Tornando-o flex passthrough, o scroll volta a funcionar corretamente. */
+.erp-modal > form {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  overflow: hidden;
+  min-height: 0;
+}
+
 .erp-modal .modal-footer {
   border-top-color: var(--erp-border);
   padding: 0.875rem 1.25rem;
@@ -872,6 +883,26 @@ code, kbd, pre, .font-mono {
 }
 
 /* ─── Paginação ────────────────────────────────────────────────────────────── */
+/* ─── Seção de endereços no modal ──────────────────────────────────────────── */
+.erp-divider {
+  border-color: var(--erp-border);
+  opacity: 1;
+}
+
+.erp-field-optional {
+  font-family: var(--erp-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--erp-text-muted);
+  text-transform: lowercase;
+}
+
+.erp-endereco-card {
+  background: var(--erp-surface-muted);
+  border: 1px solid var(--erp-border);
+  border-radius: 0.375rem;
+}
+
 .pagination {
   --bs-pagination-bg: transparent;
   --bs-pagination-color: var(--erp-text-secondary);

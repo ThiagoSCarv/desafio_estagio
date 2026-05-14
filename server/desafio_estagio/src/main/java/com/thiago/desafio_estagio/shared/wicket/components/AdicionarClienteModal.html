@@ -3,7 +3,7 @@
 <body>
 <wicket:panel>
 
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content erp-modal">
 
             <div class="modal-header erp-modal-header-form">
@@ -13,7 +13,6 @@
                         Novo <em class="erp-title--italic">cliente</em>
                     </h4>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
 
             <form wicket:id="form">
@@ -85,6 +84,20 @@
                             <input wicket:id="dataCriacao" type="text" class="form-control" placeholder="dd/mm/aaaa" />
                         </div>
                     </div>
+
+                    <hr class="erp-divider my-4" />
+
+                    <p class="erp-modal-eyebrow mb-3">endere&ccedil;os</p>
+
+                    <div wicket:id="enderecoContainer">
+                        <div wicket:id="enderecoList">
+                            <div wicket:id="enderecoPanel"></div>
+                        </div>
+                    </div>
+
+                    <a wicket:id="btnAdicionarEndereco" class="btn btn-sm btn-outline-secondary w-100 mt-1 mb-2">
+                        + Adicionar endere&ccedil;o
+                    </a>
 
                 </div>
                 <div class="modal-footer">
