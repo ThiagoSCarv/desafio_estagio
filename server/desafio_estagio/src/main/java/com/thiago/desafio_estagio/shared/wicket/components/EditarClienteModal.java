@@ -35,11 +35,9 @@ public class EditarClienteModal extends Panel {
     private UUID clienteId;
     private TipoPessoa tipoPessoa;
 
-    private final Model<String> breadcrumbModel    = Model.of("");
     private final Model<String> tipoModel          = Model.of("");
     private final Model<String> badgeLabelModel    = Model.of("");
     private final Model<String> badgeNameModel     = Model.of("");
-    private final Model<String> badgeCodigoModel   = Model.of("");
     private final Model<String> emailLabelModel    = Model.of("");
     private final Model<String> ativoNumModel      = Model.of("03");
     private final Model<String> emailModel         = Model.of("");
@@ -56,7 +54,6 @@ public class EditarClienteModal extends Panel {
         super(id);
         setOutputMarkupId(true);
 
-        add(new Label("breadcrumb", breadcrumbModel));
         add(new Label("titulotipo", tipoModel));
 
         Form<Void> form = new Form<>("form");
@@ -68,7 +65,6 @@ public class EditarClienteModal extends Panel {
 
         form.add(new Label("badgeLabel", badgeLabelModel));
         form.add(new Label("badgeName", badgeNameModel));
-        form.add(new Label("badgeCodigo", badgeCodigoModel));
         form.add(new Label("emailLabel", emailLabelModel));
         form.add(new Label("ativoNum", ativoNumModel));
 
@@ -94,6 +90,7 @@ public class EditarClienteModal extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
                     salvar();
+                    mostrarToast(target, "Atualização realizada com sucesso");
                     ocultarModal(target);
                     onAtualizado(target);
                 } catch (RuntimeException e) {
@@ -112,32 +109,25 @@ public class EditarClienteModal extends Panel {
     public void setCliente(ClienteDto cliente) {
         this.clienteId = cliente.id();
         this.tipoPessoa = cliente.tipoPessoa();
-        emailModel.setObject("");
         ativoModel.setObject(cliente.ativo());
 
         String codigo = "C-" + cliente.id().toString().replace("-", "").substring(0, 4).toUpperCase();
-        badgeCodigoModel.setObject(codigo);
 
         if (cliente instanceof ClientePfDto pf) {
-            breadcrumbModel.setObject("atualizar cadastro · pessoa física");
-            tipoModel.setObject("pessoa física");
+            tipoModel.setObject("Pessoa Física");
             badgeLabelModel.setObject("CLIENTE");
             badgeNameModel.setObject(pf.nome());
             emailLabelModel.setObject("E-MAIL");
             ativoNumModel.setObject("03");
-            nomeModel.setObject("");
             pfCampos.setVisible(true);
             pjCampos.setVisible(false);
         } else {
             ClientePjDto pj = (ClientePjDto) cliente;
-            breadcrumbModel.setObject("atualizar cadastro · pessoa jurídica");
-            tipoModel.setObject("pessoa jurídica");
+            tipoModel.setObject("Pessoa Jurídica");
             badgeLabelModel.setObject("CNPJ");
             badgeNameModel.setObject(formatarCnpj(pj.cnpj()));
             emailLabelModel.setObject("E-MAIL CORPORATIVO");
             ativoNumModel.setObject("04");
-            razaoSocialModel.setObject("");
-            inscricaoEstadualModel.setObject("");
             pfCampos.setVisible(false);
             pjCampos.setVisible(true);
         }
@@ -164,6 +154,24 @@ public class EditarClienteModal extends Panel {
                     ativoModel.getObject()
             ));
         }
+    }
+
+    private void mostrarToast(AjaxRequestTarget target, String mensagem) {
+        target.appendJavaScript(
+            "(function(){" +
+            "var wrap=document.createElement('div');" +
+            "wrap.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;z-index:11000;';" +
+            "var t=document.createElement('div');" +
+            "t.className='toast align-items-center border-0';" +
+            "t.style.cssText='background:var(--erp-success);color:var(--erp-bg);';" +
+            "t.setAttribute('role','alert');" +
+            "t.innerHTML='<div class=\"d-flex\"><div class=\"toast-body fw-medium\">" + mensagem + "</div>" +
+            "<button type=\"button\" class=\"btn-close me-2 m-auto\" data-bs-dismiss=\"toast\"></button></div>';" +
+            "wrap.appendChild(t);document.body.appendChild(wrap);" +
+            "var bsT=new bootstrap.Toast(t,{delay:4000});bsT.show();" +
+            "t.addEventListener('hidden.bs.toast',function(){wrap.remove();});" +
+            "})();"
+        );
     }
 
     private void ocultarModal(AjaxRequestTarget target) {
