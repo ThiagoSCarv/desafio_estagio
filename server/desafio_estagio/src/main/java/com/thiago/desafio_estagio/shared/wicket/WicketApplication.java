@@ -4,16 +4,22 @@ import com.thiago.desafio_estagio.shared.utils.JsUtils;
 import com.thiago.desafio_estagio.shared.wicket.pages.home.HomePage;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WicketApplication extends WebApplication {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    public static final PackageResourceReference THEME_CSS =
+        new PackageResourceReference(WicketApplication.class, "theme.css");
+
+    private final ApplicationContext applicationContext;
+
+    public WicketApplication(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     @Override
     public Class<? extends Page> getHomePage() {
@@ -26,12 +32,8 @@ public class WicketApplication extends WebApplication {
         getComponentInstantiationListeners().add(
             new SpringComponentInjector(this, applicationContext)
         );
-        // Serve o tema CSS diretamente pelo Wicket evitando conflito com o WicketFilter
-        mountResource("/css/theme.css",
-            new org.apache.wicket.request.resource.PackageResourceReference(
-                WicketApplication.class, "theme.css"
-            )
-        );
+        // Serve os recursos diretamente pelo Wicket evitando conflito com o WicketFilter
+        mountResource("/css/theme.css", THEME_CSS);
         mountResource("/js/masks.js", JsUtils.MASKS);
     }
 }

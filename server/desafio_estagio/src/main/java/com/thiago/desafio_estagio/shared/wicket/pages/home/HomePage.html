@@ -14,62 +14,11 @@
 
     <main class="erp-main">
 
-        <div class="erp-toolbar">
-
-            <div class="erp-search-wrap">
-                <div class="erp-search">
-                    <svg class="erp-search__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                    <input type="text" class="erp-search__input" placeholder="Nome / Razão Social"/>
-                </div>
-            </div>
-
-            <div class="erp-filters">
-
-                <div class="erp-filter-group">
-                    <span class="erp-filter-group__label">Tipo</span>
-                    <div class="erp-filter-tabs" role="radiogroup">
-                        <label class="erp-filter-tab">
-                            <input type="radio" name="tipoPessoa" value="" checked/>
-                            todos
-                        </label>
-                        <label class="erp-filter-tab">
-                            <input type="radio" name="tipoPessoa" value="FISICA"/>
-                            física
-                        </label>
-                        <label class="erp-filter-tab">
-                            <input type="radio" name="tipoPessoa" value="JURIDICA"/>
-                            jurídica
-                        </label>
-                    </div>
-                </div>
-
-                <div class="erp-filter-group">
-                    <label class="erp-filter-group__label" for="filtroDocumento">Documento</label>
-                    <input type="text" id="filtroDocumento" class="erp-filter-input" placeholder="CPF ou CNPJ"/>
-                </div>
-
-            </div>
-
-        </div>
-
         <div wicket:id="listaClientes"></div>
 
-        <!-- Rodapé: paginação + ações globais -->
         <div class="erp-list-footer">
 
-            <div class="erp-pagination">
-                <span class="erp-pagination__info">01 / 02 &middot; 12 de 20 registros</span>
-                <div class="erp-pagination__nav">
-                    <button class="erp-page-btn" title="P&aacute;gina anterior">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                    </button>
-                    <button class="erp-page-btn" title="Pr&oacute;xima p&aacute;gina">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                    </button>
-                </div>
-            </div>
+            <div><!-- espaço reservado para alinhamento com a paginação acima --></div>
 
             <div class="erp-global-actions">
                 <a wicket:id="adicionarCliente" class="erp-btn-add">
@@ -88,36 +37,36 @@
 
 </div>
 
-    <!-- Modal: cadastrar novo cliente (gerenciado pelo Wicket) -->
-    <div wicket:id="modalAdicionar" class="modal fade" tabindex="-1" aria-modal="true" role="dialog"></div>
+<!-- Modal: cadastrar novo cliente (gerenciado pelo Wicket) -->
+<div wicket:id="modalAdicionar" class="modal fade" tabindex="-1" aria-modal="true" role="dialog"></div>
 
-    <!-- Modal: relatório completo (estático — apenas Bootstrap, sem Wicket) -->
-    <div id="modalRelatorioLista" class="modal fade" tabindex="-1" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content erp-modal">
-                <div class="modal-header">
-                    <h5 class="modal-title">Emitir relat&oacute;rio completo</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+<!-- Modal: relatório completo (estático — apenas Bootstrap, sem Wicket) -->
+<div id="modalRelatorioLista" class="modal fade" tabindex="-1" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content erp-modal">
+            <div class="modal-header">
+                <h5 class="modal-title">Emitir relat&oacute;rio completo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Escolha o formato de exporta&ccedil;&atilde;o:</p>
+                <div class="d-flex gap-2">
+                    <a href="/relatorio/clientes?formato=pdf" target="_blank" class="btn btn-danger flex-fill d-flex align-items-center justify-content-center gap-2" data-bs-dismiss="modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        PDF
+                    </a>
+                    <a href="/relatorio/clientes?formato=xlsx" target="_blank" class="btn btn-success flex-fill d-flex align-items-center justify-content-center gap-2" data-bs-dismiss="modal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+                        Excel
+                    </a>
                 </div>
-                <div class="modal-body">
-                    <p class="mb-3">Escolha o formato de exporta&ccedil;&atilde;o:</p>
-                    <div class="d-flex gap-2">
-                        <a href="/relatorio/clientes?formato=pdf" target="_blank" class="btn btn-danger flex-fill d-flex align-items-center justify-content-center gap-2" data-bs-dismiss="modal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                            PDF
-                        </a>
-                        <a href="/relatorio/clientes?formato=xlsx" target="_blank" class="btn btn-success flex-fill d-flex align-items-center justify-content-center gap-2" data-bs-dismiss="modal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
-                            Excel
-                        </a>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
+</div>
 
 </body>
 </html>

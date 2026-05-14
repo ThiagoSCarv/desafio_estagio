@@ -1,7 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<head><title>Lista de Clientes</title></head>
 <body>
 <wicket:panel>
+
+    <form wicket:id="filtroForm" class="erp-toolbar">
+
+        <div class="erp-search-wrap">
+            <div class="erp-search">
+                <svg class="erp-search__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input wicket:id="filtroNome" type="text" class="erp-search__input" placeholder="Nome / Raz&atilde;o Social"/>
+            </div>
+        </div>
+
+        <div class="erp-filters">
+
+            <div class="erp-filter-group">
+                <span class="erp-filter-group__label">Tipo</span>
+                <div class="erp-filter-tabs" role="radiogroup">
+                    <a wicket:id="filtroTodos" class="erp-filter-tab">todos</a>
+                    <a wicket:id="filtroFisica" class="erp-filter-tab">f&iacute;sica</a>
+                    <a wicket:id="filtroJuridica" class="erp-filter-tab">jur&iacute;dica</a>
+                </div>
+            </div>
+
+            <div class="erp-filter-group">
+                <label class="erp-filter-group__label" for="filtroDocumento">Documento</label>
+                <input wicket:id="filtroDocumento" type="text" class="erp-filter-input" placeholder="CPF ou CNPJ"/>
+            </div>
+
+        </div>
+
+    </form>
 
     <div class="erp-list">
 
@@ -38,6 +70,18 @@
             </li>
         </ol>
 
+    </div>
+
+    <div class="erp-pagination" style="margin-top: 1.25rem;">
+        <span wicket:id="paginacaoInfo" class="erp-pagination__info">01 / 01 &middot; 0 de 0 registros</span>
+        <div class="erp-pagination__nav">
+            <a wicket:id="paginaAnterior" class="erp-page-btn" title="P&aacute;gina anterior">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </a>
+            <a wicket:id="proximaPagina" class="erp-page-btn" title="Pr&oacute;xima p&aacute;gina">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+        </div>
     </div>
 
 </wicket:panel>
