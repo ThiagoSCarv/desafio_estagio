@@ -637,7 +637,8 @@ code, kbd, pre, .font-mono {
 }
 
 .erp-btn-add,
-.erp-btn-report {
+.erp-btn-report,
+.erp-btn-import {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -672,6 +673,18 @@ code, kbd, pre, .font-mono {
   background-color: var(--erp-surface-muted);
   border-color: var(--erp-border-strong);
   color: var(--erp-text);
+}
+
+.erp-btn-import {
+  background-color: transparent;
+  border: 1px solid rgba(100, 160, 220, 0.25);
+  color: rgba(140, 190, 240, 0.75);
+}
+
+.erp-btn-import:hover {
+  background-color: rgba(100, 160, 220, 0.08);
+  border-color: rgba(100, 160, 220, 0.45);
+  color: rgba(180, 215, 255, 0.95);
 }
 
 /* ─── Modais ───────────────────────────────────────────────────────────────── */

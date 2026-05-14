@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content erp-modal">
+
+            <div class="modal-header erp-modal-header-form">
+                <div>
+                    <p class="erp-modal-eyebrow">importa&ccedil;&atilde;o em lote</p>
+                    <h4 class="erp-modal-heading">
+                        Importar <em class="erp-title--italic">clientes</em>
+                    </h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <form wicket:id="form">
+                <div class="modal-body">
+
+                    <div wicket:id="feedback"></div>
+
+                    <p class="mb-3" style="color: var(--erp-text-secondary); font-size: 0.875rem;">
+                        Fa&ccedil;a o download da planilha modelo, preencha com os dados dos clientes e envie o arquivo abaixo.
+                    </p>
+
+                    <div class="mb-4">
+                        <a wicket:id="downloadTemplate" class="erp-btn-report" style="display:inline-flex; text-decoration:none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Baixar planilha modelo
+                        </a>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">01</span> ARQUIVO XLSX
+                        </label>
+                        <input wicket:id="arquivo" type="file" class="form-control" accept=".xlsx"/>
+                    </div>
+
+                    <div wicket:id="resultado">
+                        <div wicket:id="resumo" class="mb-2" style="font-size:0.875rem; color: var(--erp-success);"></div>
+                        <ul wicket:id="listaErros" class="mb-0 ps-3" style="font-size:0.8125rem; color:#e57373; max-height:160px; overflow-y:auto;">
+                            <li wicket:id="erroItem"></li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer" style="border-top: 1px solid var(--erp-border);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button wicket:id="importar" type="submit" class="btn btn-primary">Importar</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>

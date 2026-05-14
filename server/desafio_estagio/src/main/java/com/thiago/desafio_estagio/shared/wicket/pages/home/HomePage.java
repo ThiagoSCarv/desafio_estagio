@@ -1,9 +1,8 @@
 package com.thiago.desafio_estagio.shared.wicket.pages.home;
 
 import com.thiago.desafio_estagio.shared.wicket.WicketApplication;
-import com.thiago.desafio_estagio.shared.wicket.components.AdicionarClienteModal;
+import com.thiago.desafio_estagio.shared.wicket.components.FooterPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -23,20 +22,17 @@ public class HomePage extends WebPage {
         };
         add(listaClientes);
 
-        AdicionarClienteModal modalAdicionar = new AdicionarClienteModal("modalAdicionar") {
+        add(new FooterPanel("footer") {
             @Override
-            protected void onAdicionado(AjaxRequestTarget target) {
+            protected void onAdicionou(AjaxRequestTarget target) {
                 listaClientes.recarregarLista(target);
+                target.add(header);
             }
-        };
-        add(modalAdicionar);
 
-        add(new AjaxLink<Void>("adicionarCliente") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript(
-                    "bootstrap.Modal.getOrCreateInstance(document.getElementById('" + modalAdicionar.getMarkupId() + "')).show();"
-                );
+            protected void onImportou(AjaxRequestTarget target) {
+                listaClientes.recarregarLista(target);
+                target.add(header);
             }
         });
     }
