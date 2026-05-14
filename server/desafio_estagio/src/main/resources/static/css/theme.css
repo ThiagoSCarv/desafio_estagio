@@ -11,14 +11,7 @@
   --erp-text:          #efe9e2;
   --erp-text-secondary: rgba(239, 233, 226, 0.62);
   --erp-text-muted:    rgba(239, 233, 226, 0.38);
-  --erp-text-on-primary: #1a0f08;
-
-  /* Acento principal (laranja-terracota) */
-  --erp-accent:        #d97757;
-  --erp-accent-bg:     rgba(217, 119, 87, 0.13);
-  --erp-accent-border: rgba(217, 119, 87, 0.28);
-
-  /* Status ativo (verde) */
+  /* Verde (acento e status ativo) */
   --erp-success:       #6dbc8a;
   --erp-success-glow:  rgba(109, 188, 138, 0.12);
 
@@ -35,8 +28,8 @@
   --bs-body-bg:             var(--erp-bg);
   --bs-body-color:          var(--erp-text);
 
-  --bs-primary:             var(--erp-accent);
-  --bs-primary-rgb:         217, 119, 87;
+  --bs-primary:             var(--erp-success);
+  --bs-primary-rgb:         109, 188, 138;
 
   --bs-success:             var(--erp-success);
   --bs-success-rgb:         109, 188, 138;
@@ -53,12 +46,12 @@
   --bs-input-border-color:  var(--erp-border);
   --bs-input-color:         var(--erp-text);
   --bs-input-placeholder-color: var(--erp-text-muted);
-  --bs-input-focus-border-color: var(--erp-accent);
-  --bs-input-focus-box-shadow: 0 0 0 0.2rem rgba(217, 119, 87, 0.15);
+  --bs-input-focus-border-color: var(--erp-success);
+  --bs-input-focus-box-shadow: 0 0 0 0.2rem var(--erp-success-glow);
 
   --bs-btn-font-family:     var(--erp-font-sans);
-  --bs-link-color:          var(--erp-accent);
-  --bs-link-hover-color:    #e8896a;
+  --bs-link-color:          var(--erp-success);
+  --bs-link-hover-color:    #7dcf9b;
 }
 
 /* ─── Base ─────────────────────────────────────────────────────────────────── */
@@ -73,18 +66,18 @@ code, kbd, pre, .font-mono {
   font-family: var(--erp-font-mono);
 }
 
-/* ─── Botão primário (laranja) ─────────────────────────────────────────────── */
+/* ─── Botão primário (verde) ───────────────────────────────────────────────── */
 .btn-primary {
-  background-color: var(--erp-accent);
+  background-color: var(--erp-success);
   border-color: transparent;
-  color: var(--erp-text-on-primary);
+  color: #0d2318;
   font-weight: 500;
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #e8896a;
+  background-color: #7dcf9b;
   border-color: transparent;
-  color: var(--erp-text-on-primary);
+  color: #0d2318;
 }
 
 /* ─── Botão secundário (outline warm) ─────────────────────────────────────── */
@@ -112,9 +105,9 @@ code, kbd, pre, .font-mono {
 .form-control:focus,
 .form-select:focus {
   background-color: var(--erp-surface-muted);
-  border-color: var(--erp-accent);
+  border-color: var(--erp-success);
   color: var(--erp-text);
-  box-shadow: 0 0 0 0.2rem rgba(217, 119, 87, 0.15);
+  box-shadow: 0 0 0 0.2rem var(--erp-success-glow);
 }
 .form-control::placeholder {
   color: var(--erp-text-muted);
@@ -152,7 +145,7 @@ code, kbd, pre, .font-mono {
   font-size: 0.875rem;
   margin-bottom: 0.5rem;
 }
-.feedbackPanelINFO    { background-color: rgba(217, 119, 87, 0.10); border: 1px solid var(--erp-accent-border); color: var(--erp-accent); }
+.feedbackPanelINFO    { background-color: rgba(239, 233, 226, 0.06); border: 1px solid rgba(239, 233, 226, 0.12); color: var(--erp-text-secondary); }
 .feedbackPanelSUCCESS { background-color: rgba(109, 188, 138, 0.10); border: 1px solid rgba(109, 188, 138, 0.28); color: var(--erp-success); }
 .feedbackPanelERROR   { background-color: rgba(220, 80, 80, 0.10);  border: 1px solid rgba(220, 80, 80, 0.28);  color: #e07070; }
 .feedbackPanelWARNING { background-color: rgba(230, 180, 60, 0.10); border: 1px solid rgba(230, 180, 60, 0.28); color: #e6b43c; }
@@ -170,7 +163,6 @@ code, kbd, pre, .font-mono {
 /* ─── Texto auxiliar ───────────────────────────────────────────────────────── */
 .text-secondary { color: var(--erp-text-secondary) !important; }
 .text-muted     { color: var(--erp-text-muted) !important; }
-.text-accent    { color: var(--erp-accent) !important; }
 .text-success   { color: var(--erp-success) !important; }
 
 /* ─── Navegação / breadcrumb ───────────────────────────────────────────────── */
@@ -278,7 +270,7 @@ code, kbd, pre, .font-mono {
   --bs-pagination-hover-bg: var(--erp-surface-muted);
   --bs-pagination-hover-color: var(--erp-text);
   --bs-pagination-hover-border-color: var(--erp-border);
-  --bs-pagination-active-bg: var(--erp-accent);
+  --bs-pagination-active-bg: var(--erp-success);
   --bs-pagination-active-border-color: transparent;
   --bs-pagination-disabled-color: var(--erp-text-muted);
   --bs-pagination-disabled-bg: transparent;
