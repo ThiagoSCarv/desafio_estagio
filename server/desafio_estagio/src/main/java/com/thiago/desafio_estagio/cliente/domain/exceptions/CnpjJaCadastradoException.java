@@ -1,8 +1,15 @@
 package com.thiago.desafio_estagio.cliente.domain.exceptions;
 
-public class CnpjJaCadastradoException extends RuntimeException {
+import com.thiago.desafio_estagio.shared.exceptions.DuplicidadeException;
+
+public class CnpjJaCadastradoException extends DuplicidadeException {
 
     public CnpjJaCadastradoException() {
         super("CNPJ já cadastrado");
+    }
+
+    @Override
+    public String field() {
+        return "cnpj";
     }
 }

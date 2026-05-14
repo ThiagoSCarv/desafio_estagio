@@ -1,8 +1,15 @@
 package com.thiago.desafio_estagio.cliente.domain.exceptions;
 
-public class RazaoSocialJaCadastradaException extends RuntimeException {
+import com.thiago.desafio_estagio.shared.exceptions.DuplicidadeException;
+
+public class RazaoSocialJaCadastradaException extends DuplicidadeException {
 
     public RazaoSocialJaCadastradaException() {
         super("Razão social já cadastrada");
+    }
+
+    @Override
+    public String field() {
+        return "razaoSocial";
     }
 }

@@ -1,15 +1,11 @@
 package com.thiago.desafio_estagio.shared.exceptions;
 
 import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontradoException;
-import com.thiago.desafio_estagio.cliente.domain.exceptions.CnpjJaCadastradoException;
-import com.thiago.desafio_estagio.cliente.domain.exceptions.CpfJaCadastradoException;
-import com.thiago.desafio_estagio.cliente.domain.exceptions.EmailJaCadastradoException;
-import com.thiago.desafio_estagio.cliente.domain.exceptions.RazaoSocialJaCadastradaException;
-import com.thiago.desafio_estagio.cliente.domain.exceptions.RgJaCadastradoException;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoNaoEncontradoException;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
 import com.thiago.desafio_estagio.relatorio.application.exceptions.FormatoRelatorioInvalidoException;
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
@@ -32,42 +28,21 @@ public class ExceptionHandlerController {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   public ErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
-    List<ErrorMessageDTO> erros = ex.getBindingResult().getFieldErrors().stream()
-        .map(error -> new ErrorMessageDTO(
-            error.getField(),
-            messageSource.getMessage(error, LocaleContextHolder.getLocale())))
-        .toList();
-    return ErrorResponse.of(erros);
+    var locale = LocaleContextHolder.getLocale();
+    // inclui field errors e global errors (constraints de classe como @AssertTrue)
+    List<ErrorMessageDTO> errors = Stream.concat(
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(e -> new ErrorMessageDTO(e.getField(), messageSource.getMessage(e, locale))),
+        ex.getBindingResult().getGlobalErrors().stream()
+            .map(e -> new ErrorMessageDTO(e.getObjectName(), messageSource.getMessage(e, locale)))
+    ).toList();
+    return ErrorResponse.of(errors);
   }
 
-  @ExceptionHandler(EmailJaCadastradoException.class)
+  @ExceptionHandler(DuplicidadeException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleEmailJaCadastrado(EmailJaCadastradoException ex) {
-    return ErrorResponse.of("email", ex.getMessage());
-  }
-
-  @ExceptionHandler(CpfJaCadastradoException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleCpfJaCadastrado(CpfJaCadastradoException ex) {
-    return ErrorResponse.of("cpf", ex.getMessage());
-  }
-
-  @ExceptionHandler(RgJaCadastradoException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleRgJaCadastrado(RgJaCadastradoException ex) {
-    return ErrorResponse.of("rg", ex.getMessage());
-  }
-
-  @ExceptionHandler(CnpjJaCadastradoException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleCnpjJaCadastrado(CnpjJaCadastradoException ex) {
-    return ErrorResponse.of("cnpj", ex.getMessage());
-  }
-
-  @ExceptionHandler(RazaoSocialJaCadastradaException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleRazaoSocialJaCadastrada(RazaoSocialJaCadastradaException ex) {
-    return ErrorResponse.of("razaoSocial", ex.getMessage());
+  public ErrorResponse handleDuplicidade(DuplicidadeException ex) {
+    return ErrorResponse.of(ex.field(), ex.getMessage());
   }
 
   @ExceptionHandler(ClienteNaoEncontradoException.class)
@@ -92,5 +67,11 @@ public class ExceptionHandlerController {
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErrorResponse handleFormatoRelatorioInvalido(FormatoRelatorioInvalidoException ex) {
     return ErrorResponse.of("formato", ex.getMessage());
+  }
+
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ErrorResponse handleUnexpected(Exception ex) {
+    return ErrorResponse.of("erro", "Erro interno inesperado");
   }
 }

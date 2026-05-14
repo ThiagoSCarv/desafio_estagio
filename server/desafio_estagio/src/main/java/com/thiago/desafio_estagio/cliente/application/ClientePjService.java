@@ -33,7 +33,7 @@ public class ClientePjService {
     //CNPJ é normalizado garantindo que mesmo que os clientes enviem com mascara o dado seja armazenado da maneira correta.
     @Transactional
     public ClientePjDto criar(ClientePjCreateDto dto) {
-        String cnpj = dto.cnpj().replaceAll("[^0-9]", "");
+        String cnpj = dto.cnpj().replaceAll("\\D", "");
 
         if (clienteRepository.existsByEmail(dto.email())) {
             throw new EmailJaCadastradoException();

@@ -10,16 +10,14 @@ public class TelefoneValidator implements ConstraintValidator<ValidTelefone, Str
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) return true;
 
-        String telefone = value.replaceAll("[^0-9]", "");
+        String telefone = value.replaceAll("\\D", "");
 
         if (telefone.length() != 10 && telefone.length() != 11) return false;
 
         int ddd = Integer.parseInt(telefone.substring(0, 2));
         if (ddd < 11 || ddd > 99) return false;
 
-        // celular: 11 dígitos e terceiro dígito deve ser 9
-        if (telefone.length() == 11 && telefone.charAt(2) != '9') return false;
-
-        return true;
+        // celular: terceiro dígito deve ser 9
+        return telefone.length() != 11 || telefone.charAt(2) == '9';
     }
 }

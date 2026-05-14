@@ -13,7 +13,7 @@ public class CnpjValidator implements ConstraintValidator<ValidCnpj, String> {
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) return true;
 
-        String cnpj = value.replaceAll("[^0-9]", "");
+        String cnpj = value.replaceAll("\\D", "");
 
         if (cnpj.length() != 14) return false;
 

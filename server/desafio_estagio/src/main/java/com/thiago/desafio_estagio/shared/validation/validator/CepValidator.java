@@ -10,7 +10,7 @@ public class CepValidator implements ConstraintValidator<ValidCep, String> {
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) return true;
 
-        String cep = value.replaceAll("[^0-9]", "");
+        String cep = value.replaceAll("\\D", "");
 
         return cep.length() == 8;
     }

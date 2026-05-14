@@ -1,0 +1,14 @@
+{
+	"configurations": [
+		{
+			"type": "java",
+			"name": "Spring Boot-DesafioEstagioApplication<desafio_estagio>",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"mainClass": "com.thiago.desafio_estagio.DesafioEstagioApplication",
+			"projectName": "desafio_estagio",
+			"args": "",
+			"envFile": "${workspaceFolder}/.env"
+		}
+	]
+}

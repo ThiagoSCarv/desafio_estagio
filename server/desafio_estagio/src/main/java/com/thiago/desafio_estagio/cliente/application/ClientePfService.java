@@ -33,7 +33,7 @@ public class ClientePfService {
     //CPF e RG são normalizados garantindo que mesmo que os clientes enviem com mascara o dado seja armazenado da maneira correta.
     @Transactional
     public ClientePfDto criar(ClientePfCreateDto dto) {
-        String cpf = dto.cpf().replaceAll("[^0-9]", "");
+        String cpf = dto.cpf().replaceAll("\\D", "");
         String rg = dto.rg().replaceAll("[.\\-\\s]", "").toUpperCase();
 
         if (clienteRepository.existsByEmail(dto.email())) {
