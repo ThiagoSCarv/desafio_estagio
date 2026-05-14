@@ -104,7 +104,16 @@ public class ListaClientes extends Panel {
         documentoField.add(atualizarAoMudar());
         filtroForm.add(documentoField);
 
-        add(new ListView<ClienteDto>("clientes", new LoadableDetachableModel<List<ClienteDto>>() {
+        WebMarkupContainer listaOrdenada = new WebMarkupContainer("listaOrdenada");
+        listaOrdenada.add(new AttributeModifier("start", new IModel<Integer>() {
+            @Override
+            public Integer getObject() {
+                return paginaAtual * PAGE_SIZE + 1;
+            }
+        }));
+        add(listaOrdenada);
+
+        listaOrdenada.add(new ListView<ClienteDto>("clientes", new LoadableDetachableModel<List<ClienteDto>>() {
             @Override
             protected List<ClienteDto> load() {
                 return pageModel.getObject().getContent();
