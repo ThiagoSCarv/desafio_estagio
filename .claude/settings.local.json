@@ -27,7 +27,12 @@
       "Bash(rm -f /tmp/CompileJrxml.java /tmp/CompileJrxml.class /tmp/classpath.txt)",
       "Bash(kill 259424)",
       "Bash(echo \"started pid=$!\")",
-      "Bash(kill 267292 267112)"
+      "Bash(kill 267292 267112)",
+      "Bash(rtk find *)",
+      "Bash(rtk wc *)",
+      "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"fix: corrigindo numeração da lista ao paginar com atributo start no ol\")",
+      "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: adicionando serviço e controller de importação de clientes via xlsx\")",
+      "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: extraindo FooterPanel e adicionando modal de importação em lote\")"
     ],
     "additionalDirectories": [
       "/tmp"

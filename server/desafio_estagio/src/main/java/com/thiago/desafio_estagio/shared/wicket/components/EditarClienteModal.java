@@ -110,8 +110,7 @@ public class EditarClienteModal extends Panel {
         this.clienteId = cliente.id();
         this.tipoPessoa = cliente.tipoPessoa();
         ativoModel.setObject(cliente.ativo());
-
-        String codigo = "C-" + cliente.id().toString().replace("-", "").substring(0, 4).toUpperCase();
+        emailModel.setObject(cliente.email());
 
         if (cliente instanceof ClientePfDto pf) {
             tipoModel.setObject("Pessoa Física");
@@ -119,6 +118,7 @@ public class EditarClienteModal extends Panel {
             badgeNameModel.setObject(pf.nome());
             emailLabelModel.setObject("E-MAIL");
             ativoNumModel.setObject("03");
+            nomeModel.setObject(pf.nome());
             pfCampos.setVisible(true);
             pjCampos.setVisible(false);
         } else {
@@ -128,6 +128,8 @@ public class EditarClienteModal extends Panel {
             badgeNameModel.setObject(formatarCnpj(pj.cnpj()));
             emailLabelModel.setObject("E-MAIL CORPORATIVO");
             ativoNumModel.setObject("04");
+            razaoSocialModel.setObject(pj.razaoSocial());
+            inscricaoEstadualModel.setObject(pj.inscricaoEstadual());
             pfCampos.setVisible(false);
             pjCampos.setVisible(true);
         }
