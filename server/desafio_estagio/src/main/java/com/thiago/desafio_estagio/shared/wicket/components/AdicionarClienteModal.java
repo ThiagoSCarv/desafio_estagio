@@ -19,6 +19,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class AdicionarClienteModal extends Panel {
 
@@ -144,9 +145,9 @@ public class AdicionarClienteModal extends Panel {
             throw new IllegalArgumentException("Data obrigatória não informada.");
         }
         try {
-            return LocalDate.parse(value);
+            return LocalDate.parse(value, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         } catch (Exception e) {
-            throw new IllegalArgumentException("Formato de data inválido.");
+            throw new IllegalArgumentException("Formato de data inválido. Use dd/mm/aaaa.");
         }
     }
 
