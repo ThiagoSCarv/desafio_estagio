@@ -1,9 +1,7 @@
-package com.thiago.desafio_estagio.shared.wicket.components;
+package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 
-import com.thiago.desafio_estagio.cliente.application.ClienteDto;
-import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
-import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
-import com.thiago.desafio_estagio.cliente.application.ClienteService;
+import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
+import com.thiago.desafio_estagio.endereco.application.EnderecoService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
@@ -15,16 +13,16 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.UUID;
 
-public class ExcluirClienteModal extends Panel {
+public class ExcluirEnderecoModal extends Panel {
 
     @SpringBean
-    private ClienteService clienteService;
+    private EnderecoService enderecoService;
 
-    private UUID clienteId;
-    private final Model<String> nomeModel = Model.of("");
+    private UUID enderecoId;
+    private final Model<String> logradouroModel = Model.of("");
     private final FeedbackPanel feedback;
 
-    public ExcluirClienteModal(String id) {
+    public ExcluirEnderecoModal(String id) {
         super(id);
         setOutputMarkupId(true);
 
@@ -32,30 +30,30 @@ public class ExcluirClienteModal extends Panel {
         feedback.setOutputMarkupId(true);
         add(feedback);
 
-        add(new Label("nomeCliente", nomeModel));
+        add(new Label("logradouroEndereco", logradouroModel));
 
         add(new AjaxLink<Void>("confirmar") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 try {
-                    clienteService.deletar(clienteId);
+                    enderecoService.deletar(enderecoId);
                     ocultarModal(target);
-                    mostrarToast(target, "Cliente removido com sucesso.");
+                    mostrarToast(target, "Endereço removido com sucesso.");
                     onExcluido(target);
                 } catch (RuntimeException e) {
-                    ExcluirClienteModal.this.error(e.getMessage());
+                    ExcluirEnderecoModal.this.error(e.getMessage());
                     target.add(feedback);
                 }
             }
         });
     }
 
-    public void setCliente(ClienteDto cliente) {
-        this.clienteId = cliente.id();
-        String nome = cliente instanceof ClientePfDto pf
-                ? pf.nome()
-                : ((ClientePjDto) cliente).razaoSocial();
-        nomeModel.setObject(nome);
+    public void setEndereco(EnderecoDto endereco) {
+        this.enderecoId = endereco.id();
+        String logradouro = endereco.logradouro() != null ? endereco.logradouro() : "Endereço";
+        if (endereco.numero() != null && !endereco.numero().isBlank())
+            logradouro += ", " + endereco.numero();
+        logradouroModel.setObject(logradouro);
     }
 
     private void ocultarModal(AjaxRequestTarget target) {

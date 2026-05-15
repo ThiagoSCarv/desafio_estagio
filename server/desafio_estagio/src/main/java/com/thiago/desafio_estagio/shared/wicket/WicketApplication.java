@@ -36,6 +36,6 @@ public class WicketApplication extends WebApplication {
         // Serve os recursos diretamente pelo Wicket evitando conflito com o WicketFilter
         mountResource("/css/theme.css", THEME_CSS);
         mountResource("/js/masks.js", JsUtils.MASKS);
-        mountPage("/clientes/${id}", DetalhesClientePage.class);
+        mountPage("/clientes/detalhe/${id}", DetalhesClientePage.class);
     }
 }

@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.shared.wicket.components;
+package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

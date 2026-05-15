@@ -1,10 +1,11 @@
-package com.thiago.desafio_estagio.shared.wicket.components;
+package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 
 import com.thiago.desafio_estagio.cliente.application.ClienteDto;
 import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
 import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
+import com.thiago.desafio_estagio.shared.wicket.components.home.RelatorioClienteModal;
 import com.thiago.desafio_estagio.shared.wicket.pages.home.HomePage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;

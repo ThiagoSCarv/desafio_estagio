@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.shared.wicket.components;
+package com.thiago.desafio_estagio.shared.wicket.components.home;
 
 import com.thiago.desafio_estagio.cliente.application.ClienteDto;
 import com.thiago.desafio_estagio.shared.wicket.pages.detalhes.DetalhesClientePage;

@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.shared.wicket.components;
+package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 
 import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
 import com.thiago.desafio_estagio.endereco.application.EnderecoService;

@@ -134,6 +134,17 @@ code, kbd, pre, .font-mono {
   color: var(--erp-text-muted);
 }
 
+.form-control[type="file"]::file-selector-button {
+  background-color: var(--erp-surface);
+  border-inline-end-color: var(--erp-border);
+  color: var(--erp-text-muted);
+}
+
+.form-control[type="file"]:hover:not(:disabled)::file-selector-button {
+  background-color: var(--erp-surface-muted);
+  color: var(--erp-text-secondary);
+}
+
 /* ─── Cards / painéis ──────────────────────────────────────────────────────── */
 .card {
   background-color: var(--erp-surface);

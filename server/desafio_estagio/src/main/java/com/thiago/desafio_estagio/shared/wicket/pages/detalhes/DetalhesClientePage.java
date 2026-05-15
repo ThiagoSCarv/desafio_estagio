@@ -1,10 +1,10 @@
 package com.thiago.desafio_estagio.shared.wicket.pages.detalhes;
 
 import com.thiago.desafio_estagio.shared.wicket.WicketApplication;
-import com.thiago.desafio_estagio.shared.wicket.components.FooterDetalheCliente;
-import com.thiago.desafio_estagio.shared.wicket.components.HeaderDetalheCliente;
-import com.thiago.desafio_estagio.shared.wicket.components.ListaEnderecosCliente;
-import com.thiago.desafio_estagio.shared.wicket.components.SectionDetalheCliente;
+import com.thiago.desafio_estagio.shared.wicket.components.detalhes.FooterDetalheCliente;
+import com.thiago.desafio_estagio.shared.wicket.components.detalhes.HeaderDetalheCliente;
+import com.thiago.desafio_estagio.shared.wicket.components.detalhes.ListaEnderecosCliente;
+import com.thiago.desafio_estagio.shared.wicket.components.detalhes.SectionDetalheCliente;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
