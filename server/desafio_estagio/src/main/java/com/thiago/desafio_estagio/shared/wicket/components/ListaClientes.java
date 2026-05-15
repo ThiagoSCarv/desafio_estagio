@@ -5,21 +5,14 @@ import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
 import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
-import com.thiago.desafio_estagio.shared.utils.JsUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -45,7 +38,7 @@ public class ListaClientes extends Panel {
 
     private final Model<String> nomeFilter      = Model.of("");
     private final Model<String> documentoFilter  = Model.of("");
-    private TipoPessoa tipoFiltro               = null;
+    private final Model<TipoPessoa> tipoFiltroModel = Model.of((TipoPessoa) null);
     private int paginaAtual                     = 0;
 
     // Modelo compartilhado entre ListView e Label de paginação dentro do mesmo request.
@@ -55,19 +48,13 @@ public class ListaClientes extends Panel {
             @Override
             protected Page<ClienteDto> load() {
                 return clienteService.listarTodos(
-                    tipoFiltro,
+                    tipoFiltroModel.getObject(),
                     documentoFilter.getObject(),
                     nomeFilter.getObject(),
                     PageRequest.of(paginaAtual, PAGE_SIZE)
                 );
             }
         };
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(JsUtils.MASKS));
-    }
 
     public void recarregarLista(AjaxRequestTarget target) {
         paginaAtual = 0;
@@ -86,22 +73,14 @@ public class ListaClientes extends Panel {
         super(id);
         setOutputMarkupId(true);
 
-        // Form necessário para AjaxFormComponentUpdatingBehavior nos campos de texto
-        Form<Void> filtroForm = new Form<>("filtroForm");
-        filtroForm.add(AttributeModifier.replace("onsubmit", "return false;"));
-        add(filtroForm);
-
-        filtroForm.add(tipoLink("filtroTodos", null));
-        filtroForm.add(tipoLink("filtroFisica", TipoPessoa.FISICA));
-        filtroForm.add(tipoLink("filtroJuridica", TipoPessoa.JURIDICA));
-
-        TextField<String> nomeField = new TextField<>("filtroNome", nomeFilter);
-        nomeField.add(atualizarAoMudar());
-        filtroForm.add(nomeField);
-
-        TextField<String> documentoField = new TextField<>("filtroDocumento", documentoFilter);
-        documentoField.add(atualizarAoMudar());
-        filtroForm.add(documentoField);
+        add(new FiltroClientesPanel("filtroPanel", nomeFilter, documentoFilter, tipoFiltroModel) {
+            @Override
+            protected void onFiltroMudou(AjaxRequestTarget target) {
+                paginaAtual = 0;
+                pageModel.detach();
+                target.add(ListaClientes.this);
+            }
+        });
 
         WebMarkupContainer listaOrdenada = new WebMarkupContainer("listaOrdenada");
         add(listaOrdenada);
@@ -185,35 +164,5 @@ public class ListaClientes extends Panel {
                 }
             }
         });
-    }
-
-    private AjaxFormComponentUpdatingBehavior atualizarAoMudar() {
-        return new AjaxFormComponentUpdatingBehavior("change") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                paginaAtual = 0;
-                pageModel.detach();
-                target.add(ListaClientes.this);
-            }
-        };
-    }
-
-    private AjaxLink<Void> tipoLink(String id, TipoPessoa tipo) {
-        AjaxLink<Void> link = new AjaxLink<>(id) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                tipoFiltro = tipo;
-                paginaAtual = 0;
-                pageModel.detach();
-                target.add(ListaClientes.this);
-            }
-        };
-        link.add(new AttributeModifier("class", new IModel<String>() {
-            @Override
-            public String getObject() {
-                return "erp-filter-tab" + (tipoFiltro == tipo ? " erp-filter-tab--ativo" : "");
-            }
-        }));
-        return link;
     }
 }

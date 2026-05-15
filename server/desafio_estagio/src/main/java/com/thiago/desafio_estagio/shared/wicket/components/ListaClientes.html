@@ -4,36 +4,7 @@
 <body>
 <wicket:panel>
 
-    <form wicket:id="filtroForm" class="erp-toolbar">
-
-        <div class="erp-search-wrap">
-            <div class="erp-search">
-                <svg class="erp-search__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-                <input wicket:id="filtroNome" type="text" class="erp-search__input" placeholder="Nome / Raz&atilde;o Social"/>
-            </div>
-        </div>
-
-        <div class="erp-filters">
-
-            <div class="erp-filter-group">
-                <span class="erp-filter-group__label">Tipo</span>
-                <div class="erp-filter-tabs" role="radiogroup">
-                    <a wicket:id="filtroTodos" class="erp-filter-tab">todos</a>
-                    <a wicket:id="filtroFisica" class="erp-filter-tab">f&iacute;sica</a>
-                    <a wicket:id="filtroJuridica" class="erp-filter-tab">jur&iacute;dica</a>
-                </div>
-            </div>
-
-            <div class="erp-filter-group">
-                <label class="erp-filter-group__label" for="filtroDocumento">Documento</label>
-                <input wicket:id="filtroDocumento" type="text" class="erp-filter-input" placeholder="CPF ou CNPJ"/>
-            </div>
-
-        </div>
-
-    </form>
+    <div wicket:id="filtroPanel"></div>
 
     <div class="erp-list">
 
