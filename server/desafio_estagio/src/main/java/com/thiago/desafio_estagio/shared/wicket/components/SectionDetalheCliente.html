@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <!-- Dados PJ -->
+    <section wicket:id="secaoPj" class="erp-detalhe-section">
+        <div class="erp-detalhe-section__header">
+            <span class="erp-detalhe-section__num">01</span>
+            <h2 class="erp-detalhe-section__title">Dados da Empresa</h2>
+        </div>
+        <hr class="erp-divider" />
+        <div class="erp-detalhe-fields">
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Raz&atilde;o Social</span>
+                <span class="erp-detalhe-field__value" wicket:id="razaoSocial">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">E-mail Corporativo</span>
+                <span class="erp-detalhe-field__value" wicket:id="emailPj">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Status</span>
+                <span wicket:id="statusPj" class="erp-status erp-status--ativo">
+                    <span class="erp-status-dot"></span>
+                    <span class="erp-status__badge" wicket:id="statusPjLabel">ATIVO</span>
+                </span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Inscri&ccedil;&atilde;o Estadual</span>
+                <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="inscricaoEstadual">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">CNPJ</span>
+                <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="cnpj">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Data de Cria&ccedil;&atilde;o</span>
+                <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="dataCriacao">—</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dados PF -->
+    <section wicket:id="secaoPf" class="erp-detalhe-section">
+        <div class="erp-detalhe-section__header">
+            <span class="erp-detalhe-section__num">01</span>
+            <h2 class="erp-detalhe-section__title">Dados Pessoais</h2>
+        </div>
+        <hr class="erp-divider" />
+        <div class="erp-detalhe-fields">
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Nome Completo</span>
+                <span class="erp-detalhe-field__value" wicket:id="nome">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">E-mail</span>
+                <span class="erp-detalhe-field__value" wicket:id="emailPf">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Status</span>
+                <span wicket:id="statusPf" class="erp-status erp-status--ativo">
+                    <span class="erp-status-dot"></span>
+                    <span class="erp-status__badge" wicket:id="statusPfLabel">ATIVO</span>
+                </span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">CPF</span>
+                <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="cpf">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">RG</span>
+                <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="rg">—</span>
+            </div>
+            <div class="erp-detalhe-field">
+                <span class="erp-detalhe-field__label">Data de Nascimento</span>
+                <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="dataNascimento">—</span>
+            </div>
+        </div>
+    </section>
+
+
+</wicket:panel>
+</body>
+</html>

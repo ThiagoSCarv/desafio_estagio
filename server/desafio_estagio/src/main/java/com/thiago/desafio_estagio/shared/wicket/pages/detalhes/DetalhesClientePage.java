@@ -2,6 +2,8 @@ package com.thiago.desafio_estagio.shared.wicket.pages.detalhes;
 
 import com.thiago.desafio_estagio.shared.wicket.WicketApplication;
 import com.thiago.desafio_estagio.shared.wicket.components.HeaderDetalheCliente;
+import com.thiago.desafio_estagio.shared.wicket.components.ListaEnderecosCliente;
+import com.thiago.desafio_estagio.shared.wicket.components.SectionDetalheCliente;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -18,6 +20,8 @@ public class DetalhesClientePage extends WebPage {
         UUID clienteId = UUID.fromString(params.get("id").toString());
 
         add(new HeaderDetalheCliente("header", clienteId));
+        add(new SectionDetalheCliente("secaoDetalhe", clienteId));
+        add(new ListaEnderecosCliente("listaEnderecos", clienteId));
     }
 
     @Override

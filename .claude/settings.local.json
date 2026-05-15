@@ -32,7 +32,8 @@
       "Bash(rtk wc *)",
       "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"fix: corrigindo numeração da lista ao paginar com atributo start no ol\")",
       "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: adicionando serviço e controller de importação de clientes via xlsx\")",
-      "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: extraindo FooterPanel e adicionando modal de importação em lote\")"
+      "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: extraindo FooterPanel e adicionando modal de importação em lote\")",
+      "Bash(xargs ls)"
     ],
     "additionalDirectories": [
       "/tmp"
