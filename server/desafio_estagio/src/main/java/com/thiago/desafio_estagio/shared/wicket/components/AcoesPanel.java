@@ -1,10 +1,13 @@
 package com.thiago.desafio_estagio.shared.wicket.components;
 
 import com.thiago.desafio_estagio.cliente.application.ClienteDto;
+import com.thiago.desafio_estagio.shared.wicket.pages.detalhes.DetalhesClientePage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class AcoesPanel extends Panel {
 
@@ -34,10 +37,9 @@ public class AcoesPanel extends Panel {
         modalRelatorio = new RelatorioClienteModal("modalRelatorio");
         add(modalRelatorio);
 
-        add(new AjaxLink<ClienteDto>("detalhes", model) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {}
-        });
+        PageParameters detalhesParams = new PageParameters();
+        detalhesParams.set("id", model.getObject().id().toString());
+        add(new BookmarkablePageLink<>("detalhes", DetalhesClientePage.class, detalhesParams));
 
         add(new AjaxLink<ClienteDto>("editar", model) {
             @Override
