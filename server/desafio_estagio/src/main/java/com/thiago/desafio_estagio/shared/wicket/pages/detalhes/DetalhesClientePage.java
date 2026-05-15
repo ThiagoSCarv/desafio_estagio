@@ -1,6 +1,7 @@
 package com.thiago.desafio_estagio.shared.wicket.pages.detalhes;
 
 import com.thiago.desafio_estagio.shared.wicket.WicketApplication;
+import com.thiago.desafio_estagio.shared.wicket.components.FooterDetalheCliente;
 import com.thiago.desafio_estagio.shared.wicket.components.HeaderDetalheCliente;
 import com.thiago.desafio_estagio.shared.wicket.components.ListaEnderecosCliente;
 import com.thiago.desafio_estagio.shared.wicket.components.SectionDetalheCliente;
@@ -21,7 +22,9 @@ public class DetalhesClientePage extends WebPage {
 
         add(new HeaderDetalheCliente("header", clienteId));
         add(new SectionDetalheCliente("secaoDetalhe", clienteId));
-        add(new ListaEnderecosCliente("listaEnderecos", clienteId));
+        ListaEnderecosCliente listaEnderecos = new ListaEnderecosCliente("listaEnderecos", clienteId);
+        add(listaEnderecos);
+        add(new FooterDetalheCliente("footerDetalhe", clienteId, listaEnderecos));
     }
 
     @Override

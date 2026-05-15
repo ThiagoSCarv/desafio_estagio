@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content erp-modal">
+
+            <div class="modal-header erp-modal-header-form">
+                <div>
+                    <p class="erp-modal-eyebrow">Endere&ccedil;os</p>
+                    <h4 class="erp-modal-heading">Adicionar endere&ccedil;o</h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <form wicket:id="form">
+                <div class="modal-body">
+                    <div wicket:id="feedback"></div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">01</span> LOGRADOURO
+                        </label>
+                        <input wicket:id="logradouro" type="text" class="form-control" placeholder="Rua, Avenida, Travessa…" />
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-8">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">02</span> N&Uacute;MERO
+                            </label>
+                            <input wicket:id="numero" type="text" class="form-control" />
+                        </div>
+                        <div class="col-4">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">03</span> CEP
+                            </label>
+                            <input wicket:id="cep" type="text" class="form-control" placeholder="00000000" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">04</span> BAIRRO
+                        </label>
+                        <input wicket:id="bairro" type="text" class="form-control" />
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-8">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">05</span> CIDADE
+                            </label>
+                            <input wicket:id="cidade" type="text" class="form-control" />
+                        </div>
+                        <div class="col-4">
+                            <label class="erp-field-label">
+                                <span class="erp-field-num">06</span> UF
+                            </label>
+                            <input wicket:id="estado" type="text" class="form-control" maxlength="2" placeholder="SP" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">07</span> TELEFONE
+                            <span class="erp-field-optional">opcional</span>
+                        </label>
+                        <input wicket:id="telefone" type="text" class="form-control" placeholder="(00) 00000-0000" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">08</span> COMPLEMENTO
+                            <span class="erp-field-optional">opcional</span>
+                        </label>
+                        <input wicket:id="complemento" type="text" class="form-control" placeholder="Apto, Bloco, Casa…" />
+                    </div>
+
+                    <div>
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">09</span> ENDERE&Ccedil;O PRINCIPAL
+                        </label>
+                        <div class="erp-toggle-row">
+                            <div class="form-check form-switch mb-0">
+                                <input wicket:id="enderecoPrincipal" type="checkbox" class="form-check-input erp-toggle-switch" />
+                            </div>
+                            <span class="erp-toggle-label">PRINCIPAL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button wicket:id="salvar" type="submit" class="btn btn-success">Adicionar endere&ccedil;o</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>
