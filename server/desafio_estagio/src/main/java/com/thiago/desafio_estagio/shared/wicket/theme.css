@@ -918,3 +918,90 @@ code, kbd, pre, .font-mono {
   --bs-pagination-disabled-color: var(--erp-text-muted);
   --bs-pagination-disabled-bg: transparent;
 }
+
+/* ─── Header de detalhe ─────────────────────────────────────────────────────── */
+.erp-head--detalhe {
+  padding: 0;
+  border-bottom: none;
+}
+
+.erp-head-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 2.5rem;
+  border-bottom: 1px solid var(--erp-border);
+}
+
+.erp-head-topbar__breadcrumb {
+  flex: 1;
+  --bs-breadcrumb-divider: "·";
+}
+
+.erp-btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--erp-text-secondary);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.625rem;
+  border: 1px solid var(--erp-border);
+  border-radius: 0.375rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+.erp-btn-voltar:hover {
+  color: var(--erp-text);
+  border-color: var(--erp-border-strong);
+}
+
+.erp-btn-relatorio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--erp-text-secondary);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--erp-border);
+  border-radius: 0.375rem;
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.erp-btn-relatorio:hover {
+  color: var(--erp-text);
+  border-color: var(--erp-border-strong);
+}
+
+.erp-head-detalhe-body {
+  padding: 1.75rem 2.5rem 1.5rem;
+}
+
+.erp-detalhe-eyebrow {
+  font-family: var(--erp-font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  color: var(--erp-text-muted);
+  margin-bottom: 0.375rem;
+}
+
+.erp-status__badge {
+  font-family: var(--erp-font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.erp-status__desde {
+  font-family: var(--erp-font-sans);
+  font-size: 0.6875rem;
+  color: var(--erp-text-muted);
+}

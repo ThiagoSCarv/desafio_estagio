@@ -1,30 +1,23 @@
 package com.thiago.desafio_estagio.shared.wicket.pages.detalhes;
 
 import com.thiago.desafio_estagio.shared.wicket.WicketApplication;
-import com.thiago.desafio_estagio.shared.wicket.pages.home.HomePage;
+import com.thiago.desafio_estagio.shared.wicket.components.HeaderDetalheCliente;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import java.util.UUID;
 
 public class DetalhesClientePage extends WebPage {
 
     public DetalhesClientePage(PageParameters params) {
         super(params);
 
-        String id = params.get("id").toString("(não informado)");
+        UUID clienteId = UUID.fromString(params.get("id").toString());
 
-        add(new Label("clienteId", id));
-
-        add(new Link<Void>("voltar") {
-            @Override
-            public void onClick() {
-                setResponsePage(HomePage.class);
-            }
-        });
+        add(new HeaderDetalheCliente("header", clienteId));
     }
 
     @Override
