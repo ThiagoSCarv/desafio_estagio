@@ -32,6 +32,7 @@ public class ImportarClientesModal extends Panel {
 
     public ImportarClientesModal(String id) {
         super(id);
+        setOutputMarkupId(true);
 
         Form<Void> form = new Form<>("form");
         form.setMultiPart(true);

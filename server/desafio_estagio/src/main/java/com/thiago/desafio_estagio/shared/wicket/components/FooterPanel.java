@@ -29,7 +29,7 @@ public class FooterPanel extends Panel {
         ImportarClientesModal modalImportar = new ImportarClientesModal("modalImportar") {
             @Override
             protected void onImportou(AjaxRequestTarget target) {
-                onImportou(target);
+                FooterPanel.this.onImportou(target);
             }
         };
         add(modalImportar);

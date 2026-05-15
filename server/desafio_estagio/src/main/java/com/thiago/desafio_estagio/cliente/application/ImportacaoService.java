@@ -82,8 +82,9 @@ public class ImportacaoService {
                 }
             }
 
-            for (int i = 0; i < cabecalhos.length; i++) {
-                sheet.autoSizeColumn(i);
+            int[] larguras = {8, 30, 20, 30, 20, 14};
+            for (int i = 0; i < larguras.length; i++) {
+                sheet.setColumnWidth(i, larguras[i] * 256);
             }
 
             workbook.write(out);
