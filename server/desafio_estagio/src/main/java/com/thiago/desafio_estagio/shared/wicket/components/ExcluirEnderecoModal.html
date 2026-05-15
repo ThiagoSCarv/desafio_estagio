@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content erp-modal">
+
+            <div class="modal-header erp-modal-header-form">
+                <div>
+                    <p class="erp-modal-eyebrow">Confirmar exclus&atilde;o</p>
+                    <h4 class="erp-modal-heading">Remover endere&ccedil;o?</h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div wicket:id="feedback"></div>
+                <p class="mb-1" style="font-size: 0.9375rem; color: var(--erp-text-secondary);">
+                    Voc&ecirc; est&aacute; prestes a remover <strong style="color: var(--erp-text);" wicket:id="logradouroEndereco">logradouro</strong>.
+                    Essa a&ccedil;&atilde;o n&atilde;o pode ser desfeita.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a wicket:id="confirmar" class="btn btn-danger">Remover endere&ccedil;o</a>
+            </div>
+
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>
