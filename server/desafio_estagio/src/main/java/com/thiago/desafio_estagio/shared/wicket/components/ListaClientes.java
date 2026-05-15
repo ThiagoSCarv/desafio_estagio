@@ -1,4 +1,4 @@
-package com.thiago.desafio_estagio.shared.wicket.pages.home;
+package com.thiago.desafio_estagio.shared.wicket.components;
 
 import com.thiago.desafio_estagio.cliente.application.ClienteDto;
 import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
@@ -6,7 +6,6 @@ import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
 import com.thiago.desafio_estagio.shared.utils.JsUtils;
-import com.thiago.desafio_estagio.shared.wicket.components.AcoesPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -105,12 +104,6 @@ public class ListaClientes extends Panel {
         filtroForm.add(documentoField);
 
         WebMarkupContainer listaOrdenada = new WebMarkupContainer("listaOrdenada");
-        listaOrdenada.add(new AttributeModifier("start", new IModel<Integer>() {
-            @Override
-            public Integer getObject() {
-                return paginaAtual * PAGE_SIZE + 1;
-            }
-        }));
         add(listaOrdenada);
 
         listaOrdenada.add(new ListView<ClienteDto>("clientes", new LoadableDetachableModel<List<ClienteDto>>() {
@@ -167,11 +160,7 @@ public class ListaClientes extends Panel {
             @Override
             protected String load() {
                 Page<ClienteDto> page = pageModel.getObject();
-                return String.format("%02d / %02d · %d de %d registros",
-                    paginaAtual + 1,
-                    Math.max(1, page.getTotalPages()),
-                    page.getNumberOfElements(),
-                    page.getTotalElements());
+                return String.format("%02d / %02d", paginaAtual + 1, Math.max(1, page.getTotalPages()));
             }
         }));
 

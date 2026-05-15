@@ -2,6 +2,8 @@ package com.thiago.desafio_estagio.shared.wicket.pages.home;
 
 import com.thiago.desafio_estagio.shared.wicket.WicketApplication;
 import com.thiago.desafio_estagio.shared.wicket.components.FooterPanel;
+import com.thiago.desafio_estagio.shared.wicket.components.HeaderPanel;
+import com.thiago.desafio_estagio.shared.wicket.components.ListaClientes;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;

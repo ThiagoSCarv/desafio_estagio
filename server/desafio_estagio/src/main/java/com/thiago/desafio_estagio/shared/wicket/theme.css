@@ -444,7 +444,7 @@ code, kbd, pre, .font-mono {
 
 .erp-list-header {
   display: grid;
-  grid-template-columns: 2.5rem 1fr 5rem 10rem 1fr 8rem 7rem;
+  grid-template-columns: 1fr 5rem 10rem 1fr 8rem 7rem;
   align-items: center;
   gap: 1rem;
   padding: 0.625rem 1.25rem;
@@ -453,29 +453,19 @@ code, kbd, pre, .font-mono {
 
 .erp-list-row {
   display: grid;
-  grid-template-columns: 2.5rem 1fr 5rem 10rem 1fr 8rem 7rem;
+  grid-template-columns: 1fr 5rem 10rem 1fr 8rem 7rem;
   align-items: center;
   gap: 1rem;
   padding: 0 1.25rem;
-  counter-increment: erp-row;
   min-height: 3rem;
   border-bottom: 1px solid var(--erp-border);
   transition: background-color 0.1s;
 }
 
 .erp-list-body {
-  counter-reset: erp-row;
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-.erp-list-row::before {
-  content: counter(erp-row, decimal-leading-zero);
-  font-family: var(--erp-font-mono);
-  font-size: 0.6875rem;
-  color: var(--erp-text-muted);
-  text-align: right;
 }
 
 .erp-list-col {

@@ -38,7 +38,6 @@
     <div class="erp-list">
 
         <div class="erp-list-header">
-            <span class="erp-list-col erp-list-col--num"></span>
             <span class="erp-list-col erp-list-col--nome">Nome do Cliente</span>
             <span class="erp-list-col erp-list-col--tipo">Tipo</span>
             <span class="erp-list-col erp-list-col--documento">Documento</span>
@@ -47,7 +46,7 @@
             <span class="erp-list-col erp-list-col--acoes">A&ccedil;&otilde;es</span>
         </div>
 
-        <ol wicket:id="listaOrdenada" class="erp-list-body">
+        <ul wicket:id="listaOrdenada" class="erp-list-body">
             <li wicket:id="clientes" class="erp-list-row">
 
                 <span wicket:id="clienteNome" class="erp-list-col erp-list-col--nome">Nome</span>
@@ -68,12 +67,12 @@
                 <div wicket:id="acoes"></div>
 
             </li>
-        </ol>
+        </ul>
 
     </div>
 
     <div class="erp-pagination" style="margin-top: 1.25rem;">
-        <span wicket:id="paginacaoInfo" class="erp-pagination__info">01 / 01 &middot; 0 de 0 registros</span>
+        <span wicket:id="paginacaoInfo" class="erp-pagination__info">01 / 01</span>
         <div class="erp-pagination__nav">
             <a wicket:id="paginaAnterior" class="erp-page-btn" title="P&aacute;gina anterior">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>

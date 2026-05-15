@@ -34,6 +34,11 @@ public class AcoesPanel extends Panel {
         modalRelatorio = new RelatorioClienteModal("modalRelatorio");
         add(modalRelatorio);
 
+        add(new AjaxLink<ClienteDto>("detalhes", model) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {}
+        });
+
         add(new AjaxLink<ClienteDto>("editar", model) {
             @Override
             public void onClick(AjaxRequestTarget target) {
