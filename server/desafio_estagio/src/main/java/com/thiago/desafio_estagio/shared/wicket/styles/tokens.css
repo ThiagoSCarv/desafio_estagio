@@ -1,0 +1,48 @@
+/* ─── Tokens do design ─────────────────────────────────────────────────────── */
+:root {
+  /* Superfícies */
+  --erp-bg:            #14110f;
+  --erp-surface:       #1c1815;
+  --erp-surface-muted: rgba(255, 245, 230, 0.04);
+
+  /* Texto */
+  --erp-text:           #efe9e2;
+  --erp-text-secondary: rgba(239, 233, 226, 0.62);
+  --erp-text-muted:     rgba(239, 233, 226, 0.38);
+
+  /* Status ativo (verde) */
+  --erp-success:      #6dbc8a;
+  --erp-success-glow: rgba(109, 188, 138, 0.12);
+
+  /* Bordas */
+  --erp-border:        rgba(255, 245, 230, 0.08);
+  --erp-border-strong: rgba(255, 245, 230, 0.16);
+
+  /* Tipografia */
+  --erp-font-sans: 'Geist', system-ui, sans-serif;
+  --erp-font-mono: 'Geist Mono', 'Noto Sans Mono', monospace;
+
+  /* ─── Override Bootstrap 5 ──────────────────────────────────────────────── */
+  --bs-body-font-family: var(--erp-font-sans);
+  --bs-body-bg:          var(--erp-bg);
+  --bs-body-color:       var(--erp-text);
+
+  --bs-success:     var(--erp-success);
+  --bs-success-rgb: 109, 188, 138;
+
+  --bs-secondary-color: var(--erp-text-secondary);
+  --bs-border-color:    var(--erp-border);
+
+  --bs-card-bg:            var(--erp-surface);
+  --bs-card-border-color:  var(--erp-border);
+  --bs-card-border-radius: 0.75rem;
+
+  --bs-input-bg:                 var(--erp-surface-muted);
+  --bs-input-border-color:       var(--erp-border);
+  --bs-input-color:              var(--erp-text);
+  --bs-input-placeholder-color:  var(--erp-text-muted);
+  --bs-input-focus-border-color: var(--erp-success);
+  --bs-input-focus-box-shadow:   0 0 0 0.2rem var(--erp-success-glow);
+
+  --bs-btn-font-family: var(--erp-font-sans);
+}

@@ -1,0 +1,204 @@
+/* ─── Lista de clientes ────────────────────────────────────────────────────── */
+.erp-list {
+  border: 1px solid var(--erp-border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.erp-list-header,
+.erp-list-row {
+  display: grid;
+  grid-template-columns: 1fr 5rem 10rem 1fr 8rem 7rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.625rem 1.25rem;
+}
+
+.erp-list-header { border-bottom: 1px solid var(--erp-border); }
+
+.erp-list-row {
+  padding: 0 1.25rem;
+  min-height: 3rem;
+  border-bottom: 1px solid var(--erp-border);
+  transition: background-color 0.1s;
+}
+.erp-list-row:last-child { border-bottom: none; }
+.erp-list-row:hover      { background-color: var(--erp-surface-muted); }
+
+.erp-list-body {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.erp-list-col {
+  font-family: var(--erp-font-sans);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.erp-list-header .erp-list-col {
+  color: var(--erp-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+}
+
+.erp-list-col--nome     { font-size: 0.875rem; font-weight: 500; color: var(--erp-text); }
+.erp-list-col--tipo     { font-family: var(--erp-font-mono); font-size: 0.75rem; color: var(--erp-text-secondary); }
+.erp-list-col--documento{ font-family: var(--erp-font-mono); font-size: 0.75rem; color: var(--erp-text-secondary); }
+.erp-list-col--email    { font-size: 0.8125rem; color: var(--erp-text-secondary); }
+.erp-list-col--status   { display: flex; align-items: center; }
+.erp-list-col--acoes    { display: flex; align-items: center; gap: 0.25rem; justify-content: flex-end; }
+
+/* Badge de status */
+.erp-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.erp-status--ativo   { color: var(--erp-success); }
+.erp-status--inativo { color: var(--erp-text-muted); }
+
+/* Botões de ação (ícone) */
+.erp-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  color: var(--erp-text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+.erp-action-btn:hover {
+  background-color: var(--erp-surface-muted);
+  border-color: var(--erp-border);
+  color: var(--erp-text);
+}
+.erp-action-btn--danger:hover {
+  background-color: rgba(220, 80, 80, 0.10);
+  border-color: rgba(220, 80, 80, 0.28);
+  color: #e07070;
+}
+
+/* ─── Rodapé da lista (paginação + ações globais) ──────────────────────────── */
+.erp-list-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.erp-pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.erp-pagination__info {
+  font-family: var(--erp-font-mono);
+  font-size: 0.75rem;
+  color: var(--erp-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.erp-pagination__nav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.erp-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  background: none;
+  border: 1px solid var(--erp-border);
+  border-radius: 0.4rem;
+  color: var(--erp-text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+.erp-page-btn:hover {
+  background-color: var(--erp-surface-muted);
+  color: var(--erp-text);
+}
+
+/* Paginação Bootstrap */
+.pagination {
+  --bs-pagination-bg: transparent;
+  --bs-pagination-color: var(--erp-text-secondary);
+  --bs-pagination-border-color: var(--erp-border);
+  --bs-pagination-hover-bg: var(--erp-surface-muted);
+  --bs-pagination-hover-color: var(--erp-text);
+  --bs-pagination-hover-border-color: var(--erp-border);
+  --bs-pagination-active-bg: var(--erp-success);
+  --bs-pagination-active-border-color: transparent;
+  --bs-pagination-disabled-color: var(--erp-text-muted);
+  --bs-pagination-disabled-bg: transparent;
+}
+
+/* ─── Botões globais (adicionar, relatório, importar) ──────────────────────── */
+.erp-global-actions {
+  display: flex;
+  gap: 0.625rem;
+}
+
+.erp-btn-add,
+.erp-btn-report,
+.erp-btn-import {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-family: var(--erp-font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.erp-btn-add {
+  background-color: var(--erp-success);
+  border: none;
+  color: #0d2318;
+}
+.erp-btn-add:hover { background-color: #7dcf9b; }
+
+.erp-btn-report {
+  background-color: transparent;
+  border: 1px solid var(--erp-border);
+  color: var(--erp-text-secondary);
+}
+.erp-btn-report:hover {
+  background-color: var(--erp-surface-muted);
+  border-color: var(--erp-border-strong);
+  color: var(--erp-text);
+}
+
+.erp-btn-import {
+  background-color: transparent;
+  border: 1px solid rgba(100, 160, 220, 0.25);
+  color: rgba(140, 190, 240, 0.75);
+}
+.erp-btn-import:hover {
+  background-color: rgba(100, 160, 220, 0.08);
+  border-color: rgba(100, 160, 220, 0.45);
+  color: rgba(180, 215, 255, 0.95);
+}

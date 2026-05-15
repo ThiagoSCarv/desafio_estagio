@@ -33,10 +33,13 @@
       "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"fix: corrigindo numeração da lista ao paginar com atributo start no ol\")",
       "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: adicionando serviço e controller de importação de clientes via xlsx\")",
       "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: extraindo FooterPanel e adicionando modal de importação em lote\")",
-      "Bash(xargs ls)"
+      "Bash(xargs ls)",
+      "Bash(rm /home/thiago/repos/desafio_estagio/server/desafio_estagio/src/main/resources/static/css/theme.css && echo \"deleted\")",
+      "Bash(grep -oP '--erp-[a-z\\\\-]+')"
     ],
     "additionalDirectories": [
-      "/tmp"
+      "/tmp",
+      "/home/thiago/repos/desafio_estagio/server/desafio_estagio/src/main/resources/static/css"
     ]
   }
 }

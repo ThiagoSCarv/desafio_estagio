@@ -1,0 +1,83 @@
+/* ─── Layout da página ─────────────────────────────────────────────────────── */
+.erp-shell {
+  min-height: 100vh;
+  background-color: var(--erp-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.erp-main {
+  flex: 1;
+  padding: 2rem 2.5rem;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+.erp-head {
+  padding: 1.75rem 2.5rem 1.25rem;
+  border-bottom: 1px solid var(--erp-border);
+}
+
+.erp-eyebrow {
+  font-family: var(--erp-font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--erp-text-secondary);
+  margin-bottom: 0.625rem;
+}
+
+.erp-head-body {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.erp-head-title-group {
+  line-height: 1.1;
+}
+
+.erp-title {
+  font-family: var(--erp-font-sans);
+  font-size: 2.75rem;
+  font-weight: 400;
+  color: var(--erp-text);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.erp-title--italic {
+  font-style: italic;
+  color: var(--erp-success);
+  font-weight: 400;
+}
+
+/* ─── Stats ────────────────────────────────────────────────────────────────── */
+.erp-stats {
+  display: flex;
+  gap: 2rem;
+  padding-bottom: 0.25rem;
+}
+
+.erp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.125rem;
+}
+
+.erp-stat__label {
+  font-family: var(--erp-font-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--erp-text-muted);
+}
+
+.erp-stat__value {
+  font-family: var(--erp-font-mono);
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--erp-text);
+  letter-spacing: 0.04em;
+}

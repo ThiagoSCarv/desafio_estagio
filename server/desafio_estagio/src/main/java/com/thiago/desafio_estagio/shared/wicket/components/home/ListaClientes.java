@@ -69,6 +69,16 @@ public class ListaClientes extends Panel {
         // implementação opcional — sem comportamento padrão
     }
 
+    private static String formatarDocumento(String doc) {
+        String digits = doc.replaceAll("\\D", "");
+        if (digits.length() == 11) {
+            return digits.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+        } else if (digits.length() == 14) {
+            return digits.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+        }
+        return doc;
+    }
+
     public ListaClientes(String id) {
         super(id);
         setOutputMarkupId(true);
@@ -111,7 +121,7 @@ public class ListaClientes extends Panel {
 
                 item.add(new Label("clienteNome", nome));
                 item.add(new Label("clienteTipo", tipo));
-                item.add(new Label("clienteDocumento", documento));
+                item.add(new Label("clienteDocumento", formatarDocumento(documento)));
                 item.add(new Label("clienteEmail", dto.email()));
 
                 boolean ativo = dto.ativo();

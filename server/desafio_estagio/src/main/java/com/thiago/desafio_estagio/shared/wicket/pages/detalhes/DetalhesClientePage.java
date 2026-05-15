@@ -34,6 +34,13 @@ public class DetalhesClientePage extends WebPage {
             "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         ));
         response.render(CssHeaderItem.forReference(WicketApplication.THEME_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.TOKENS_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.GLOBAL_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.LAYOUT_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.TOOLBAR_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.LIST_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.DETAIL_CSS));
+        response.render(CssHeaderItem.forReference(WicketApplication.MODAL_CSS));
         response.render(JavaScriptHeaderItem.forUrl(
             "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         ));
