@@ -6,7 +6,8 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoUpdateDto;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -42,7 +43,10 @@ public class EditarEnderecoModal extends Panel {
         form.add(new TextField<>("numero", numeroModel));
         form.add(new TextField<>("telefone", telefoneModel));
         form.add(new TextField<>("complemento", complementoModel));
-        form.add(new CheckBox("enderecoPrincipal", principalModel));
+        RadioGroup<Boolean> principalGroup = new RadioGroup<>("principalGroup", principalModel);
+        principalGroup.add(new Radio<>("radioSim", Model.of(Boolean.TRUE)));
+        principalGroup.add(new Radio<>("radioNao", Model.of(Boolean.FALSE)));
+        form.add(principalGroup);
 
         form.add(new AjaxButton("salvar", form) {
             @Override

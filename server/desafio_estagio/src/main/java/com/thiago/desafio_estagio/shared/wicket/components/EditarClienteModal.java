@@ -13,7 +13,8 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.EmailTextField;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -83,7 +84,10 @@ public class EditarClienteModal extends Panel {
         pjCampos.add(new TextField<>("inscricaoEstadual", inscricaoEstadualModel));
         form.add(pjCampos);
 
-        form.add(new CheckBox("ativo", ativoModel));
+        RadioGroup<Boolean> ativoGroup = new RadioGroup<>("ativoGroup", ativoModel);
+        ativoGroup.add(new Radio<>("radioAtivo",  Model.of(Boolean.TRUE)));
+        ativoGroup.add(new Radio<>("radioInativo", Model.of(Boolean.FALSE)));
+        form.add(ativoGroup);
 
         form.add(new AjaxButton("salvar", form) {
             @Override

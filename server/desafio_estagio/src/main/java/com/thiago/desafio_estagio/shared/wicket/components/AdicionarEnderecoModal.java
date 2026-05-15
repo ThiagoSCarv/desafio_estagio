@@ -5,12 +5,15 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
-import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
@@ -54,7 +57,10 @@ public class AdicionarEnderecoModal extends Panel {
         form.add(new TextField<>("telefone"));
         form.add(new TextField<>("cidade"));
         form.add(new TextField<>("estado"));
-        form.add(new CheckBox("enderecoPrincipal"));
+        RadioGroup<Boolean> principalGroup = new RadioGroup<>("principalGroup", new PropertyModel<>(formData, "enderecoPrincipal"));
+        principalGroup.add(new Radio<>("radioSim", Model.of(Boolean.TRUE)));
+        principalGroup.add(new Radio<>("radioNao", Model.of(Boolean.FALSE)));
+        form.add(principalGroup);
         form.add(new TextField<>("complemento"));
 
         form.add(new AjaxButton("salvar", form) { // NOSONAR java:S110 — profundidade herdada do Wicket

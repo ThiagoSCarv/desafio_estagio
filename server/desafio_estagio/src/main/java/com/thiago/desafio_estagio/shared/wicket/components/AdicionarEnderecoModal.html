@@ -82,11 +82,15 @@
                         <label class="erp-field-label">
                             <span class="erp-field-num">09</span> ENDERE&Ccedil;O PRINCIPAL
                         </label>
-                        <div class="erp-toggle-row">
-                            <div class="form-check form-switch mb-0">
-                                <input wicket:id="enderecoPrincipal" type="checkbox" class="form-check-input erp-toggle-switch" />
-                            </div>
-                            <span class="erp-toggle-label">PRINCIPAL</span>
+                        <div wicket:id="principalGroup" class="erp-status-selector">
+                            <label class="erp-status-btn">
+                                <input wicket:id="radioSim" type="radio" />
+                                SIM
+                            </label>
+                            <label class="erp-status-btn">
+                                <input wicket:id="radioNao" type="radio" />
+                                N&Atilde;O
+                            </label>
                         </div>
                     </div>
                 </div>

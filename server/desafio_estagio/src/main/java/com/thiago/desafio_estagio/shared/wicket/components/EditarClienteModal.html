@@ -57,11 +57,15 @@
                         <label class="erp-field-label">
                             <span class="erp-field-num" wicket:id="ativoNum">03</span> CLIENTE ATIVO
                         </label>
-                        <div class="erp-toggle-row">
-                            <div class="form-check form-switch mb-0">
-                                <input wicket:id="ativo" type="checkbox" class="form-check-input erp-toggle-switch" />
-                            </div>
-                            <span class="erp-toggle-label">ATIVO</span>
+                        <div wicket:id="ativoGroup" class="erp-status-selector">
+                            <label class="erp-status-btn">
+                                <input wicket:id="radioAtivo" type="radio" />
+                                ATIVO
+                            </label>
+                            <label class="erp-status-btn">
+                                <input wicket:id="radioInativo" type="radio" />
+                                INATIVO
+                            </label>
                         </div>
                     </div>
                 </div>
