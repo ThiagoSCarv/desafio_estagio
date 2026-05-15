@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<body>
+<wicket:panel>
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content erp-modal">
+
+            <div class="modal-header erp-modal-header-form">
+                <div>
+                    <h4 class="erp-modal-heading">Editar endere&ccedil;o</h4>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <form wicket:id="form">
+                <div class="modal-body">
+                    <div wicket:id="feedback"></div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">01</span> N&Uacute;MERO
+                        </label>
+                        <input wicket:id="numero" type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">02</span> TELEFONE
+                        </label>
+                        <input wicket:id="telefone" type="text" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">03</span> COMPLEMENTO
+                        </label>
+                        <input wicket:id="complemento" type="text" class="form-control" />
+                    </div>
+
+                    <div>
+                        <label class="erp-field-label">
+                            <span class="erp-field-num">04</span> ENDERE&Ccedil;O PRINCIPAL
+                        </label>
+                        <div class="erp-toggle-row">
+                            <div class="form-check form-switch mb-0">
+                                <input wicket:id="enderecoPrincipal" type="checkbox" class="form-check-input erp-toggle-switch" />
+                            </div>
+                            <span class="erp-toggle-label">PRINCIPAL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button wicket:id="salvar" type="submit" class="btn btn-success">Salvar altera&ccedil;&otilde;es</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</wicket:panel>
+</body>
+</html>
