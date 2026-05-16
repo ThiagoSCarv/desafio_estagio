@@ -5,6 +5,8 @@ import com.thiago.desafio_estagio.shared.wicket.components.detalhes.FooterDetalh
 import com.thiago.desafio_estagio.shared.wicket.components.detalhes.HeaderDetalheCliente;
 import com.thiago.desafio_estagio.shared.wicket.components.detalhes.ListaEnderecosCliente;
 import com.thiago.desafio_estagio.shared.wicket.components.detalhes.SectionDetalheCliente;
+import com.thiago.desafio_estagio.shared.wicket.pages.home.HomePage;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -18,7 +20,12 @@ public class DetalhesClientePage extends WebPage {
     public DetalhesClientePage(PageParameters params) {
         super(params);
 
-        UUID clienteId = UUID.fromString(params.get("id").toString());
+        UUID clienteId;
+        try {
+            clienteId = UUID.fromString(params.get("id").toString());
+        } catch (IllegalArgumentException e) {
+            throw new RestartResponseException(HomePage.class);
+        }
 
         add(new HeaderDetalheCliente("header", clienteId));
         add(new SectionDetalheCliente("secaoDetalhe", clienteId));
