@@ -8,6 +8,7 @@
         <div class="erp-detalhe-section__header">
             <span class="erp-detalhe-section__num">01</span>
             <h2 class="erp-detalhe-section__title">Dados da Empresa</h2>
+            <a wicket:id="editar" class="btn btn-sm btn-outline-secondary ms-auto">Editar</a>
         </div>
         <hr class="erp-divider" />
         <div class="erp-detalhe-fields">
@@ -46,6 +47,7 @@
         <div class="erp-detalhe-section__header">
             <span class="erp-detalhe-section__num">01</span>
             <h2 class="erp-detalhe-section__title">Dados Pessoais</h2>
+            <a wicket:id="editar" class="btn btn-sm btn-outline-secondary ms-auto">Editar</a>
         </div>
         <hr class="erp-divider" />
         <div class="erp-detalhe-fields">
@@ -79,6 +81,8 @@
         </div>
     </section>
 
+
+    <div wicket:id="editarModal" class="modal fade" tabindex="-1" aria-hidden="true"></div>
 
 </wicket:panel>
 </body>
