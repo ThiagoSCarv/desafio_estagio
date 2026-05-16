@@ -3,6 +3,7 @@ package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
 import com.thiago.desafio_estagio.endereco.application.EnderecoService;
 import com.thiago.desafio_estagio.endereco.application.EnderecoUpdateDto;
+import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
@@ -58,8 +59,8 @@ public class EditarEnderecoModal extends Panel {
                             principalModel.getObject(),
                             emptyToNull(complementoModel.getObject())
                     ));
-                    mostrarToast(target, "Endereço atualizado com sucesso");
-                    ocultarModal(target);
+                    WicketUtil.mostrarToast(target, "Endereço atualizado com sucesso");
+                    WicketUtil.ocultarModal(target, EditarEnderecoModal.this);
                     onAtualizado(target);
                 } catch (RuntimeException e) {
                     EditarEnderecoModal.this.error(e.getMessage());
@@ -84,30 +85,6 @@ public class EditarEnderecoModal extends Panel {
 
     private static String emptyToNull(String value) {
         return value != null && !value.isBlank() ? value : null;
-    }
-
-    private void mostrarToast(AjaxRequestTarget target, String mensagem) {
-        target.appendJavaScript(
-            "(function(){" +
-            "var wrap=document.createElement('div');" +
-            "wrap.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;z-index:11000;';" +
-            "var t=document.createElement('div');" +
-            "t.className='toast align-items-center border-0';" +
-            "t.style.cssText='background:var(--erp-success);color:var(--erp-bg);';" +
-            "t.setAttribute('role','alert');" +
-            "t.innerHTML='<div class=\"d-flex\"><div class=\"toast-body fw-medium\">" + mensagem + "</div>" +
-            "<button type=\"button\" class=\"btn-close me-2 m-auto\" data-bs-dismiss=\"toast\"></button></div>';" +
-            "wrap.appendChild(t);document.body.appendChild(wrap);" +
-            "var bsT=new bootstrap.Toast(t,{delay:4000});bsT.show();" +
-            "t.addEventListener('hidden.bs.toast',function(){wrap.remove();});" +
-            "})();"
-        );
-    }
-
-    private void ocultarModal(AjaxRequestTarget target) {
-        target.appendJavaScript(
-            "(function(){var el=document.getElementById('" + getMarkupId() + "');if(el)bootstrap.Modal.getOrCreateInstance(el).hide();})();"
-        );
     }
 
     protected void onAtualizado(AjaxRequestTarget target) {}

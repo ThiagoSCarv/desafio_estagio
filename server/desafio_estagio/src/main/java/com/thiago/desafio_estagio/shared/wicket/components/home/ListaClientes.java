@@ -5,6 +5,8 @@ import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
 import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
+import com.thiago.desafio_estagio.shared.utils.DocumentFormat;
+import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -25,14 +27,6 @@ public class ListaClientes extends Panel {
 
     @SpringBean
     private ClienteService clienteService;
-
-    // Wicket substitui o HTML do painel antes de executar qualquer JS do Ajax.
-    // Esse trecho limpa o estado do Bootstrap diretamente no DOM após a substituição.
-    private static final String MODAL_CLEANUP_JS =
-        "document.querySelectorAll('.modal-backdrop').forEach(function(b){b.remove();});" +
-        "document.body.classList.remove('modal-open');" +
-        "document.body.style.removeProperty('overflow');" +
-        "document.body.style.removeProperty('padding-right');";
 
     private static final int PAGE_SIZE = 12;
 
@@ -59,7 +53,7 @@ public class ListaClientes extends Panel {
     public void recarregarLista(AjaxRequestTarget target) {
         paginaAtual = 0;
         pageModel.detach();
-        target.appendJavaScript(MODAL_CLEANUP_JS);
+        target.appendJavaScript(WicketUtil.MODAL_CLEANUP_JS);
         target.add(this);
         onAtualizou(target);
     }
@@ -67,16 +61,6 @@ public class ListaClientes extends Panel {
     // Ponto de extensão: subclasses sobrescrevem para reagir a mutações (ex: atualizar o HeaderPanel).
     protected void onAtualizou(AjaxRequestTarget target) {
         // implementação opcional — sem comportamento padrão
-    }
-
-    private static String formatarDocumento(String doc) {
-        String digits = doc.replaceAll("\\D", "");
-        if (digits.length() == 11) {
-            return digits.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
-        } else if (digits.length() == 14) {
-            return digits.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
-        }
-        return doc;
     }
 
     public ListaClientes(String id) {
@@ -121,7 +105,7 @@ public class ListaClientes extends Panel {
 
                 item.add(new Label("clienteNome", nome));
                 item.add(new Label("clienteTipo", tipo));
-                item.add(new Label("clienteDocumento", formatarDocumento(documento)));
+                item.add(new Label("clienteDocumento", DocumentFormat.formatarDocumento(documento)));
                 item.add(new Label("clienteEmail", dto.email()));
 
                 boolean ativo = dto.ativo();

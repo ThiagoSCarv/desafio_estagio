@@ -3,6 +3,8 @@ package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 import com.thiago.desafio_estagio.cliente.application.ClienteDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
+import com.thiago.desafio_estagio.shared.utils.DocumentFormat;
+import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -19,12 +21,6 @@ public class ListaEnderecosCliente extends Panel {
 
     @SpringBean
     private ClienteService clienteService;
-
-    private static final String MODAL_CLEANUP_JS =
-        "document.querySelectorAll('.modal-backdrop').forEach(function(b){b.remove();});" +
-        "document.body.classList.remove('modal-open');" +
-        "document.body.style.removeProperty('overflow');" +
-        "document.body.style.removeProperty('padding-right');";
 
     private final LoadableDetachableModel<ClienteDto> clienteModel;
 
@@ -69,9 +65,9 @@ public class ListaEnderecosCliente extends Panel {
                 item.add(new Label("logradouro", logradouroCompleto));
 
                 item.add(new Label("bairro", e.bairro() != null ? e.bairro() : "—"));
-                item.add(new Label("cep", formatarCep(e.cep())));
+                item.add(new Label("cep", DocumentFormat.formatarCep(e.cep())));
                 item.add(new Label("cidadeUf", formatarCidadeUf(e.cidade(), e.estado())));
-                item.add(new Label("telefone", e.telefone() != null ? formatarTelefone(e.telefone()) : "—"));
+                item.add(new Label("telefone", e.telefone() != null ? DocumentFormat.formatarTelefone(e.telefone()) : "—"));
                 item.add(new Label("complemento", e.complemento() != null ? e.complemento() : "—"));
             }
         };
@@ -80,7 +76,7 @@ public class ListaEnderecosCliente extends Panel {
 
     public void recarregarLista(AjaxRequestTarget target) {
         clienteModel.detach();
-        target.appendJavaScript(MODAL_CLEANUP_JS);
+        target.appendJavaScript(WicketUtil.MODAL_CLEANUP_JS);
         target.add(this);
     }
 
@@ -91,17 +87,4 @@ public class ListaEnderecosCliente extends Panel {
         return "—";
     }
 
-    private static String formatarCep(String cep) {
-        if (cep == null || cep.length() != 8) return cep != null ? cep : "—";
-        return cep.substring(0, 5) + "-" + cep.substring(5);
-    }
-
-    private static String formatarTelefone(String tel) {
-        if (tel == null) return "—";
-        if (tel.length() == 11)
-            return "(" + tel.substring(0, 2) + ") " + tel.substring(2, 7) + "-" + tel.substring(7);
-        if (tel.length() == 10)
-            return "(" + tel.substring(0, 2) + ") " + tel.substring(2, 6) + "-" + tel.substring(6);
-        return tel;
-    }
 }

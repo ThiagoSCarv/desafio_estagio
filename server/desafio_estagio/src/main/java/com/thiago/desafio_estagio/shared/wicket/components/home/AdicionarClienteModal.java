@@ -9,6 +9,7 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
 import com.thiago.desafio_estagio.shared.validation.validator.CnpjValidator;
 import com.thiago.desafio_estagio.shared.validation.validator.CpfValidator;
 import com.thiago.desafio_estagio.shared.validation.validator.RgValidator;
+import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -175,9 +176,9 @@ public class AdicionarClienteModal extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
                     criar();
-                    mostrarToast(target, "Cadastro realizado com sucesso");
+                    WicketUtil.mostrarToast(target, "Cadastro realizado com sucesso");
                     limpar(target);
-                    ocultarModal(target);
+                    WicketUtil.ocultarModal(target, AdicionarClienteModal.this);
                     onAdicionado(target);
                 } catch (RuntimeException e) {
                     AdicionarClienteModal.this.error(e.getMessage());
@@ -281,30 +282,6 @@ public class AdicionarClienteModal extends Panel {
             "m.querySelectorAll('[data-tipo]').forEach(function(b){b.classList.remove('erp-tipo-btn--ativo');});" +
             "var a=m.querySelector('[data-tipo=\"" + tipo + "\"]');" +
             "if(a)a.classList.add('erp-tipo-btn--ativo');" +
-            "})();"
-        );
-    }
-
-    private void ocultarModal(AjaxRequestTarget target) {
-        target.appendJavaScript(
-            "(function(){var el=document.getElementById('" + getMarkupId() + "');if(el)bootstrap.Modal.getOrCreateInstance(el).hide();})();"
-        );
-    }
-
-    private void mostrarToast(AjaxRequestTarget target, String mensagem) {
-        target.appendJavaScript(
-            "(function(){" +
-            "var wrap=document.createElement('div');" +
-            "wrap.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;z-index:11000;';" +
-            "var t=document.createElement('div');" +
-            "t.className='toast align-items-center border-0';" +
-            "t.style.cssText='background:var(--erp-success);color:var(--erp-bg);';" +
-            "t.setAttribute('role','alert');" +
-            "t.innerHTML='<div class=\"d-flex\"><div class=\"toast-body fw-medium\">" + mensagem + "</div>" +
-            "<button type=\"button\" class=\"btn-close me-2 m-auto\" data-bs-dismiss=\"toast\"></button></div>';" +
-            "wrap.appendChild(t);document.body.appendChild(wrap);" +
-            "var bsT=new bootstrap.Toast(t,{delay:4000});bsT.show();" +
-            "t.addEventListener('hidden.bs.toast',function(){wrap.remove();});" +
             "})();"
         );
     }

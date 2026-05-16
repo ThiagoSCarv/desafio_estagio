@@ -8,6 +8,8 @@ import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
 import com.thiago.desafio_estagio.cliente.application.ClientePjService;
 import com.thiago.desafio_estagio.cliente.application.ClientePjUpdateDto;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
+import com.thiago.desafio_estagio.shared.utils.DocumentFormat;
+import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
@@ -94,8 +96,8 @@ public class EditarClienteModal extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
                     salvar();
-                    mostrarToast(target, "Atualização realizada com sucesso");
-                    ocultarModal(target);
+                    WicketUtil.mostrarToast(target, "Atualização realizada com sucesso");
+                    WicketUtil.ocultarModal(target, EditarClienteModal.this);
                     onAtualizado(target);
                 } catch (RuntimeException e) {
                     EditarClienteModal.this.error(e.getMessage());
@@ -129,7 +131,7 @@ public class EditarClienteModal extends Panel {
             ClientePjDto pj = (ClientePjDto) cliente;
             tipoModel.setObject("Pessoa Jurídica");
             badgeLabelModel.setObject("CNPJ");
-            badgeNameModel.setObject(formatarCnpj(pj.cnpj()));
+            badgeNameModel.setObject(DocumentFormat.formatarCnpj(pj.cnpj()));
             emailLabelModel.setObject("E-MAIL CORPORATIVO");
             ativoNumModel.setObject("04");
             razaoSocialModel.setObject(pj.razaoSocial());
@@ -137,12 +139,6 @@ public class EditarClienteModal extends Panel {
             pfCampos.setVisible(false);
             pjCampos.setVisible(true);
         }
-    }
-
-    private static String formatarCnpj(String cnpj) {
-        if (cnpj == null || cnpj.length() != 14) return cnpj;
-        return cnpj.substring(0, 2) + "." + cnpj.substring(2, 5) + "."
-             + cnpj.substring(5, 8) + "/" + cnpj.substring(8, 12) + "-" + cnpj.substring(12);
     }
 
     private void salvar() {
@@ -160,30 +156,6 @@ public class EditarClienteModal extends Panel {
                     ativoModel.getObject()
             ));
         }
-    }
-
-    private void mostrarToast(AjaxRequestTarget target, String mensagem) {
-        target.appendJavaScript(
-            "(function(){" +
-            "var wrap=document.createElement('div');" +
-            "wrap.style.cssText='position:fixed;bottom:1.5rem;right:1.5rem;z-index:11000;';" +
-            "var t=document.createElement('div');" +
-            "t.className='toast align-items-center border-0';" +
-            "t.style.cssText='background:var(--erp-success);color:var(--erp-bg);';" +
-            "t.setAttribute('role','alert');" +
-            "t.innerHTML='<div class=\"d-flex\"><div class=\"toast-body fw-medium\">" + mensagem + "</div>" +
-            "<button type=\"button\" class=\"btn-close me-2 m-auto\" data-bs-dismiss=\"toast\"></button></div>';" +
-            "wrap.appendChild(t);document.body.appendChild(wrap);" +
-            "var bsT=new bootstrap.Toast(t,{delay:4000});bsT.show();" +
-            "t.addEventListener('hidden.bs.toast',function(){wrap.remove();});" +
-            "})();"
-        );
-    }
-
-    private void ocultarModal(AjaxRequestTarget target) {
-        target.appendJavaScript(
-            "(function(){var el=document.getElementById('" + getMarkupId() + "');if(el)bootstrap.Modal.getOrCreateInstance(el).hide();})();"
-        );
     }
 
     // Ponto de extensão: subclasses ou páginas que instanciam o modal sobrescrevem para reagir ao salvamento.
