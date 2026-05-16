@@ -48,7 +48,7 @@ public class FiltroClientesPanel extends Panel {
     protected void onFiltroMudou(AjaxRequestTarget target) {}
 
     private AjaxFormComponentUpdatingBehavior atualizarAoMudar() {
-        return new AjaxFormComponentUpdatingBehavior("change") {
+        return new AjaxFormComponentUpdatingBehavior("input") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 onFiltroMudou(target);
