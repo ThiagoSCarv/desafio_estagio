@@ -50,6 +50,10 @@ public class ListaClientes extends Panel {
             }
         };
 
+    // Container que agrupa lista + paginação — atualizado isoladamente pelo filtro
+    // para evitar re-renderizar o FiltroClientesPanel e mover o cursor do input.
+    private final WebMarkupContainer resultados = new WebMarkupContainer("resultados");
+
     public void recarregarLista(AjaxRequestTarget target) {
         paginaAtual = 0;
         pageModel.detach();
@@ -72,12 +76,15 @@ public class ListaClientes extends Panel {
             protected void onFiltroMudou(AjaxRequestTarget target) {
                 paginaAtual = 0;
                 pageModel.detach();
-                target.add(ListaClientes.this);
+                target.add(resultados);
             }
         });
 
+        resultados.setOutputMarkupId(true);
+        add(resultados);
+
         WebMarkupContainer listaOrdenada = new WebMarkupContainer("listaOrdenada");
-        add(listaOrdenada);
+        resultados.add(listaOrdenada);
 
         listaOrdenada.add(new ListView<ClienteDto>("clientes", new LoadableDetachableModel<List<ClienteDto>>() {
             @Override
@@ -129,7 +136,7 @@ public class ListaClientes extends Panel {
             }
         });
 
-        add(new Label("paginacaoInfo", new LoadableDetachableModel<String>() {
+        resultados.add(new Label("paginacaoInfo", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
                 Page<ClienteDto> page = pageModel.getObject();
@@ -137,24 +144,24 @@ public class ListaClientes extends Panel {
             }
         }));
 
-        add(new AjaxLink<Void>("paginaAnterior") {
+        resultados.add(new AjaxLink<Void>("paginaAnterior") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (paginaAtual > 0) {
                     paginaAtual--;
                     pageModel.detach();
-                    target.add(ListaClientes.this);
+                    target.add(resultados);
                 }
             }
         });
 
-        add(new AjaxLink<Void>("proximaPagina") {
+        resultados.add(new AjaxLink<Void>("proximaPagina") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (paginaAtual < pageModel.getObject().getTotalPages() - 1) {
                     paginaAtual++;
                     pageModel.detach();
-                    target.add(ListaClientes.this);
+                    target.add(resultados);
                 }
             }
         });
