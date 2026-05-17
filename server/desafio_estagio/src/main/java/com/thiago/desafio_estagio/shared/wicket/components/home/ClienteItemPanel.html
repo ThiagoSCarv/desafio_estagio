@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org" lang="pt-BR">
+<head><title>Item de Cliente</title></head>
+<body>
+<wicket:panel>
+
+    <span wicket:id="clienteNome" class="erp-list-col erp-list-col--nome">Nome</span>
+    <span wicket:id="clienteTipo" class="erp-list-col erp-list-col--tipo">PF</span>
+    <span wicket:id="clienteDocumento" class="erp-list-col erp-list-col--documento">000.000.000-00</span>
+    <span wicket:id="clienteEmail" class="erp-list-col erp-list-col--email">email@exemplo.com</span>
+    <div class="erp-list-col erp-list-col--status">
+        <span wicket:id="clienteStatus" class="erp-status">
+            <span class="erp-status-dot"></span>
+            <span wicket:id="statusTexto">Ativo</span>
+        </span>
+    </div>
+    <div wicket:id="acoes" style="display:contents"></div>
+
+</wicket:panel>
+</body>
+</html>

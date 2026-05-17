@@ -1,13 +1,9 @@
 package com.thiago.desafio_estagio.shared.wicket.components.home;
 
 import com.thiago.desafio_estagio.cliente.application.ClienteDto;
-import com.thiago.desafio_estagio.cliente.application.ClientePfDto;
-import com.thiago.desafio_estagio.cliente.application.ClientePjDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
-import com.thiago.desafio_estagio.shared.utils.DocumentFormat;
 import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -94,35 +90,7 @@ public class ListaClientes extends Panel {
         }) {
             @Override
             protected void populateItem(ListItem<ClienteDto> item) {
-                ClienteDto dto = item.getModelObject();
-
-                String nome;
-                String tipo;
-                String documento;
-                if (dto instanceof ClientePfDto pf) {
-                    nome = pf.nome();
-                    tipo = "PF";
-                    documento = pf.cpf();
-                } else {
-                    ClientePjDto pj = (ClientePjDto) dto;
-                    nome = pj.razaoSocial();
-                    tipo = "PJ";
-                    documento = pj.cnpj();
-                }
-
-                item.add(new Label("clienteNome", nome));
-                item.add(new Label("clienteTipo", tipo));
-                item.add(new Label("clienteDocumento", DocumentFormat.formatarDocumento(documento)));
-                item.add(new Label("clienteEmail", dto.email()));
-
-                boolean ativo = dto.ativo();
-                WebMarkupContainer clienteStatus = new WebMarkupContainer("clienteStatus");
-                clienteStatus.add(AttributeModifier.replace("class",
-                    "erp-status " + (ativo ? "erp-status--ativo" : "erp-status--inativo")));
-                clienteStatus.add(new Label("statusTexto", ativo ? "Ativo" : "Inativo"));
-                item.add(clienteStatus);
-
-                item.add(new AcoesPanel("acoes", item.getModel()) {
+                item.add(new ClienteItemPanel("itemPanel", item.getModel()) {
                     @Override
                     protected void onClienteExcluido(AjaxRequestTarget target) {
                         recarregarLista(target);

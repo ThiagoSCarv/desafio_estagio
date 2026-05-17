@@ -21,24 +21,7 @@
 
             <ul wicket:id="listaOrdenada" class="erp-list-body">
                 <li wicket:id="clientes" class="erp-list-row">
-
-                    <span wicket:id="clienteNome" class="erp-list-col erp-list-col--nome">Nome</span>
-
-                    <span wicket:id="clienteTipo" class="erp-list-col erp-list-col--tipo">PF</span>
-
-                    <span wicket:id="clienteDocumento" class="erp-list-col erp-list-col--documento">000.000.000-00</span>
-
-                    <span wicket:id="clienteEmail" class="erp-list-col erp-list-col--email">email@exemplo.com</span>
-
-                    <div class="erp-list-col erp-list-col--status">
-                        <span wicket:id="clienteStatus" class="erp-status">
-                            <span class="erp-status-dot"></span>
-                            <span wicket:id="statusTexto">Ativo</span>
-                        </span>
-                    </div>
-
-                    <div wicket:id="acoes"></div>
-
+                    <wicket:container wicket:id="itemPanel"></wicket:container>
                 </li>
             </ul>
 

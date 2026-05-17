@@ -40,6 +40,10 @@ public class WicketApplication extends WebApplication {
         getComponentInstantiationListeners().add(
             new SpringComponentInjector(this, applicationContext)
         );
+        // Em modo development o Wicket mantém as tags <wicket:container>, <wicket:panel> etc no HTML
+        // renderizado, que aparecem como elementos inline desconhecidos no browser e quebram layouts
+        // baseados em CSS Grid/Flex que esperam os filhos diretos no host (ex: erp-list-row).
+        getMarkupSettings().setStripWicketTags(true);
         // Serve os recursos diretamente pelo Wicket evitando conflito com o WicketFilter
         mountResource("/css/theme.css",   THEME_CSS);
         mountResource("/css/tokens.css",  TOKENS_CSS);

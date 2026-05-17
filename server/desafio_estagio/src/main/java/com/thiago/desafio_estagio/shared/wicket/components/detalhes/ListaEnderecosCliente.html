@@ -12,35 +12,7 @@
         <hr class="erp-divider" />
         <div class="erp-detalhe-enderecos">
             <wicket:container wicket:id="enderecos">
-                <div class="erp-detalhe-endereco-card">
-                    <div class="erp-detalhe-endereco-card__top">
-                        <span class="erp-detalhe-endereco-logradouro" wicket:id="logradouro">—</span>
-                        <span wicket:id="principalBadge" class="erp-detalhe-endereco-badge">Principal</span>
-                        <div wicket:id="acoes"></div>
-                    </div>
-                    <div class="erp-detalhe-fields erp-detalhe-fields--4col">
-                        <div class="erp-detalhe-field">
-                            <span class="erp-detalhe-field__label">Bairro</span>
-                            <span class="erp-detalhe-field__value" wicket:id="bairro">—</span>
-                        </div>
-                        <div class="erp-detalhe-field">
-                            <span class="erp-detalhe-field__label">CEP</span>
-                            <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="cep">—</span>
-                        </div>
-                        <div class="erp-detalhe-field">
-                            <span class="erp-detalhe-field__label">Cidade / UF</span>
-                            <span class="erp-detalhe-field__value" wicket:id="cidadeUf">—</span>
-                        </div>
-                        <div class="erp-detalhe-field">
-                            <span class="erp-detalhe-field__label">Telefone</span>
-                            <span class="erp-detalhe-field__value erp-detalhe-field__value--mono" wicket:id="telefone">—</span>
-                        </div>
-                        <div class="erp-detalhe-field erp-detalhe-field--full">
-                            <span class="erp-detalhe-field__label">Complemento</span>
-                            <span class="erp-detalhe-field__value" wicket:id="complemento">—</span>
-                        </div>
-                    </div>
-                </div>
+                <wicket:container wicket:id="itemPanel"></wicket:container>
             </wicket:container>
         </div>
     </section>
