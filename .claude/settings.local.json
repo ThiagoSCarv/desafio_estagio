@@ -35,7 +35,8 @@
       "Bash(git -C /home/unika/repos/desafio_estagio commit -m \"feat: extraindo FooterPanel e adicionando modal de importação em lote\")",
       "Bash(xargs ls)",
       "Bash(rm /home/thiago/repos/desafio_estagio/server/desafio_estagio/src/main/resources/static/css/theme.css && echo \"deleted\")",
-      "Bash(grep -oP '--erp-[a-z\\\\-]+')"
+      "Bash(grep -oP '--erp-[a-z\\\\-]+')",
+      "WebFetch(domain:github.com)"
     ],
     "additionalDirectories": [
       "/tmp",
