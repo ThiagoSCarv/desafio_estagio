@@ -59,6 +59,7 @@ public class AdicionarClienteModal extends Panel {
     private final WebMarkupContainer pjCampos;
     private final WebMarkupContainer enderecoContainer;
     private final FeedbackPanel feedback;
+    private final Form<Void> form;
 
     public AdicionarClienteModal(String id) {
         super(id);
@@ -66,7 +67,8 @@ public class AdicionarClienteModal extends Panel {
 
         enderecos.add(new EnderecoPanel.EnderecoEntry());
 
-        Form<Void> form = new Form<>("form");
+        form = new Form<>("form");
+        form.setOutputMarkupId(true);
         add(form);
 
         feedback = new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(this));
@@ -171,6 +173,17 @@ public class AdicionarClienteModal extends Panel {
             }
         });
 
+        AjaxButton cancelar = new AjaxButton("cancelar") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                limpar(target);
+                WicketUtil.ocultarModal(target, AdicionarClienteModal.this);
+            }
+        };
+        // Pula validação — cancelar não deve falhar por campos obrigatórios em branco.
+        cancelar.setDefaultFormProcessing(false);
+        form.add(cancelar);
+
         form.add(new AjaxButton("salvar", form) {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
@@ -225,6 +238,8 @@ public class AdicionarClienteModal extends Panel {
 
     private void criar() {
         validarEnderecos();
+        exigir(emailModel.getObject(), "E-mail é obrigatório.");
+
         List<EnderecoCreateDto> enderecosDtos = enderecos.stream()
                 .map(e -> new EnderecoCreateDto(
                         e.cep,
@@ -240,6 +255,9 @@ public class AdicionarClienteModal extends Panel {
                 .toList();
 
         if (tipoSelecionado == TipoPessoa.FISICA) {
+            exigir(nomeModel.getObject(), "Nome é obrigatório.");
+            exigir(cpfModel.getObject(), "CPF é obrigatório.");
+            exigir(rgModel.getObject(), "RG é obrigatório.");
             clientePfService.criar(new ClientePfCreateDto(
                     emailModel.getObject(),
                     nomeModel.getObject(),
@@ -249,6 +267,9 @@ public class AdicionarClienteModal extends Panel {
                     enderecosDtos
             ));
         } else {
+            exigir(cnpjModel.getObject(), "CNPJ é obrigatório.");
+            exigir(razaoSocialModel.getObject(), "Razão social é obrigatória.");
+            exigir(inscricaoEstadualModel.getObject(), "Inscrição estadual é obrigatória.");
             clientePjService.criar(new ClientePjCreateDto(
                     emailModel.getObject(),
                     cnpjModel.getObject(),
@@ -288,12 +309,20 @@ public class AdicionarClienteModal extends Panel {
         dataCriacaoModel.setObject("");
         pfCampos.setVisible(true);
         pjCampos.setVisible(false);
-        target.add(pfCampos, pjCampos);
-        ativarTab(target, "FISICA");
 
         enderecos.clear();
         enderecos.add(new EnderecoPanel.EnderecoEntry());
-        target.add(enderecoContainer);
+
+        // Descarta input bruto preso nos componentes e mensagens de erro acumuladas
+        // de tentativas anteriores, para o modal reabrir totalmente limpo.
+        form.visitFormComponents((fc, visit) -> {
+            fc.clearInput();
+            fc.getFeedbackMessages().clear();
+        });
+        getFeedbackMessages().clear();
+
+        target.add(form);
+        ativarTab(target, "FISICA");
     }
 
     private void ativarTab(AjaxRequestTarget target, String tipo) {

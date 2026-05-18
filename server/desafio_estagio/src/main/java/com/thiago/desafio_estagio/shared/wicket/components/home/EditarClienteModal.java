@@ -52,6 +52,7 @@ public class EditarClienteModal extends Panel {
     private final WebMarkupContainer pfCampos;
     private final WebMarkupContainer pjCampos;
     private final FeedbackPanel feedback;
+    private final Form<Void> form;
 
     public EditarClienteModal(String id) {
         super(id);
@@ -59,7 +60,8 @@ public class EditarClienteModal extends Panel {
 
         add(new Label("titulotipo", tipoModel));
 
-        Form<Void> form = new Form<>("form");
+        form = new Form<>("form");
+        form.setOutputMarkupId(true);
         add(form);
 
         feedback = new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(this));
@@ -90,6 +92,17 @@ public class EditarClienteModal extends Panel {
         ativoGroup.add(new Radio<>("radioAtivo",  Model.of(Boolean.TRUE)));
         ativoGroup.add(new Radio<>("radioInativo", Model.of(Boolean.FALSE)));
         form.add(ativoGroup);
+
+        AjaxButton cancelar = new AjaxButton("cancelar") { // NOSONAR java:S110 — profundidade herdada do Wicket
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                limpar(target);
+                WicketUtil.ocultarModal(target, EditarClienteModal.this);
+            }
+        };
+        // Pula validação — cancelar não deve falhar por campos obrigatórios em branco.
+        cancelar.setDefaultFormProcessing(false);
+        form.add(cancelar);
 
         form.add(new AjaxButton("salvar", form) {
             @Override
@@ -139,6 +152,26 @@ public class EditarClienteModal extends Panel {
             pfCampos.setVisible(false);
             pjCampos.setVisible(true);
         }
+    }
+
+    // Reseta o estado do formulário (Models + cache de input bruto dos componentes) e marca o form para re-render via Ajax.
+    private void limpar(AjaxRequestTarget target) {
+        clienteId = null;
+        tipoPessoa = null;
+        tipoModel.setObject("");
+        badgeLabelModel.setObject("");
+        badgeNameModel.setObject("");
+        emailLabelModel.setObject("");
+        ativoNumModel.setObject("03");
+        emailModel.setObject("");
+        ativoModel.setObject(Boolean.TRUE);
+        nomeModel.setObject("");
+        razaoSocialModel.setObject("");
+        inscricaoEstadualModel.setObject("");
+        pfCampos.setVisible(false);
+        pjCampos.setVisible(false);
+        form.visitFormComponents((fc, visit) -> fc.clearInput());
+        target.add(form);
     }
 
     private void salvar() {

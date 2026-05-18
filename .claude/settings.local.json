@@ -36,7 +36,21 @@
       "Bash(xargs ls)",
       "Bash(rm /home/thiago/repos/desafio_estagio/server/desafio_estagio/src/main/resources/static/css/theme.css && echo \"deleted\")",
       "Bash(grep -oP '--erp-[a-z\\\\-]+')",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(./mvnw -q -DskipTests compile)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"EnderecoPanel.java\" -not -path \"*/target/*\")",
+      "Bash(./mvnw -q -DskipTests spring-boot:run)",
+      "Bash(tee /tmp/wicket-run.log)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server/desafio_estagio -name \"*.log\" -newer /tmp/wicket-run.log)",
+      "Bash(rtk proxy *)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"CpfValidator.java\" -not -path \"*/target/*\")",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"WicketApplication.java\" -not -path \"*/target/*\")",
+      "Bash(xargs cat)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"ClientePfService.java\" -not -path \"*/target/*\" -exec cat {} \\\\;)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"ClientePfCreateDto.java\" -not -path \"*/target/*\" -exec cat {} \\\\;)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"Endereco.java\" -not -path \"*/target/*\" -path \"*/domain/*\" -exec cat {} \\\\;)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"ExceptionHandlerController.java\" -not -path \"*/target/*\" -exec cat {} \\\\;)",
+      "Bash(/usr/bin/find /home/unika/repos/desafio_estagio/server -name \"ClientePfDto.java\" -not -path \"*/target/*\" -exec cat {} \\\\;)"
     ],
     "additionalDirectories": [
       "/tmp",

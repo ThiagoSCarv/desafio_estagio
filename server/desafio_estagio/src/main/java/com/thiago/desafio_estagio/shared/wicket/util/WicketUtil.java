@@ -40,4 +40,5 @@ public class WicketUtil {
             "if(el)bootstrap.Modal.getOrCreateInstance(el).hide();})();"
         );
     }
+
 }

@@ -29,12 +29,14 @@ public class EditarEnderecoModal extends Panel {
     private final Model<String> complementoModel = Model.of("");
     private final Model<Boolean> principalModel  = Model.of(Boolean.FALSE);
     private final FeedbackPanel feedback;
+    private final Form<Void> form;
 
     public EditarEnderecoModal(String id) {
         super(id);
         setOutputMarkupId(true);
 
-        Form<Void> form = new Form<>("form");
+        form = new Form<>("form");
+        form.setOutputMarkupId(true);
         add(form);
 
         feedback = new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(this));
@@ -48,6 +50,17 @@ public class EditarEnderecoModal extends Panel {
         principalGroup.add(new Radio<>("radioSim", Model.of(Boolean.TRUE)));
         principalGroup.add(new Radio<>("radioNao", Model.of(Boolean.FALSE)));
         form.add(principalGroup);
+
+        AjaxButton cancelar = new AjaxButton("cancelar") { // NOSONAR java:S110 — profundidade herdada do Wicket
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                limpar(target);
+                WicketUtil.ocultarModal(target, EditarEnderecoModal.this);
+            }
+        };
+        // Pula validação — cancelar não deve falhar por campos obrigatórios em branco.
+        cancelar.setDefaultFormProcessing(false);
+        form.add(cancelar);
 
         form.add(new AjaxButton("salvar", form) {
             @Override
@@ -73,6 +86,17 @@ public class EditarEnderecoModal extends Panel {
                 target.add(feedback);
             }
         });
+    }
+
+    // Reseta o estado do formulário (Models + cache de input bruto dos componentes) e marca o form para re-render via Ajax.
+    private void limpar(AjaxRequestTarget target) {
+        enderecoId = null;
+        numeroModel.setObject("");
+        telefoneModel.setObject("");
+        complementoModel.setObject("");
+        principalModel.setObject(Boolean.FALSE);
+        form.visitFormComponents((fc, visit) -> fc.clearInput());
+        target.add(form);
     }
 
     public void setEndereco(EnderecoDto endereco) {

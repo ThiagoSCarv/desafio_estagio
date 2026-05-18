@@ -45,12 +45,14 @@ public class AdicionarEnderecoModal extends Panel {
 
     private final EnderecoData formData = new EnderecoData();
     private final FeedbackPanel feedback;
+    private final Form<EnderecoData> form;
 
     public AdicionarEnderecoModal(String id, UUID clienteId) {
         super(id);
         setOutputMarkupId(true);
 
-        Form<EnderecoData> form = new Form<>("form", new CompoundPropertyModel<>(formData));
+        form = new Form<>("form", new CompoundPropertyModel<>(formData));
+        form.setOutputMarkupId(true);
         add(form);
 
         feedback = new FeedbackPanel("feedback", new ContainerFeedbackMessageFilter(this));
@@ -111,10 +113,22 @@ public class AdicionarEnderecoModal extends Panel {
         form.add(principalGroup);
         form.add(new TextField<>("complemento"));
 
+        AjaxButton cancelar = new AjaxButton("cancelar") { // NOSONAR java:S110 — profundidade herdada do Wicket
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                limpar(target);
+                WicketUtil.ocultarModal(target, AdicionarEnderecoModal.this);
+            }
+        };
+        // Pula validação — cancelar não deve falhar por campos obrigatórios em branco.
+        cancelar.setDefaultFormProcessing(false);
+        form.add(cancelar);
+
         form.add(new AjaxButton("salvar", form) { // NOSONAR java:S110 — profundidade herdada do Wicket
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
+                    validarFormData();
                     enderecoService.criar(clienteId, new EnderecoCreateDto(
                             formData.cep,
                             formData.logradouro,
@@ -126,7 +140,7 @@ public class AdicionarEnderecoModal extends Panel {
                             formData.enderecoPrincipal,
                             emptyToNull(formData.complemento)
                     ));
-                    limpar();
+                    limpar(target);
                     WicketUtil.mostrarToast(target, "Endereço adicionado com sucesso");
                     WicketUtil.ocultarModal(target, AdicionarEnderecoModal.this);
                     onAdicionado(target);
@@ -143,7 +157,21 @@ public class AdicionarEnderecoModal extends Panel {
         });
     }
 
-    private void limpar() {
+    private void validarFormData() {
+        exigir(formData.cep,        "CEP é obrigatório.");
+        exigir(formData.logradouro, "Logradouro é obrigatório.");
+        exigir(formData.numero,     "Número é obrigatório.");
+        exigir(formData.bairro,     "Bairro é obrigatório.");
+        exigir(formData.cidade,     "Cidade é obrigatória.");
+        exigir(formData.estado,     "Estado é obrigatório.");
+    }
+
+    private static void exigir(String value, String mensagem) {
+        if (value == null || value.isBlank()) throw new IllegalArgumentException(mensagem);
+    }
+
+    // Reseta o estado do formulário (POJO + cache de input bruto dos componentes) e marca o form para re-render via Ajax.
+    private void limpar(AjaxRequestTarget target) {
         formData.cep               = "";
         formData.logradouro        = "";
         formData.numero            = "";
@@ -153,6 +181,8 @@ public class AdicionarEnderecoModal extends Panel {
         formData.telefone          = "";
         formData.enderecoPrincipal = Boolean.FALSE;
         formData.complemento       = "";
+        form.visitFormComponents((fc, visit) -> fc.clearInput());
+        target.add(form);
     }
 
     private static String emptyToNull(String value) {
