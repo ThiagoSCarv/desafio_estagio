@@ -203,16 +203,37 @@ public class AdicionarClienteModal extends Panel {
         target.add(enderecoContainer);
     }
 
+    private void validarEnderecos() {
+        for (int i = 0; i < enderecos.size(); i++) {
+            String prefixo = enderecos.size() > 1 ? "Endereço " + (i + 1) + ": " : "";
+            validarEntry(enderecos.get(i), prefixo);
+        }
+    }
+
+    private static void validarEntry(EnderecoPanel.EnderecoEntry e, String prefixo) {
+        exigir(e.cep,        prefixo + "CEP é obrigatório.");
+        exigir(e.logradouro, prefixo + "Logradouro é obrigatório.");
+        exigir(e.numero,     prefixo + "Número é obrigatório.");
+        exigir(e.bairro,     prefixo + "Bairro é obrigatório.");
+        exigir(e.cidade,     prefixo + "Cidade é obrigatória.");
+        exigir(e.estado,     prefixo + "Estado é obrigatório.");
+    }
+
+    private static void exigir(String value, String mensagem) {
+        if (value == null || value.isBlank()) throw new IllegalArgumentException(mensagem);
+    }
+
     private void criar() {
+        validarEnderecos();
         List<EnderecoCreateDto> enderecosDtos = enderecos.stream()
                 .map(e -> new EnderecoCreateDto(
+                        e.cep,
                         e.logradouro,
                         e.numero,
-                        e.cep,
                         e.bairro,
-                        emptyToNull(e.telefone),
                         e.cidade,
                         e.estado,
+                        emptyToNull(e.telefone),
                         e.enderecoPrincipal,
                         emptyToNull(e.complemento)
                 ))

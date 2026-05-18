@@ -7,13 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record EnderecoCreateDto(
+        @NotBlank @ValidCep String cep,
         @NotBlank String logradouro,
         @NotBlank String numero,
-        @NotBlank @ValidCep String cep,
         @NotBlank String bairro,
-        @ValidTelefone String telefone,
         @NotBlank String cidade,
         @NotBlank @Size(min = 2, max = 2) String estado,
+        @ValidTelefone String telefone,
         @NotNull Boolean enderecoPrincipal,
         String complemento
 ) {

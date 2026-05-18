@@ -8,4 +8,8 @@ public class EnderecoPrincipalException extends RuntimeException {
     public EnderecoPrincipalException() {
         super("Não é possível remover ou desmarcar o endereço principal. Marque outro endereço como principal para substituí-lo.");
     }
+
+    public EnderecoPrincipalException(String message) {
+        super(message);
+    }
 }

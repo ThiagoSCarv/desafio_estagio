@@ -38,7 +38,7 @@ public class EnderecoService {
         Endereco endereco = new Endereco();
         endereco.setLogradouro(dto.logradouro());
         endereco.setNumero(dto.numero());
-        endereco.setCep(dto.cep());
+        endereco.setCep(dto.cep().replaceAll("\\D", ""));
         endereco.setBairro(dto.bairro());
         endereco.setTelefone(dto.telefone());
         endereco.setCidade(dto.cidade());

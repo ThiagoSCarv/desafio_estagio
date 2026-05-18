@@ -12,6 +12,7 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
 import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
 import com.thiago.desafio_estagio.endereco.domain.Endereco;
 import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -90,14 +91,19 @@ public class ClientePjService {
     }
 
     // Salva a lista de endereços vinculada ao cliente recém-criado.
-    // O último item com enderecoPrincipal=true vence; se nenhum estiver marcado, o primeiro é principal.
+    // Exatamente um endereço pode ser marcado como principal; se nenhum estiver marcado, o primeiro é principal.
     private List<EnderecoDto> salvarEnderecos(ClientePj cliente, List<EnderecoCreateDto> enderecos) {
         if (enderecos == null || enderecos.isEmpty()) {
             return List.of();
         }
 
+        long qtdPrincipais = enderecos.stream().filter(e -> Boolean.TRUE.equals(e.enderecoPrincipal())).count();
+        if (qtdPrincipais > 1) {
+            throw new EnderecoPrincipalException("Apenas um endereço pode ser marcado como principal.");
+        }
+
         int principalIdx = 0;
-        for (int i = enderecos.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < enderecos.size(); i++) {
             if (Boolean.TRUE.equals(enderecos.get(i).enderecoPrincipal())) {
                 principalIdx = i;
                 break;

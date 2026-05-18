@@ -2,19 +2,22 @@ package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 
 import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
 import com.thiago.desafio_estagio.endereco.application.EnderecoService;
+import com.thiago.desafio_estagio.endereco.application.ViaCepClient;
+import com.thiago.desafio_estagio.endereco.application.ViaCepResponseDto;
 import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
@@ -25,14 +28,17 @@ public class AdicionarEnderecoModal extends Panel {
     @SpringBean
     private EnderecoService enderecoService;
 
+    @SpringBean
+    private ViaCepClient viaCepClient;
+
     private static class EnderecoData implements Serializable {
+        String  cep               = "";
         String  logradouro        = "";
         String  numero            = "";
-        String  cep               = "";
         String  bairro            = "";
-        String  telefone          = "";
         String  cidade            = "";
         String  estado            = "";
+        String  telefone          = "";
         Boolean enderecoPrincipal = Boolean.FALSE;
         String  complemento       = "";
     }
@@ -51,13 +57,54 @@ public class AdicionarEnderecoModal extends Panel {
         feedback.setOutputMarkupId(true);
         form.add(feedback);
 
-        form.add(new TextField<>("logradouro"));
+        // Campos preenchidos automaticamente via ViaCEP — ficam editáveis para correção manual
+        TextField<String> logradouroField = new TextField<>("logradouro");
+        logradouroField.setOutputMarkupId(true);
+
+        TextField<String> bairroField = new TextField<>("bairro");
+        bairroField.setOutputMarkupId(true);
+
+        TextField<String> cidadeField = new TextField<>("cidade");
+        cidadeField.setOutputMarkupId(true);
+
+        TextField<String> estadoField = new TextField<>("estado");
+        estadoField.setOutputMarkupId(true);
+
+        TextField<String> cepField = new TextField<>("cep");
+        cepField.add(new AjaxFormComponentUpdatingBehavior("change") { // NOSONAR java:S110 — profundidade herdada do Wicket
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                String cep = formData.cep != null ? formData.cep : "";
+                if (cep.replaceAll("\\D", "").length() != 8) {
+                    return;
+                }
+                try {
+                    ViaCepResponseDto viaCep = viaCepClient.buscarPorCep(cep);
+                    formData.logradouro = nvl(viaCep.logradouro());
+                    formData.bairro     = nvl(viaCep.bairro());
+                    formData.cidade     = nvl(viaCep.localidade());
+                    formData.estado     = nvl(viaCep.uf());
+                } catch (RuntimeException e) {
+                    AdicionarEnderecoModal.this.error("CEP não encontrado. Preencha os campos manualmente.");
+                    target.add(feedback);
+                }
+                target.add(logradouroField, bairroField, cidadeField, estadoField);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, RuntimeException e) {
+                // CEP ainda incompleto ou inválido — não exibir erro enquanto o usuário digita
+            }
+        });
+
+        form.add(cepField);
+        form.add(logradouroField);
         form.add(new TextField<>("numero"));
-        form.add(new TextField<>("cep"));
-        form.add(new TextField<>("bairro"));
+        form.add(bairroField);
+        form.add(cidadeField);
+        form.add(estadoField);
         form.add(new TextField<>("telefone"));
-        form.add(new TextField<>("cidade"));
-        form.add(new TextField<>("estado"));
+
         RadioGroup<Boolean> principalGroup = new RadioGroup<>("principalGroup", new PropertyModel<>(formData, "enderecoPrincipal"));
         principalGroup.add(new Radio<>("radioSim", Model.of(Boolean.TRUE)));
         principalGroup.add(new Radio<>("radioNao", Model.of(Boolean.FALSE)));
@@ -69,13 +116,13 @@ public class AdicionarEnderecoModal extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
                     enderecoService.criar(clienteId, new EnderecoCreateDto(
+                            formData.cep,
                             formData.logradouro,
                             formData.numero,
-                            formData.cep,
                             formData.bairro,
-                            emptyToNull(formData.telefone),
                             formData.cidade,
                             formData.estado,
+                            emptyToNull(formData.telefone),
                             formData.enderecoPrincipal,
                             emptyToNull(formData.complemento)
                     ));
@@ -97,19 +144,23 @@ public class AdicionarEnderecoModal extends Panel {
     }
 
     private void limpar() {
+        formData.cep               = "";
         formData.logradouro        = "";
         formData.numero            = "";
-        formData.cep               = "";
         formData.bairro            = "";
-        formData.telefone          = "";
         formData.cidade            = "";
         formData.estado            = "";
+        formData.telefone          = "";
         formData.enderecoPrincipal = Boolean.FALSE;
         formData.complemento       = "";
     }
 
     private static String emptyToNull(String value) {
         return value != null && !value.isBlank() ? value : null;
+    }
+
+    private static String nvl(String value) {
+        return value != null ? value : "";
     }
 
     protected void onAdicionado(AjaxRequestTarget target) { // hook para subclasses recarregarem a lista

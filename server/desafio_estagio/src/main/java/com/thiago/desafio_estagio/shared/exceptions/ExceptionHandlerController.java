@@ -1,6 +1,7 @@
 package com.thiago.desafio_estagio.shared.exceptions;
 
 import com.thiago.desafio_estagio.cliente.domain.exceptions.ClienteNaoEncontradoException;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.CepNaoEncontradoException;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoNaoEncontradoException;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
 import com.thiago.desafio_estagio.relatorio.application.exceptions.FormatoRelatorioInvalidoException;
@@ -55,6 +56,12 @@ public class ExceptionHandlerController {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public ErrorResponse handleEnderecoNaoEncontrado(EnderecoNaoEncontradoException ex) {
     return ErrorResponse.of("id", ex.getMessage());
+  }
+
+  @ExceptionHandler(CepNaoEncontradoException.class)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+  public ErrorResponse handleCepNaoEncontrado(CepNaoEncontradoException ex) {
+    return ErrorResponse.of("cep", ex.getMessage());
   }
 
   @ExceptionHandler(EnderecoPrincipalException.class)
