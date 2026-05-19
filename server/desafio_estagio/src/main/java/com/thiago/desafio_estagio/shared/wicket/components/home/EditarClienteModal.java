@@ -170,8 +170,7 @@ public class EditarClienteModal extends Panel {
         inscricaoEstadualModel.setObject("");
         pfCampos.setVisible(false);
         pjCampos.setVisible(false);
-        form.visitFormComponents((fc, visit) -> fc.clearInput());
-        target.add(form);
+        WicketUtil.limparForm(form, target);
     }
 
     private void salvar() {

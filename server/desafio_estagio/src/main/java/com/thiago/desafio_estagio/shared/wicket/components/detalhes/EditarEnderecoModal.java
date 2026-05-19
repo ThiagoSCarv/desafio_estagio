@@ -67,10 +67,10 @@ public class EditarEnderecoModal extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
                     enderecoService.atualizar(enderecoId, new EnderecoUpdateDto(
-                            emptyToNull(numeroModel.getObject()),
-                            emptyToNull(telefoneModel.getObject()),
+                            WicketUtil.emptyToNull(numeroModel.getObject()),
+                            WicketUtil.emptyToNull(telefoneModel.getObject()),
                             principalModel.getObject(),
-                            emptyToNull(complementoModel.getObject())
+                            WicketUtil.emptyToNull(complementoModel.getObject())
                     ));
                     WicketUtil.mostrarToast(target, "Endereço atualizado com sucesso");
                     WicketUtil.ocultarModal(target, EditarEnderecoModal.this);
@@ -95,20 +95,15 @@ public class EditarEnderecoModal extends Panel {
         telefoneModel.setObject("");
         complementoModel.setObject("");
         principalModel.setObject(Boolean.FALSE);
-        form.visitFormComponents((fc, visit) -> fc.clearInput());
-        target.add(form);
+        WicketUtil.limparForm(form, target);
     }
 
     public void setEndereco(EnderecoDto endereco) {
         this.enderecoId = endereco.id();
-        numeroModel.setObject(endereco.numero() != null ? endereco.numero() : "");
-        telefoneModel.setObject(endereco.telefone() != null ? endereco.telefone() : "");
-        complementoModel.setObject(endereco.complemento() != null ? endereco.complemento() : "");
+        numeroModel.setObject(WicketUtil.emptyToString(endereco.numero()));
+        telefoneModel.setObject(WicketUtil.emptyToString(endereco.telefone()));
+        complementoModel.setObject(WicketUtil.emptyToString(endereco.complemento()));
         principalModel.setObject(endereco.enderecoPrincipal());
-    }
-
-    private static String emptyToNull(String value) {
-        return value != null && !value.isBlank() ? value : null;
     }
 
     protected void onAtualizado(AjaxRequestTarget target) {}

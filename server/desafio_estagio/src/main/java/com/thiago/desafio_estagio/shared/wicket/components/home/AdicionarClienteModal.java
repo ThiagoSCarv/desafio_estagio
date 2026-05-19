@@ -9,8 +9,12 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
 import com.thiago.desafio_estagio.shared.validation.validator.CnpjValidator;
 import com.thiago.desafio_estagio.shared.validation.validator.CpfValidator;
 import com.thiago.desafio_estagio.shared.validation.validator.RgValidator;
+import com.thiago.desafio_estagio.shared.utils.JsUtils;
 import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -34,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdicionarClienteModal extends Panel {
+
+    private static final String DATA_MASK = "data-mask";
 
     @SpringBean
     private ClientePfService clientePfService;
@@ -80,6 +86,7 @@ public class AdicionarClienteModal extends Panel {
         pfCampos.add(new TextField<>("nome", nomeModel));
 
         TextField<String> cpfField = new TextField<>("cpf", cpfModel);
+        cpfField.add(AttributeModifier.replace(DATA_MASK, "cpf"));
         cpfField.add((IValidator<String>) validatable -> {
             String v = validatable.getValue();
             if (v != null && !v.isBlank() && !new CpfValidator().isValid(v, null))
@@ -88,6 +95,7 @@ public class AdicionarClienteModal extends Panel {
         pfCampos.add(cpfField);
 
         TextField<String> rgField = new TextField<>("rg", rgModel);
+        rgField.add(AttributeModifier.replace(DATA_MASK, "rg"));
         rgField.add((IValidator<String>) validatable -> {
             String v = validatable.getValue();
             if (v != null && !v.isBlank() && !new RgValidator().isValid(v, null))
@@ -102,6 +110,7 @@ public class AdicionarClienteModal extends Panel {
         pjCampos.setVisible(false);
 
         TextField<String> cnpjField = new TextField<>("cnpj", cnpjModel);
+        cnpjField.add(AttributeModifier.replace(DATA_MASK, "cnpj"));
         cnpjField.add((IValidator<String>) validatable -> {
             String v = validatable.getValue();
             if (v != null && !v.isBlank() && !new CnpjValidator().isValid(v, null))
@@ -209,11 +218,13 @@ public class AdicionarClienteModal extends Panel {
     private void adicionarEndereco(AjaxRequestTarget target) {
         enderecos.add(new EnderecoPanel.EnderecoEntry());
         target.add(enderecoContainer);
+        target.appendJavaScript(WicketUtil.INIT_MASKS);
     }
 
     private void removerEndereco(EnderecoPanel.EnderecoEntry entry, AjaxRequestTarget target) {
         enderecos.remove(entry);
         target.add(enderecoContainer);
+        target.appendJavaScript(WicketUtil.INIT_MASKS);
     }
 
     private void validarEnderecos() {
@@ -224,23 +235,49 @@ public class AdicionarClienteModal extends Panel {
     }
 
     private static void validarEntry(EnderecoPanel.EnderecoEntry e, String prefixo) {
-        exigir(e.cep,        prefixo + "CEP é obrigatório.");
-        exigir(e.logradouro, prefixo + "Logradouro é obrigatório.");
-        exigir(e.numero,     prefixo + "Número é obrigatório.");
-        exigir(e.bairro,     prefixo + "Bairro é obrigatório.");
-        exigir(e.cidade,     prefixo + "Cidade é obrigatória.");
-        exigir(e.estado,     prefixo + "Estado é obrigatório.");
-    }
-
-    private static void exigir(String value, String mensagem) {
-        if (value == null || value.isBlank()) throw new IllegalArgumentException(mensagem);
+        WicketUtil.exigir(e.cep,        prefixo + "CEP é obrigatório.");
+        WicketUtil.exigir(e.logradouro, prefixo + "Logradouro é obrigatório.");
+        WicketUtil.exigir(e.numero,     prefixo + "Número é obrigatório.");
+        WicketUtil.exigir(e.bairro,     prefixo + "Bairro é obrigatório.");
+        WicketUtil.exigir(e.cidade,     prefixo + "Cidade é obrigatória.");
+        WicketUtil.exigir(e.estado,     prefixo + "Estado é obrigatório.");
     }
 
     private void criar() {
         validarEnderecos();
-        exigir(emailModel.getObject(), "E-mail é obrigatório.");
+        WicketUtil.exigir(emailModel.getObject(), "E-mail é obrigatório.");
 
-        List<EnderecoCreateDto> enderecosDtos = enderecos.stream()
+        List<EnderecoCreateDto> enderecosDtos = mapEnderecos();
+
+        if (tipoSelecionado == TipoPessoa.FISICA) {
+            WicketUtil.exigir(nomeModel.getObject(), "Nome é obrigatório.");
+            WicketUtil.exigir(cpfModel.getObject(), "CPF é obrigatório.");
+            WicketUtil.exigir(rgModel.getObject(), "RG é obrigatório.");
+            clientePfService.criar(new ClientePfCreateDto(
+                    emailModel.getObject(),
+                    nomeModel.getObject(),
+                    cpfModel.getObject(),
+                    rgModel.getObject(),
+                    parseDate(dataNascimentoModel.getObject(), "Data de nascimento"),
+                    enderecosDtos
+            ));
+        } else {
+            WicketUtil.exigir(cnpjModel.getObject(), "CNPJ é obrigatório.");
+            WicketUtil.exigir(razaoSocialModel.getObject(), "Razão social é obrigatória.");
+            WicketUtil.exigir(inscricaoEstadualModel.getObject(), "Inscrição estadual é obrigatória.");
+            clientePjService.criar(new ClientePjCreateDto(
+                    emailModel.getObject(),
+                    cnpjModel.getObject(),
+                    razaoSocialModel.getObject(),
+                    inscricaoEstadualModel.getObject(),
+                    parseDate(dataCriacaoModel.getObject(), "Data de fundação"),
+                    enderecosDtos
+            ));
+        }
+    }
+
+    private List<EnderecoCreateDto> mapEnderecos() {
+        return enderecos.stream()
                 .map(e -> new EnderecoCreateDto(
                         e.cep,
                         e.logradouro,
@@ -248,52 +285,22 @@ public class AdicionarClienteModal extends Panel {
                         e.bairro,
                         e.cidade,
                         e.estado,
-                        emptyToNull(e.telefone),
+                        WicketUtil.emptyToNull(e.telefone),
                         e.enderecoPrincipal,
-                        emptyToNull(e.complemento)
+                        WicketUtil.emptyToNull(e.complemento)
                 ))
                 .toList();
-
-        if (tipoSelecionado == TipoPessoa.FISICA) {
-            exigir(nomeModel.getObject(), "Nome é obrigatório.");
-            exigir(cpfModel.getObject(), "CPF é obrigatório.");
-            exigir(rgModel.getObject(), "RG é obrigatório.");
-            clientePfService.criar(new ClientePfCreateDto(
-                    emailModel.getObject(),
-                    nomeModel.getObject(),
-                    cpfModel.getObject(),
-                    rgModel.getObject(),
-                    parseDate(dataNascimentoModel.getObject()),
-                    enderecosDtos
-            ));
-        } else {
-            exigir(cnpjModel.getObject(), "CNPJ é obrigatório.");
-            exigir(razaoSocialModel.getObject(), "Razão social é obrigatória.");
-            exigir(inscricaoEstadualModel.getObject(), "Inscrição estadual é obrigatória.");
-            clientePjService.criar(new ClientePjCreateDto(
-                    emailModel.getObject(),
-                    cnpjModel.getObject(),
-                    razaoSocialModel.getObject(),
-                    inscricaoEstadualModel.getObject(),
-                    parseDate(dataCriacaoModel.getObject()),
-                    enderecosDtos
-            ));
-        }
     }
 
-    private LocalDate parseDate(String value) {
+    private LocalDate parseDate(String value, String nomeCampo) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Data obrigatória não informada.");
+            throw new IllegalArgumentException(nomeCampo + " é obrigatória.");
         }
         try {
             return LocalDate.parse(value, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         } catch (Exception e) {
-            throw new IllegalArgumentException("Formato de data inválido. Use dd/mm/aaaa.");
+            throw new IllegalArgumentException(nomeCampo + " inválida. Use dd/mm/aaaa.");
         }
-    }
-
-    private String emptyToNull(String value) {
-        return (value == null || value.isBlank()) ? null : value;
     }
 
     private void limpar(AjaxRequestTarget target) {
@@ -313,15 +320,9 @@ public class AdicionarClienteModal extends Panel {
         enderecos.clear();
         enderecos.add(new EnderecoPanel.EnderecoEntry());
 
-        // Descarta input bruto preso nos componentes e mensagens de erro acumuladas
-        // de tentativas anteriores, para o modal reabrir totalmente limpo.
-        form.visitFormComponents((fc, visit) -> {
-            fc.clearInput();
-            fc.getFeedbackMessages().clear();
-        });
         getFeedbackMessages().clear();
-
-        target.add(form);
+        WicketUtil.limparForm(form, target);
+        target.appendJavaScript(WicketUtil.INIT_MASKS);
         ativarTab(target, "FISICA");
     }
 
@@ -334,6 +335,12 @@ public class AdicionarClienteModal extends Panel {
             "if(a)a.classList.add('erp-tipo-btn--ativo');" +
             "})();"
         );
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JsUtils.MASKS));
     }
 
     protected void onAdicionado(AjaxRequestTarget target) {}

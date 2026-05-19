@@ -2,8 +2,11 @@ package com.thiago.desafio_estagio.shared.wicket.util;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.form.Form;
 
 public class WicketUtil {
+
+    public static final String INIT_MASKS = "typeof initMasks==='function'&&initMasks(document);";
 
     // Wicket substitui o HTML do painel antes de executar qualquer JS do Ajax.
     // Esse trecho limpa o estado do Bootstrap diretamente no DOM após a substituição.
@@ -14,6 +17,27 @@ public class WicketUtil {
         "document.body.style.removeProperty('padding-right');";
 
     private WicketUtil() {}
+
+    public static String emptyToNull(String value) {
+        return value != null && !value.isBlank() ? value : null;
+    }
+
+    public static String emptyToString(String value) {
+        return value != null ? value : "";
+    }
+
+    public static void exigir(String value, String mensagem) {
+        if (value == null || value.isBlank()) throw new IllegalArgumentException(mensagem);
+    }
+
+    // Limpa input bruto e mensagens de erro de todos os componentes do form, e marca-o para re-render via Ajax.
+    public static void limparForm(Form<?> form, AjaxRequestTarget target) {
+        form.visitFormComponents((fc, visit) -> {
+            fc.clearInput();
+            fc.getFeedbackMessages().clear();
+        });
+        target.add(form);
+    }
 
     public static void mostrarToast(AjaxRequestTarget target, String mensagem) {
         target.appendJavaScript(

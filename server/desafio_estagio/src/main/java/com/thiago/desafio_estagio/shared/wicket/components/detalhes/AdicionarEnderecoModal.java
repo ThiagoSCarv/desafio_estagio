@@ -4,8 +4,13 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoCreateDto;
 import com.thiago.desafio_estagio.endereco.application.EnderecoService;
 import com.thiago.desafio_estagio.endereco.application.ViaCepClient;
 import com.thiago.desafio_estagio.endereco.application.ViaCepResponseDto;
+import com.thiago.desafio_estagio.endereco.domain.exceptions.CepNaoEncontradoException;
+import com.thiago.desafio_estagio.shared.utils.JsUtils;
 import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
@@ -73,6 +78,7 @@ public class AdicionarEnderecoModal extends Panel {
         estadoField.setOutputMarkupId(true);
 
         TextField<String> cepField = new TextField<>("cep");
+        cepField.add(AttributeModifier.replace("data-mask", "cep"));
         cepField.add(new AjaxFormComponentUpdatingBehavior("change") { // NOSONAR java:S110 — profundidade herdada do Wicket
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -82,12 +88,15 @@ public class AdicionarEnderecoModal extends Panel {
                 }
                 try {
                     ViaCepResponseDto viaCep = viaCepClient.buscarPorCep(cep);
-                    formData.logradouro = nvl(viaCep.logradouro());
-                    formData.bairro     = nvl(viaCep.bairro());
-                    formData.cidade     = nvl(viaCep.localidade());
-                    formData.estado     = nvl(viaCep.uf());
-                } catch (RuntimeException e) {
+                    formData.logradouro = WicketUtil.emptyToString(viaCep.logradouro());
+                    formData.bairro     = WicketUtil.emptyToString(viaCep.bairro());
+                    formData.cidade     = WicketUtil.emptyToString(viaCep.localidade());
+                    formData.estado     = WicketUtil.emptyToString(viaCep.uf());
+                } catch (CepNaoEncontradoException e) {
                     AdicionarEnderecoModal.this.error("CEP não encontrado. Preencha os campos manualmente.");
+                    target.add(feedback);
+                } catch (RuntimeException e) {
+                    AdicionarEnderecoModal.this.error("Serviço de CEP indisponível. Preencha os campos manualmente.");
                     target.add(feedback);
                 }
                 target.add(logradouroField, bairroField, cidadeField, estadoField);
@@ -105,7 +114,9 @@ public class AdicionarEnderecoModal extends Panel {
         form.add(bairroField);
         form.add(cidadeField);
         form.add(estadoField);
-        form.add(new TextField<>("telefone"));
+        TextField<String> telefoneField = new TextField<>("telefone");
+        telefoneField.add(AttributeModifier.replace("data-mask", "telefone"));
+        form.add(telefoneField);
 
         RadioGroup<Boolean> principalGroup = new RadioGroup<>("principalGroup", new PropertyModel<>(formData, "enderecoPrincipal"));
         principalGroup.add(new Radio<>("radioSim", Model.of(Boolean.TRUE)));
@@ -136,9 +147,9 @@ public class AdicionarEnderecoModal extends Panel {
                             formData.bairro,
                             formData.cidade,
                             formData.estado,
-                            emptyToNull(formData.telefone),
+                            WicketUtil.emptyToNull(formData.telefone),
                             formData.enderecoPrincipal,
-                            emptyToNull(formData.complemento)
+                            WicketUtil.emptyToNull(formData.complemento)
                     ));
                     limpar(target);
                     WicketUtil.mostrarToast(target, "Endereço adicionado com sucesso");
@@ -158,16 +169,12 @@ public class AdicionarEnderecoModal extends Panel {
     }
 
     private void validarFormData() {
-        exigir(formData.cep,        "CEP é obrigatório.");
-        exigir(formData.logradouro, "Logradouro é obrigatório.");
-        exigir(formData.numero,     "Número é obrigatório.");
-        exigir(formData.bairro,     "Bairro é obrigatório.");
-        exigir(formData.cidade,     "Cidade é obrigatória.");
-        exigir(formData.estado,     "Estado é obrigatório.");
-    }
-
-    private static void exigir(String value, String mensagem) {
-        if (value == null || value.isBlank()) throw new IllegalArgumentException(mensagem);
+        WicketUtil.exigir(formData.cep,        "CEP é obrigatório.");
+        WicketUtil.exigir(formData.logradouro, "Logradouro é obrigatório.");
+        WicketUtil.exigir(formData.numero,     "Número é obrigatório.");
+        WicketUtil.exigir(formData.bairro,     "Bairro é obrigatório.");
+        WicketUtil.exigir(formData.cidade,     "Cidade é obrigatória.");
+        WicketUtil.exigir(formData.estado,     "Estado é obrigatório.");
     }
 
     // Reseta o estado do formulário (POJO + cache de input bruto dos componentes) e marca o form para re-render via Ajax.
@@ -181,16 +188,14 @@ public class AdicionarEnderecoModal extends Panel {
         formData.telefone          = "";
         formData.enderecoPrincipal = Boolean.FALSE;
         formData.complemento       = "";
-        form.visitFormComponents((fc, visit) -> fc.clearInput());
-        target.add(form);
+        WicketUtil.limparForm(form, target);
+        target.appendJavaScript(WicketUtil.INIT_MASKS);
     }
 
-    private static String emptyToNull(String value) {
-        return value != null && !value.isBlank() ? value : null;
-    }
-
-    private static String nvl(String value) {
-        return value != null ? value : "";
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JsUtils.MASKS));
     }
 
     protected void onAdicionado(AjaxRequestTarget target) { // hook para subclasses recarregarem a lista
