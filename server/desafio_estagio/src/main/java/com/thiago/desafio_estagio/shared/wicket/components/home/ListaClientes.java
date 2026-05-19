@@ -4,6 +4,7 @@ import com.thiago.desafio_estagio.cliente.application.ClienteDto;
 import com.thiago.desafio_estagio.cliente.application.ClienteService;
 import com.thiago.desafio_estagio.cliente.domain.TipoPessoa;
 import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -112,26 +113,40 @@ public class ListaClientes extends Panel {
             }
         }));
 
-        resultados.add(new AjaxLink<Void>("paginaAnterior") {
+        AjaxLink<Void> btnAnterior = new AjaxLink<Void>("paginaAnterior") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                if (paginaAtual > 0) {
-                    paginaAtual--;
-                    pageModel.detach();
-                    target.add(resultados);
-                }
+            public boolean isEnabled() {
+                return paginaAtual > 0;
             }
-        });
 
-        resultados.add(new AjaxLink<Void>("proximaPagina") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (paginaAtual < pageModel.getObject().getTotalPages() - 1) {
-                    paginaAtual++;
-                    pageModel.detach();
-                    target.add(resultados);
-                }
+                paginaAtual--;
+                pageModel.detach();
+                target.add(resultados);
             }
-        });
+        };
+        btnAnterior.add(AttributeModifier.replace("class", () ->
+            "erp-page-btn" + (paginaAtual == 0 ? " erp-page-btn--disabled" : "")));
+        resultados.add(btnAnterior);
+
+        AjaxLink<Void> btnProxima = new AjaxLink<Void>("proximaPagina") {
+            @Override
+            public boolean isEnabled() {
+                return paginaAtual < pageModel.getObject().getTotalPages() - 1;
+            }
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                paginaAtual++;
+                pageModel.detach();
+                target.add(resultados);
+            }
+        };
+        btnProxima.add(AttributeModifier.replace("class", () -> {
+            boolean ultimaPagina = paginaAtual >= pageModel.getObject().getTotalPages() - 1;
+            return "erp-page-btn" + (ultimaPagina ? " erp-page-btn--disabled" : "");
+        }));
+        resultados.add(btnProxima);
     }
 }

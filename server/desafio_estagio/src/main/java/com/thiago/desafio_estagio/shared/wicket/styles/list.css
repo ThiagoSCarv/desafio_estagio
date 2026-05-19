@@ -136,6 +136,11 @@
   background-color: var(--erp-surface-muted);
   color: var(--erp-text);
 }
+.erp-page-btn--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
 /* Paginação Bootstrap */
 .pagination {
