@@ -16,7 +16,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ClienteRepositoryCustomImpl implements ClienteRepositoryCustom {
 
-    private final EntityManager em;
+    private final EntityManager entityManager;
 
     /*
      * TYPE(c) antes de cada TREAT garante que o Hibernate gera INNER JOIN apenas no
@@ -37,14 +37,14 @@ public class ClienteRepositoryCustomImpl implements ClienteRepositoryCustom {
 
     @Override
     public Page<Cliente> buscarComFiltros(TipoPessoa tipoPessoa, String documento, String nome, Pageable pageable) {
-        String docNorm = normalizarDoc(documento);
-        String nomeNorm = normalizarNome(nome);
+        String documentoNormalizado = normalizarDoc(documento);
+        String nomeNormalizado = normalizarNome(nome);
 
-        TypedQuery<Cliente> dataQuery = em.createQuery("SELECT c " + WHERE_FILTROS, Cliente.class);
-        TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(c) " + WHERE_FILTROS, Long.class);
+        TypedQuery<Cliente> dataQuery = entityManager.createQuery("SELECT c " + WHERE_FILTROS, Cliente.class);
+        TypedQuery<Long> countQuery = entityManager.createQuery("SELECT COUNT(c) " + WHERE_FILTROS, Long.class);
 
-        aplicarParametros(dataQuery, tipoPessoa, docNorm, nomeNorm);
-        aplicarParametros(countQuery, tipoPessoa, docNorm, nomeNorm);
+        aplicarParametros(dataQuery, tipoPessoa, documentoNormalizado, nomeNormalizado);
+        aplicarParametros(countQuery, tipoPessoa, documentoNormalizado, nomeNormalizado);
 
         long total = countQuery.getSingleResult();
         List<Cliente> content = Objects.requireNonNullElse(
@@ -57,12 +57,12 @@ public class ClienteRepositoryCustomImpl implements ClienteRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     }
 
-    private void aplicarParametros(Query q, TipoPessoa tipoPessoa, String doc, String nome) {
-        q.setParameter("tipoPessoa", tipoPessoa);
-        q.setParameter("doc", doc);
-        q.setParameter("docPattern", doc != null ? "%" + doc + "%" : null);
-        q.setParameter("nome", nome);
-        q.setParameter("nomePattern", nome != null ? "%" + nome + "%" : null);
+    private void aplicarParametros(Query query, TipoPessoa tipoPessoa, String doc, String nome) {
+        query.setParameter("tipoPessoa", tipoPessoa);
+        query.setParameter("doc", doc);
+        query.setParameter("docPattern", doc != null ? "%" + doc + "%" : null);
+        query.setParameter("nome", nome);
+        query.setParameter("nomePattern", nome != null ? "%" + nome + "%" : null);
     }
 
     // Documentos sao persistidos so com digitos; normaliza para aceitar mascaras na busca.

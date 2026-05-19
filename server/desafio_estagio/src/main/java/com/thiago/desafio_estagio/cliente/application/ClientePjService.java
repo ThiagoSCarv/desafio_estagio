@@ -54,9 +54,9 @@ public class ClientePjService {
         clientePj.setInscricaoEstadual(dto.inscricaoEstadual());
         clientePj.setDataCriacao(dto.dataCriacao());
 
-        ClientePj saved = clientePjRepository.save(clientePj);
-        List<EnderecoDto> enderecos = salvarEnderecos(saved, dto.enderecos());
-        return ClientePjDto.from(saved, enderecos);
+        ClientePj clientePjSalvo = clientePjRepository.save(clientePj);
+        List<EnderecoDto> enderecos = salvarEnderecos(clientePjSalvo, dto.enderecos());
+        return ClientePjDto.from(clientePjSalvo, enderecos);
     }
 
     @Transactional
@@ -97,20 +97,20 @@ public class ClientePjService {
             return List.of();
         }
 
-        long qtdPrincipais = enderecos.stream().filter(e -> Boolean.TRUE.equals(e.enderecoPrincipal())).count();
-        if (qtdPrincipais > 1) {
+        long quantidadePrincipais = enderecos.stream().filter(e -> Boolean.TRUE.equals(e.enderecoPrincipal())).count();
+        if (quantidadePrincipais > 1) {
             throw new EnderecoPrincipalException("Apenas um endereço pode ser marcado como principal.");
         }
 
-        int principalIdx = 0;
+        int indicePrincipal = 0;
         for (int i = 0; i < enderecos.size(); i++) {
             if (Boolean.TRUE.equals(enderecos.get(i).enderecoPrincipal())) {
-                principalIdx = i;
+                indicePrincipal = i;
                 break;
             }
         }
 
-        List<Endereco> entities = new ArrayList<>();
+        List<Endereco> enderecosParaSalvar = new ArrayList<>();
         for (int i = 0; i < enderecos.size(); i++) {
             EnderecoCreateDto dto = enderecos.get(i);
             Endereco endereco = new Endereco();
@@ -121,13 +121,13 @@ public class ClientePjService {
             endereco.setTelefone(dto.telefone());
             endereco.setCidade(dto.cidade());
             endereco.setEstado(dto.estado());
-            endereco.setEnderecoPrincipal(i == principalIdx);
+            endereco.setEnderecoPrincipal(i == indicePrincipal);
             endereco.setComplemento(dto.complemento());
             endereco.setCliente(cliente);
-            entities.add(endereco);
+            enderecosParaSalvar.add(endereco);
         }
 
-        return enderecoRepository.saveAll(entities).stream()
+        return enderecoRepository.saveAll(enderecosParaSalvar).stream()
                 .map(EnderecoDto::from)
                 .toList();
     }

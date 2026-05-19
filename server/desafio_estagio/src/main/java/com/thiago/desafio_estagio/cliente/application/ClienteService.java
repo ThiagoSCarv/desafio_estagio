@@ -36,7 +36,7 @@ public class ClienteService {
 
     @Transactional(readOnly = true)
     public Page<ClienteDto> listarTodos(TipoPessoa tipoPessoa, String documento, String nome, Pageable pageable) {
-        return clienteRepository.buscarComFiltros(tipoPessoa, documento, nome, pageable).map(c -> toDto(c, List.of()));
+        return clienteRepository.buscarComFiltros(tipoPessoa, documento, nome, pageable).map(cliente -> toDto(cliente, List.of()));
     }
 
     @Transactional(readOnly = true)
@@ -59,8 +59,8 @@ public class ClienteService {
     }
 
     private ClienteDto toDto(Cliente cliente, List<EnderecoDto> enderecos) {
-        if (cliente instanceof ClientePf pf) {
-            return ClientePfDto.from(pf, enderecos);
+        if (cliente instanceof ClientePf clientePf) {
+            return ClientePfDto.from(clientePf, enderecos);
         }
         return ClientePjDto.from((ClientePj) cliente, enderecos);
     }

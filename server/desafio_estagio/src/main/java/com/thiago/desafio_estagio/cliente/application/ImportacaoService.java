@@ -58,17 +58,17 @@ public class ImportacaoService {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Clientes");
 
-            CellStyle cabecalhoStyle = workbook.createCellStyle();
+            CellStyle estiloDosCabecalhos = workbook.createCellStyle();
             Font boldFont = workbook.createFont();
             boldFont.setBold(true);
-            cabecalhoStyle.setFont(boldFont);
+            estiloDosCabecalhos.setFont(boldFont);
 
             String[] cabecalhos = {"tipo", "email", "cpf_cnpj", "nome_razaoSocial", "rg_inscricaoEstadual", "data"};
             Row cabecalho = sheet.createRow(0);
             for (int i = 0; i < cabecalhos.length; i++) {
                 Cell cell = cabecalho.createCell(i);
                 cell.setCellValue(cabecalhos[i]);
-                cell.setCellStyle(cabecalhoStyle);
+                cell.setCellStyle(estiloDosCabecalhos);
             }
 
             Object[][] exemplos = {
@@ -126,11 +126,11 @@ public class ImportacaoService {
     }
 
     private LocalDate parseData(Row row, int col) {
-        String valor = celula(row, col);
+        String textoData = celula(row, col);
         try {
-            return LocalDate.parse(valor, FORMATO_DATA);
+            return LocalDate.parse(textoData, FORMATO_DATA);
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("data inválida \"" + valor + "\" (esperado dd/MM/yyyy)");
+            throw new IllegalArgumentException("data inválida \"" + textoData + "\" (esperado dd/MM/yyyy)");
         }
     }
 
