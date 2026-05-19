@@ -14,6 +14,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import com.thiago.desafio_estagio.relatorio.application.exceptions.RelatorioException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -49,12 +50,12 @@ public class RelatorioService {
     private JasperReport compilar(@lombok.NonNull String classpath, String nome) {
         ClassPathResource resource = new ClassPathResource(classpath);
         if (!resource.exists()) {
-            throw new RuntimeException("Arquivo de relatório não encontrado: " + classpath);
+            throw new RelatorioException("Arquivo de relatório não encontrado: " + classpath);
         }
         try (InputStream stream = resource.getInputStream()) {
             return JasperCompileManager.compileReport(stream);
         } catch (JRException | IOException e) {
-            throw new RuntimeException("Falha ao compilar " + nome, e);
+            throw new RelatorioException("Falha ao compilar " + nome, e);
         }
     }
 
@@ -77,7 +78,7 @@ public class RelatorioService {
             JasperPrint print = JasperFillManager.fillReport(templateListaPdf, new HashMap<>(), conn);
             return exportarPdf(print);
         } catch (JRException | SQLException e) {
-            throw new RuntimeException("Erro ao gerar relatório de clientes", e);
+            throw new RelatorioException("Erro ao gerar relatório de clientes", e);
         }
     }
 
@@ -88,7 +89,7 @@ public class RelatorioService {
             JasperPrint print = JasperFillManager.fillReport(templateDetalhePdf, params, conn);
             return exportarPdf(print);
         } catch (JRException | SQLException e) {
-            throw new RuntimeException("Erro ao gerar relatório de cliente", e);
+            throw new RelatorioException("Erro ao gerar relatório de cliente", e);
         }
     }
 
@@ -122,14 +123,14 @@ public class RelatorioService {
 
             Sheet sheet = workbook.createSheet("Clientes");
 
-            CellStyle headerStyle = cabecalhoStyle(workbook);
-            String[] headers = {"Nome / Razão Social", "Email", "Tipo", "Documento",
+            CellStyle estiloCabecalho = cabecalhoStyle(workbook);
+            String[] colunas = {"Nome / Razão Social", "Email", "Tipo", "Documento",
                                 "Telefone", "CEP", "Cidade", "Estado"};
-            Row headerRow = sheet.createRow(0);
-            for (int i = 0; i < headers.length; i++) {
-                Cell cell = headerRow.createCell(i);
-                cell.setCellValue(headers[i]);
-                cell.setCellStyle(headerStyle);
+            Row linhaCabecalho = sheet.createRow(0);
+            for (int i = 0; i < colunas.length; i++) {
+                Cell celula = linhaCabecalho.createCell(i);
+                celula.setCellValue(colunas[i]);
+                celula.setCellStyle(estiloCabecalho);
             }
 
             int rowNum = 1;
@@ -145,11 +146,11 @@ public class RelatorioService {
                 row.createCell(7).setCellValue(rs.getString("estado"));
             }
 
-            for (int i = 0; i < headers.length; i++) sheet.autoSizeColumn(i);
+            for (int i = 0; i < colunas.length; i++) sheet.autoSizeColumn(i);
             workbook.write(out);
             return out.toByteArray();
         } catch (SQLException | IOException e) {
-            throw new RuntimeException("Erro ao gerar relatório XLSX de clientes", e);
+            throw new RelatorioException("Erro ao gerar relatório XLSX de clientes", e);
         }
     }
 
@@ -180,61 +181,71 @@ public class RelatorioService {
             ps.setString(1, clienteId.toString());
             ResultSet rs = ps.executeQuery();
 
-            Sheet sheet         = workbook.createSheet("Ficha do Cliente");
-            CellStyle boldStyle = cabecalhoStyle(workbook);
-            CellStyle secStyle  = secaoStyle(workbook);
+            Sheet sheet               = workbook.createSheet("Ficha do Cliente");
+            CellStyle estiloCabecalho = cabecalhoStyle(workbook);
+            CellStyle estiloSecao     = secaoStyle(workbook);
+            String[] colunasEndereco  = {"Logradouro", "Número", "Complemento", "Bairro",
+                                         "CEP", "Telefone", "Cidade", "Estado", "Principal"};
             int rowNum = 0;
-            boolean cabecalhoEscrito = false;
 
-            String[] endHeaders = {"Logradouro", "Número", "Complemento", "Bairro",
-                                   "CEP", "Telefone", "Cidade", "Estado", "Principal"};
-
-            while (rs.next()) {
-                if (!cabecalhoEscrito) {
-                    escreverSecao(sheet, rowNum++, secStyle, "DADOS DO CLIENTE");
-                    escreverLabel(sheet, rowNum++, boldStyle, "Nome / Razão Social",  rs.getString("nome_razao"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "Tipo de Pessoa",        rs.getString("tipo_pessoa"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "E-mail",               rs.getString("email"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "Ativo",                rs.getString("ativo"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "Documento (CPF/CNPJ)", rs.getString("documento"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "RG",                   rs.getString("rg"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "Data de Nascimento",   Objects.toString(rs.getDate("data_nascimento"), ""));
-                    escreverLabel(sheet, rowNum++, boldStyle, "Inscrição Estadual",   rs.getString("inscricao_estadual"));
-                    escreverLabel(sheet, rowNum++, boldStyle, "Data de Criação",      Objects.toString(rs.getDate("data_criacao"), ""));
-
-                    rowNum++; // linha em branco
-
-                    escreverSecao(sheet, rowNum++, secStyle, "ENDEREÇOS");
-                    Row hRow = sheet.createRow(rowNum++);
-                    for (int i = 0; i < endHeaders.length; i++) {
-                        Cell c = hRow.createCell(i);
-                        c.setCellValue(endHeaders[i]);
-                        c.setCellStyle(boldStyle);
+            if (rs.next()) {
+                rowNum = escreverSecaoCliente(sheet, rs, rowNum, estiloCabecalho, estiloSecao);
+                rowNum = escreverCabecalhoEnderecos(sheet, rowNum, estiloCabecalho, estiloSecao, colunasEndereco);
+                do {
+                    if (rs.getString("logradouro") != null) {
+                        escreverLinhaEndereco(sheet, rowNum++, rs);
                     }
-                    cabecalhoEscrito = true;
-                }
-
-                if (rs.getString("logradouro") != null) {
-                    Row row = sheet.createRow(rowNum++);
-                    row.createCell(0).setCellValue(rs.getString("logradouro"));
-                    row.createCell(1).setCellValue(rs.getString("numero"));
-                    row.createCell(2).setCellValue(Objects.toString(rs.getString("complemento"), ""));
-                    row.createCell(3).setCellValue(rs.getString("bairro"));
-                    row.createCell(4).setCellValue(rs.getString("cep"));
-                    row.createCell(5).setCellValue(rs.getString("telefone"));
-                    row.createCell(6).setCellValue(rs.getString("cidade"));
-                    row.createCell(7).setCellValue(rs.getString("estado"));
-                    row.createCell(8).setCellValue(rs.getString("principal"));
-                }
+                } while (rs.next());
             }
             rs.close();
 
-            for (int i = 0; i < endHeaders.length; i++) sheet.autoSizeColumn(i);
+            for (int i = 0; i < colunasEndereco.length; i++) sheet.autoSizeColumn(i);
             workbook.write(out);
             return out.toByteArray();
         } catch (SQLException | IOException e) {
-            throw new RuntimeException("Erro ao gerar relatório XLSX de cliente", e);
+            throw new RelatorioException("Erro ao gerar relatório XLSX de cliente", e);
         }
+    }
+
+    private int escreverSecaoCliente(Sheet sheet, ResultSet rs, int rowNum,
+                                      CellStyle estiloCabecalho, CellStyle estiloSecao) throws SQLException {
+        escreverSecao(sheet, rowNum++, estiloSecao, "DADOS DO CLIENTE");
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Nome / Razão Social",  rs.getString("nome_razao"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Tipo de Pessoa",        rs.getString("tipo_pessoa"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "E-mail",               rs.getString("email"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Ativo",                rs.getString("ativo"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Documento (CPF/CNPJ)", rs.getString("documento"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "RG",                   rs.getString("rg"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Data de Nascimento",   Objects.toString(rs.getDate("data_nascimento"), ""));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Inscrição Estadual",   rs.getString("inscricao_estadual"));
+        escreverLabel(sheet, rowNum++, estiloCabecalho, "Data de Criação",      Objects.toString(rs.getDate("data_criacao"), ""));
+        return rowNum;
+    }
+
+    private int escreverCabecalhoEnderecos(Sheet sheet, int rowNum, CellStyle estiloCabecalho,
+                                            CellStyle estiloSecao, String[] colunasEndereco) {
+        rowNum++; // linha em branco
+        escreverSecao(sheet, rowNum++, estiloSecao, "ENDEREÇOS");
+        Row linhaCabecalhoEnderecos = sheet.createRow(rowNum++);
+        for (int i = 0; i < colunasEndereco.length; i++) {
+            Cell celula = linhaCabecalhoEnderecos.createCell(i);
+            celula.setCellValue(colunasEndereco[i]);
+            celula.setCellStyle(estiloCabecalho);
+        }
+        return rowNum;
+    }
+
+    private void escreverLinhaEndereco(Sheet sheet, int rowNum, ResultSet rs) throws SQLException {
+        Row row = sheet.createRow(rowNum);
+        row.createCell(0).setCellValue(rs.getString("logradouro"));
+        row.createCell(1).setCellValue(rs.getString("numero"));
+        row.createCell(2).setCellValue(Objects.toString(rs.getString("complemento"), ""));
+        row.createCell(3).setCellValue(rs.getString("bairro"));
+        row.createCell(4).setCellValue(rs.getString("cep"));
+        row.createCell(5).setCellValue(rs.getString("telefone"));
+        row.createCell(6).setCellValue(rs.getString("cidade"));
+        row.createCell(7).setCellValue(rs.getString("estado"));
+        row.createCell(8).setCellValue(rs.getString("principal"));
     }
 
     private CellStyle cabecalhoStyle(Workbook workbook) {
