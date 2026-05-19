@@ -18,6 +18,10 @@ public class FiltroClientesPanel extends Panel {
 
     private final Model<TipoPessoa> tipoFiltroModel;
 
+    private AjaxLink<Void> linkTodos;
+    private AjaxLink<Void> linkFisica;
+    private AjaxLink<Void> linkJuridica;
+
     public FiltroClientesPanel(String id, Model<String> nomeFilter, Model<String> documentoFilter, Model<TipoPessoa> tipoFiltroModel) {
         super(id);
         this.tipoFiltroModel = tipoFiltroModel;
@@ -26,9 +30,15 @@ public class FiltroClientesPanel extends Panel {
         filtroForm.add(AttributeModifier.replace("onsubmit", "return false;"));
         add(filtroForm);
 
-        filtroForm.add(tipoLink("filtroTodos", null));
-        filtroForm.add(tipoLink("filtroFisica", TipoPessoa.FISICA));
-        filtroForm.add(tipoLink("filtroJuridica", TipoPessoa.JURIDICA));
+        linkTodos = tipoLink("filtroTodos", null);
+        linkFisica = tipoLink("filtroFisica", TipoPessoa.FISICA);
+        linkJuridica = tipoLink("filtroJuridica", TipoPessoa.JURIDICA);
+
+        linkTodos.setOutputMarkupId(true);
+        linkFisica.setOutputMarkupId(true);
+        linkJuridica.setOutputMarkupId(true);
+
+        filtroForm.add(linkTodos, linkFisica, linkJuridica);
 
         TextField<String> nomeField = new TextField<>("filtroNome", nomeFilter);
         nomeField.add(atualizarAoMudar());
@@ -61,6 +71,7 @@ public class FiltroClientesPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 tipoFiltroModel.setObject(tipo);
+                target.add(linkTodos, linkFisica, linkJuridica);
                 onFiltroMudou(target);
             }
         };
@@ -68,6 +79,12 @@ public class FiltroClientesPanel extends Panel {
             @Override
             public String getObject() {
                 return "erp-filter-tab" + (tipoFiltroModel.getObject() == tipo ? " erp-filter-tab--ativo" : "");
+            }
+        }));
+        link.add(new AttributeModifier("aria-selected", new IModel<String>() {
+            @Override
+            public String getObject() {
+                return String.valueOf(tipoFiltroModel.getObject() == tipo);
             }
         }));
         return link;
