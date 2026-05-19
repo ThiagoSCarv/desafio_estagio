@@ -53,6 +53,9 @@ public class HomePage extends WebPage {
         response.render(CssHeaderItem.forReference(WicketApplication.LIST_CSS));
         response.render(CssHeaderItem.forReference(WicketApplication.MODAL_CSS));
         response.render(JavaScriptHeaderItem.forUrl(
+            "https://cdn.jsdelivr.net/npm/imask@7.6.1/dist/imask.min.js"
+        ));
+        response.render(JavaScriptHeaderItem.forUrl(
             "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         ));
     }

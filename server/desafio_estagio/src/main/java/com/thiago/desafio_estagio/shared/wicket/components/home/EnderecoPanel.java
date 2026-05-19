@@ -2,7 +2,11 @@ package com.thiago.desafio_estagio.shared.wicket.components.home;
 
 import com.thiago.desafio_estagio.endereco.application.ViaCepClient;
 import com.thiago.desafio_estagio.endereco.application.ViaCepResponseDto;
+import com.thiago.desafio_estagio.shared.utils.JsUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -48,6 +52,7 @@ public class EnderecoPanel extends Panel {
         estadoField.setOutputMarkupId(true);
 
         TextField<String> cepField = new TextField<>("cep");
+        cepField.add(AttributeModifier.replace("data-mask", "cep"));
         cepField.add(new AjaxFormComponentUpdatingBehavior("change") { // NOSONAR java:S110 — profundidade herdada do Wicket
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -80,7 +85,9 @@ public class EnderecoPanel extends Panel {
         add(bairroField);
         add(cidadeField);
         add(estadoField);
-        add(new TextField<>("telefone"));
+        TextField<String> telefoneField = new TextField<>("telefone");
+        telefoneField.add(AttributeModifier.replace("data-mask", "telefone"));
+        add(telefoneField);
         add(new TextField<>("complemento"));
         add(new CheckBox("enderecoPrincipal"));
 
@@ -100,6 +107,12 @@ public class EnderecoPanel extends Panel {
                 return canRemove();
             }
         });
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forReference(JsUtils.MASKS));
     }
 
     protected boolean canRemove() {
