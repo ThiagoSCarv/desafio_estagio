@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -65,17 +66,13 @@ public class ClientePjService {
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
         if (dto.email() != null && !dto.email().equals(clientePj.getEmail())) {
-            if (clienteRepository.existsByEmailAndIdNot(dto.email(), id)) {
-                throw new EmailJaCadastradoException();
-            }
+            if (clienteRepository.existsByEmailAndIdNot(dto.email(), id)) throw new EmailJaCadastradoException();
             clientePj.setEmail(dto.email());
         }
 
         // Razao social tambem precisa ser unica: rejeita se outro cliente ja a usa.
         if (dto.razaoSocial() != null && !dto.razaoSocial().equals(clientePj.getRazaoSocial())) {
-            if (clientePjRepository.existsByRazaoSocial(dto.razaoSocial())) {
-                throw new RazaoSocialJaCadastradaException();
-            }
+            if (clientePjRepository.existsByRazaoSocial(dto.razaoSocial())) throw new RazaoSocialJaCadastradaException();
             clientePj.setRazaoSocial(dto.razaoSocial());
         }
 
@@ -102,13 +99,10 @@ public class ClientePjService {
             throw new EnderecoPrincipalException("Apenas um endereço pode ser marcado como principal.");
         }
 
-        int indicePrincipal = 0;
-        for (int i = 0; i < enderecos.size(); i++) {
-            if (Boolean.TRUE.equals(enderecos.get(i).enderecoPrincipal())) {
-                indicePrincipal = i;
-                break;
-            }
-        }
+        int indicePrincipal = IntStream.range(0, enderecos.size())
+                .filter(i -> Boolean.TRUE.equals(enderecos.get(i).enderecoPrincipal()))
+                .findFirst()
+                .orElse(0);
 
         List<Endereco> enderecosParaSalvar = new ArrayList<>();
         for (int i = 0; i < enderecos.size(); i++) {

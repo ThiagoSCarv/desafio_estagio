@@ -59,10 +59,10 @@ public class ClienteService {
     }
 
     private ClienteDto toDto(Cliente cliente, List<EnderecoDto> enderecos) {
-        if (cliente instanceof ClientePf clientePf) {
-            return ClientePfDto.from(clientePf, enderecos);
-        }
-        return ClientePjDto.from((ClientePj) cliente, enderecos);
+        return switch (cliente) {
+            case ClientePf pf -> ClientePfDto.from(pf, enderecos);
+            case ClientePj pj -> ClientePjDto.from(pj, enderecos);
+        };
     }
 
 }

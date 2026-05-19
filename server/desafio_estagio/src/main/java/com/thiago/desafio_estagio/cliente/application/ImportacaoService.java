@@ -36,13 +36,10 @@ public class ImportacaoService {
 
                 try {
                     String tipo = celula(row, 0).trim().toUpperCase();
-                    if ("PF".equals(tipo)) {
-                        clientePfService.criar(lerPf(row));
-                    } else if ("PJ".equals(tipo)) {
-                        clientePjService.criar(lerPj(row));
-                    } else {
-                        erros.add("Linha " + (i + 1) + ": tipo inválido \"" + tipo + "\" (esperado PF ou PJ)");
-                        continue;
+                    switch (tipo) {
+                        case "PF" -> clientePfService.criar(lerPf(row));
+                        case "PJ" -> clientePjService.criar(lerPj(row));
+                        default   -> throw new IllegalArgumentException("tipo inválido \"" + tipo + "\" (esperado PF ou PJ)");
                     }
                     criados++;
                 } catch (Exception e) {

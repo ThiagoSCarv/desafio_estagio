@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -66,9 +67,7 @@ public class ClientePfService {
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
         if (dto.email() != null && !dto.email().equals(clientePf.getEmail())) {
-            if (clienteRepository.existsByEmailAndIdNot(dto.email(), id)) {
-                throw new EmailJaCadastradoException();
-            }
+            if (clienteRepository.existsByEmailAndIdNot(dto.email(), id)) throw new EmailJaCadastradoException();
             clientePf.setEmail(dto.email());
         }
 
@@ -95,13 +94,10 @@ public class ClientePfService {
             throw new EnderecoPrincipalException("Apenas um endereço pode ser marcado como principal.");
         }
 
-        int indicePrincipal = 0;
-        for (int i = 0; i < enderecos.size(); i++) {
-            if (Boolean.TRUE.equals(enderecos.get(i).enderecoPrincipal())) {
-                indicePrincipal = i;
-                break;
-            }
-        }
+        int indicePrincipal = IntStream.range(0, enderecos.size())
+                .filter(i -> Boolean.TRUE.equals(enderecos.get(i).enderecoPrincipal()))
+                .findFirst()
+                .orElse(0);
 
         List<Endereco> enderecosParaSalvar = new ArrayList<>();
         for (int i = 0; i < enderecos.size(); i++) {

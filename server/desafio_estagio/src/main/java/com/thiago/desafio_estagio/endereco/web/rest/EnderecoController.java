@@ -25,22 +25,22 @@ public class EnderecoController {
 
     private final EnderecoService enderecoService;
 
-    // Cria um novo endereco associado ao cliente informado pelo path id.
-    @PostMapping("/{id}")
-    public ResponseEntity<EnderecoDto> criar(@PathVariable UUID id, @RequestBody @Valid EnderecoCreateDto dto) {
-        EnderecoDto endereco = enderecoService.criar(id, dto);
+    // Cria um novo endereco associado ao cliente informado pelo path clienteId.
+    @PostMapping("/{clienteId}")
+    public ResponseEntity<EnderecoDto> criar(@PathVariable UUID clienteId, @RequestBody @Valid EnderecoCreateDto dto) {
+        EnderecoDto endereco = enderecoService.criar(clienteId, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(endereco);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<EnderecoDto> atualizar(@PathVariable UUID id, @RequestBody @Valid EnderecoUpdateDto dto) {
-        EnderecoDto endereco = enderecoService.atualizar(id, dto);
+    @PatchMapping("/{enderecoId}")
+    public ResponseEntity<EnderecoDto> atualizar(@PathVariable UUID enderecoId, @RequestBody @Valid EnderecoUpdateDto dto) {
+        EnderecoDto endereco = enderecoService.atualizar(enderecoId, dto);
         return ResponseEntity.ok(endereco);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable UUID id) {
-        enderecoService.deletar(id);
+    @DeleteMapping("/{enderecoId}")
+    public ResponseEntity<Void> deletar(@PathVariable UUID enderecoId) {
+        enderecoService.deletar(enderecoId);
         return ResponseEntity.noContent().build();
     }
 }
