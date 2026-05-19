@@ -38,13 +38,13 @@ public abstract class EnderecoItemPanel extends Panel {
         add(new Label("logradouro", logradouroCompleto));
 
         add(new Label("bairro", e.bairro() != null ? e.bairro() : "—"));
-        add(new Label("cep", DocumentFormat.formatarCep(e.cep())));
-        add(new Label("cidadeUf", formatarCidadeUf(e.cidade(), e.estado())));
-        add(new Label("telefone", e.telefone() != null ? DocumentFormat.formatarTelefone(e.telefone()) : "—"));
+        add(new Label("cep", DocumentFormat.formatCep(e.cep())));
+        add(new Label("cidadeUf", formatCidadeUf(e.cidade(), e.estado())));
+        add(new Label("telefone", e.telefone() != null ? DocumentFormat.formatTelefone(e.telefone()) : "—"));
         add(new Label("complemento", e.complemento() != null ? e.complemento() : "—"));
     }
 
-    private static String formatarCidadeUf(String cidade, String estado) {
+    private static String formatCidadeUf(String cidade, String estado) {
         if (cidade != null && estado != null) return cidade + " · " + estado;
         if (cidade != null) return cidade;
         if (estado != null) return estado;

@@ -33,7 +33,7 @@ public abstract class ClienteItemPanel extends Panel {
 
         add(new Label("clienteNome", nome));
         add(new Label("clienteTipo", tipo));
-        add(new Label("clienteDocumento", DocumentFormat.formatarDocumento(documento)));
+        add(new Label("clienteDocumento", DocumentFormat.formatDocument(documento)));
         add(new Label("clienteEmail", dto.email()));
 
         boolean ativo = dto.ativo();

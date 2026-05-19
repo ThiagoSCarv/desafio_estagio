@@ -17,7 +17,8 @@ public class TelefoneValidator implements ConstraintValidator<ValidTelefone, Str
         int ddd = Integer.parseInt(telefone.substring(0, 2));
         if (ddd < 11 || ddd > 99) return false;
 
-        // celular: terceiro dígito deve ser 9
-        return telefone.length() != 11 || telefone.charAt(2) == '9';
+        boolean isCelular = telefone.length() == 11;
+        if (isCelular) return telefone.charAt(2) == '9';
+        return true;
     }
 }

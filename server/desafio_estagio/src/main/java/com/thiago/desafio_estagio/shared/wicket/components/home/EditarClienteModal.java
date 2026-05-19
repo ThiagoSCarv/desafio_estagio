@@ -144,7 +144,7 @@ public class EditarClienteModal extends Panel {
             ClientePjDto pj = (ClientePjDto) cliente;
             tipoModel.setObject("Pessoa Jurídica");
             badgeLabelModel.setObject("CNPJ");
-            badgeNameModel.setObject(DocumentFormat.formatarCnpj(pj.cnpj()));
+            badgeNameModel.setObject(DocumentFormat.formatCnpj(pj.cnpj()));
             emailLabelModel.setObject("E-MAIL CORPORATIVO");
             ativoNumModel.setObject("04");
             razaoSocialModel.setObject(pj.razaoSocial());

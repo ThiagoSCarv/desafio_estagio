@@ -5,6 +5,7 @@ import com.thiago.desafio_estagio.endereco.domain.exceptions.CepNaoEncontradoExc
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoNaoEncontradoException;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
 import com.thiago.desafio_estagio.relatorio.application.exceptions.FormatoRelatorioInvalidoException;
+import com.thiago.desafio_estagio.relatorio.application.exceptions.RelatorioException;
 import java.util.List;
 import java.util.stream.Stream;
 import org.springframework.context.MessageSource;
@@ -28,7 +29,7 @@ public class ExceptionHandlerController {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public ErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
+  public ErrorResponse handleValidation(MethodArgumentNotValidException ex) {
     var locale = LocaleContextHolder.getLocale();
     // inclui field errors e global errors (constraints de classe como @AssertTrue)
     List<ErrorMessageDTO> errors = Stream.concat(
@@ -42,38 +43,44 @@ public class ExceptionHandlerController {
 
   @ExceptionHandler(DuplicidadeException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleDuplicidade(DuplicidadeException ex) {
+  public ErrorResponse handleDuplicate(DuplicidadeException ex) {
     return ErrorResponse.of(ex.field(), ex.getMessage());
   }
 
   @ExceptionHandler(ClienteNaoEncontradoException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ErrorResponse handleClienteNaoEncontrado(ClienteNaoEncontradoException ex) {
+  public ErrorResponse handleClienteNotFound(ClienteNaoEncontradoException ex) {
     return ErrorResponse.of("id", ex.getMessage());
   }
 
   @ExceptionHandler(EnderecoNaoEncontradoException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ErrorResponse handleEnderecoNaoEncontrado(EnderecoNaoEncontradoException ex) {
+  public ErrorResponse handleEnderecoNotFound(EnderecoNaoEncontradoException ex) {
     return ErrorResponse.of("id", ex.getMessage());
   }
 
   @ExceptionHandler(CepNaoEncontradoException.class)
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-  public ErrorResponse handleCepNaoEncontrado(CepNaoEncontradoException ex) {
+  public ErrorResponse handleCepNotFound(CepNaoEncontradoException ex) {
     return ErrorResponse.of("cep", ex.getMessage());
   }
 
   @ExceptionHandler(EnderecoPrincipalException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
-  public ErrorResponse handleEnderecoPrincipal(EnderecoPrincipalException ex) {
+  public ErrorResponse handleEnderecoPrincipalConflict(EnderecoPrincipalException ex) {
     return ErrorResponse.of("enderecoPrincipal", ex.getMessage());
   }
 
   @ExceptionHandler(FormatoRelatorioInvalidoException.class)
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public ErrorResponse handleFormatoRelatorioInvalido(FormatoRelatorioInvalidoException ex) {
+  public ErrorResponse handleInvalidReportFormat(FormatoRelatorioInvalidoException ex) {
     return ErrorResponse.of("formato", ex.getMessage());
+  }
+
+  @ExceptionHandler(RelatorioException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ErrorResponse handleReportError(RelatorioException ex) {
+    return ErrorResponse.of("relatorio", ex.getMessage());
   }
 
   @ExceptionHandler(Exception.class)

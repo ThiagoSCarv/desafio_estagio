@@ -88,7 +88,7 @@ public class SectionDetalheCliente extends Panel {
             return "—";
         }));
         secaoPj.add(new Label("cnpj", () ->
-                clienteModel.getObject() instanceof ClientePjDto pj ? DocumentFormat.formatarCnpj(pj.cnpj()) : "—"));
+                clienteModel.getObject() instanceof ClientePjDto pj ? DocumentFormat.formatCnpj(pj.cnpj()) : "—"));
         secaoPj.add(new Label("dataCriacao", () -> {
             if (clienteModel.getObject() instanceof ClientePjDto pj && pj.dataCriacao() != null)
                 return pj.dataCriacao().format(DATE_FMT);
@@ -129,7 +129,7 @@ public class SectionDetalheCliente extends Panel {
         secaoPf.add(statusPf);
 
         secaoPf.add(new Label("cpf", () ->
-                clienteModel.getObject() instanceof ClientePfDto pf ? DocumentFormat.formatarCpf(pf.cpf()) : "—"));
+                clienteModel.getObject() instanceof ClientePfDto pf ? DocumentFormat.formatCpf(pf.cpf()) : "—"));
         secaoPf.add(new Label("rg", () -> {
             if (clienteModel.getObject() instanceof ClientePfDto pf)
                 return pf.rg() != null ? pf.rg() : "—";
