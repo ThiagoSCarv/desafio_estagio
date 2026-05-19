@@ -59,10 +59,9 @@ public class ClienteService {
     }
 
     private ClienteDto toDto(Cliente cliente, List<EnderecoDto> enderecos) {
-        return switch (cliente) {
-            case ClientePf pf -> ClientePfDto.from(pf, enderecos);
-            case ClientePj pj -> ClientePjDto.from(pj, enderecos);
-        };
+        if (cliente instanceof ClientePf pf) return ClientePfDto.from(pf, enderecos);
+        if (cliente instanceof ClientePj pj) return ClientePjDto.from(pj, enderecos);
+        throw new IllegalStateException("Tipo de cliente desconhecido: " + cliente.getClass().getSimpleName());
     }
 
 }
