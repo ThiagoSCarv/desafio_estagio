@@ -5,6 +5,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import jakarta.validation.ConstraintViolationException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +45,15 @@ public class ImportacaoService {
                         default   -> throw new IllegalArgumentException("tipo inválido \"" + tipo + "\" (esperado PF ou PJ)");
                     }
                     criados++;
+                } catch (ConstraintViolationException e) {
+                    String mensagens = e.getConstraintViolations().stream()
+                            .map(v -> {
+                                String path = v.getPropertyPath().toString();
+                                String campo = path.contains(".") ? path.substring(path.lastIndexOf('.') + 1) : path;
+                                return campo + ": " + v.getMessage();
+                            })
+                            .collect(Collectors.joining(", "));
+                    erros.add("Linha " + (i + 1) + ": " + mensagens);
                 } catch (Exception e) {
                     erros.add("Linha " + (i + 1) + ": " + e.getMessage());
                 }
