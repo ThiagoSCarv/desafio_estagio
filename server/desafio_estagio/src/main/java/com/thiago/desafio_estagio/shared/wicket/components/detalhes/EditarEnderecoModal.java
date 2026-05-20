@@ -4,6 +4,7 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
 import com.thiago.desafio_estagio.endereco.application.EnderecoService;
 import com.thiago.desafio_estagio.endereco.application.EnderecoUpdateDto;
 import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
+import jakarta.validation.ConstraintViolationException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.feedback.ContainerFeedbackMessageFilter;
@@ -24,7 +25,7 @@ public class EditarEnderecoModal extends Panel {
     private EnderecoService enderecoService;
 
     private UUID enderecoId;
-    private final Model<String> numeroModel      = Model.of("");
+    private final Model<Integer> numeroModel     = Model.of((Integer) null);
     private final Model<String> telefoneModel    = Model.of("");
     private final Model<String> complementoModel = Model.of("");
     private final Model<Boolean> principalModel  = Model.of(Boolean.FALSE);
@@ -43,7 +44,7 @@ public class EditarEnderecoModal extends Panel {
         feedback.setOutputMarkupId(true);
         form.add(feedback);
 
-        form.add(new TextField<>("numero", numeroModel));
+        form.add(new TextField<>("numero", numeroModel, Integer.class));
         form.add(new TextField<>("telefone", telefoneModel));
         form.add(new TextField<>("complemento", complementoModel));
         RadioGroup<Boolean> principalGroup = new RadioGroup<>("principalGroup", principalModel);
@@ -67,7 +68,7 @@ public class EditarEnderecoModal extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 try {
                     enderecoService.atualizar(enderecoId, new EnderecoUpdateDto(
-                            WicketUtil.emptyToNull(numeroModel.getObject()),
+                            numeroModel.getObject(),
                             WicketUtil.emptyToNull(telefoneModel.getObject()),
                             principalModel.getObject(),
                             WicketUtil.emptyToNull(complementoModel.getObject())
@@ -75,6 +76,10 @@ public class EditarEnderecoModal extends Panel {
                     WicketUtil.mostrarToast(target, "Endereço atualizado com sucesso");
                     WicketUtil.ocultarModal(target, EditarEnderecoModal.this);
                     onAtualizado(target);
+                } catch (ConstraintViolationException e) {
+                    e.getConstraintViolations().forEach(v ->
+                            EditarEnderecoModal.this.error(v.getMessage()));
+                    target.add(feedback);
                 } catch (RuntimeException e) {
                     EditarEnderecoModal.this.error(e.getMessage());
                     target.add(feedback);
@@ -91,7 +96,7 @@ public class EditarEnderecoModal extends Panel {
     // Reseta o estado do formulário (Models + cache de input bruto dos componentes) e marca o form para re-render via Ajax.
     private void limpar(AjaxRequestTarget target) {
         enderecoId = null;
-        numeroModel.setObject("");
+        numeroModel.setObject(null);
         telefoneModel.setObject("");
         complementoModel.setObject("");
         principalModel.setObject(Boolean.FALSE);
@@ -100,7 +105,7 @@ public class EditarEnderecoModal extends Panel {
 
     public void setEndereco(EnderecoDto endereco) {
         this.enderecoId = endereco.id();
-        numeroModel.setObject(WicketUtil.emptyToString(endereco.numero()));
+        numeroModel.setObject(endereco.numero());
         telefoneModel.setObject(WicketUtil.emptyToString(endereco.telefone()));
         complementoModel.setObject(WicketUtil.emptyToString(endereco.complemento()));
         principalModel.setObject(endereco.enderecoPrincipal());

@@ -52,7 +52,7 @@ public class ExcluirEnderecoModal extends Panel {
     public void setEndereco(EnderecoDto endereco) {
         this.enderecoId = endereco.id();
         String logradouro = endereco.logradouro() != null ? endereco.logradouro() : "Endereço";
-        if (endereco.numero() != null && !endereco.numero().isBlank())
+        if (endereco.numero() != null)
             logradouro += ", " + endereco.numero();
         logradouroModel.setObject(logradouro);
     }

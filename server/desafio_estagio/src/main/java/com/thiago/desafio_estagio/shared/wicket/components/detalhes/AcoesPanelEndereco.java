@@ -1,6 +1,7 @@
 package com.thiago.desafio_estagio.shared.wicket.components.detalhes;
 
 import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
+import com.thiago.desafio_estagio.shared.wicket.util.WicketUtil;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -51,7 +52,8 @@ public class AcoesPanelEndereco extends Panel {
 
     private void mostrarModal(AjaxRequestTarget target, Panel modal) {
         target.appendJavaScript(
-            "bootstrap.Modal.getOrCreateInstance(document.getElementById('" + modal.getMarkupId() + "')).show();"
+            "bootstrap.Modal.getOrCreateInstance(document.getElementById('" + modal.getMarkupId() + "')).show();" +
+            WicketUtil.INIT_MASKS
         );
     }
 

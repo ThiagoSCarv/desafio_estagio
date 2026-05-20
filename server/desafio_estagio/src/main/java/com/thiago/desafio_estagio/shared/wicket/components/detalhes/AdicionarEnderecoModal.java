@@ -39,7 +39,7 @@ public class AdicionarEnderecoModal extends Panel {
     private static class EnderecoData implements Serializable {
         String  cep               = "";
         String  logradouro        = "";
-        String  numero            = "";
+        Integer numero            = null;
         String  bairro            = "";
         String  cidade            = "";
         String  estado            = "";
@@ -171,7 +171,7 @@ public class AdicionarEnderecoModal extends Panel {
     private void validarFormData() {
         WicketUtil.exigir(formData.cep,        "CEP é obrigatório.");
         WicketUtil.exigir(formData.logradouro, "Logradouro é obrigatório.");
-        WicketUtil.exigir(formData.numero,     "Número é obrigatório.");
+        if (formData.numero == null) throw new IllegalArgumentException("Número é obrigatório.");
         WicketUtil.exigir(formData.bairro,     "Bairro é obrigatório.");
         WicketUtil.exigir(formData.cidade,     "Cidade é obrigatória.");
         WicketUtil.exigir(formData.estado,     "Estado é obrigatório.");
@@ -181,7 +181,7 @@ public class AdicionarEnderecoModal extends Panel {
     private void limpar(AjaxRequestTarget target) {
         formData.cep               = "";
         formData.logradouro        = "";
-        formData.numero            = "";
+        formData.numero            = null;
         formData.bairro            = "";
         formData.cidade            = "";
         formData.estado            = "";

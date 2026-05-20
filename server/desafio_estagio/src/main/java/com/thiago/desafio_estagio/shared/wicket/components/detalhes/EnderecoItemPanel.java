@@ -33,7 +33,7 @@ public abstract class EnderecoItemPanel extends Panel {
         });
 
         String logradouroCompleto = e.logradouro() != null ? e.logradouro() : "—";
-        if (e.numero() != null && !e.numero().isBlank())
+        if (e.numero() != null)
             logradouroCompleto += ", " + e.numero();
         add(new Label("logradouro", logradouroCompleto));
 

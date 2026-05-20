@@ -237,7 +237,7 @@ public class AdicionarClienteModal extends Panel {
     private static void validarEntry(EnderecoPanel.EnderecoEntry e, String prefixo) {
         WicketUtil.exigir(e.cep,        prefixo + "CEP é obrigatório.");
         WicketUtil.exigir(e.logradouro, prefixo + "Logradouro é obrigatório.");
-        WicketUtil.exigir(e.numero,     prefixo + "Número é obrigatório.");
+        if (e.numero == null) throw new IllegalArgumentException(prefixo + "Número é obrigatório.");
         WicketUtil.exigir(e.bairro,     prefixo + "Bairro é obrigatório.");
         WicketUtil.exigir(e.cidade,     prefixo + "Cidade é obrigatória.");
         WicketUtil.exigir(e.estado,     prefixo + "Estado é obrigatório.");

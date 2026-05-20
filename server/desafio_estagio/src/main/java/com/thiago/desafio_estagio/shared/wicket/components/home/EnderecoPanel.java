@@ -26,7 +26,7 @@ public class EnderecoPanel extends Panel {
     public static class EnderecoEntry implements Serializable {
         public String  cep               = "";
         public String  logradouro        = "";
-        public String  numero            = "";
+        public Integer numero            = null;
         public String  bairro            = "";
         public String  cidade            = "";
         public String  estado            = "";
