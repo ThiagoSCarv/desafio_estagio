@@ -13,8 +13,10 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
 import com.thiago.desafio_estagio.endereco.domain.Endereco;
 import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ClientePjService {
 
@@ -34,7 +37,7 @@ public class ClientePjService {
     //Cria um novo Cliente PJ validando que não existe outro email igual já cadastrado na tabela Cliente
     //CNPJ é normalizado garantindo que mesmo que os clientes enviem com mascara o dado seja armazenado da maneira correta.
     @Transactional
-    public ClientePjDto criar(ClientePjCreateDto dto) {
+    public ClientePjDto criar(@Valid ClientePjCreateDto dto) {
         String cnpj = dto.cnpj().replaceAll("\\D", "");
 
         if (clienteRepository.existsByEmail(dto.email())) {
@@ -61,7 +64,7 @@ public class ClientePjService {
     }
 
     @Transactional
-    public ClientePjDto atualizar(UUID id, ClientePjUpdateDto dto) {
+    public ClientePjDto atualizar(UUID id, @Valid ClientePjUpdateDto dto) {
         ClientePj clientePj = clientePjRepository.findById(id)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 

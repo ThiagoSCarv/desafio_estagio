@@ -13,8 +13,10 @@ import com.thiago.desafio_estagio.endereco.application.EnderecoDto;
 import com.thiago.desafio_estagio.endereco.domain.Endereco;
 import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ClientePfService {
 
@@ -34,7 +37,7 @@ public class ClientePfService {
     //Cria um novo Cliente PF validando que não existe outro email igual já cadastrado na tabela Cliente
     //CPF e RG são normalizados garantindo que mesmo que os clientes enviem com mascara o dado seja armazenado da maneira correta.
     @Transactional
-    public ClientePfDto criar(ClientePfCreateDto dto) {
+    public ClientePfDto criar(@Valid ClientePfCreateDto dto) {
         String cpf = dto.cpf().replaceAll("\\D", "");
         String rg = dto.rg().replaceAll("[.\\-\\s]", "").toUpperCase();
 
@@ -62,7 +65,7 @@ public class ClientePfService {
     }
 
     @Transactional
-    public ClientePfDto atualizar(UUID id, ClientePfUpdateDto dto) {
+    public ClientePfDto atualizar(UUID id, @Valid ClientePfUpdateDto dto) {
         ClientePf clientePf = clientePfRepository.findById(id)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 

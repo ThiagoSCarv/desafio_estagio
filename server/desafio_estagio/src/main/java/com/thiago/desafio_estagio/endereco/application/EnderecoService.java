@@ -7,13 +7,16 @@ import com.thiago.desafio_estagio.endereco.domain.Endereco;
 import com.thiago.desafio_estagio.endereco.domain.EnderecoRepository;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoNaoEncontradoException;
 import com.thiago.desafio_estagio.endereco.domain.exceptions.EnderecoPrincipalException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class EnderecoService {
 
@@ -25,7 +28,7 @@ public class EnderecoService {
     // endereço cadastrado é sempre marcado como principal, ignorando o que veio no DTO.
     // Quando o cliente já tem outros endereços e o novo é principal, os demais são desmarcados.
     @Transactional
-    public EnderecoDto criar(UUID clienteId, EnderecoCreateDto dto) {
+    public EnderecoDto criar(UUID clienteId, @Valid EnderecoCreateDto dto) {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(ClienteNaoEncontradoException::new);
 
@@ -55,7 +58,7 @@ public class EnderecoService {
     }
 
     @Transactional
-    public EnderecoDto atualizar(UUID enderecoId, EnderecoUpdateDto dto) {
+    public EnderecoDto atualizar(UUID enderecoId, @Valid EnderecoUpdateDto dto) {
         Endereco endereco = enderecoRepository.findById(enderecoId)
                 .orElseThrow(EnderecoNaoEncontradoException::new);
 
