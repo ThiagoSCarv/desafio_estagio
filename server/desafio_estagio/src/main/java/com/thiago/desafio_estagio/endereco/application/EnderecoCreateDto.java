@@ -4,13 +4,14 @@ import com.thiago.desafio_estagio.shared.validation.annotation.ValidCep;
 import com.thiago.desafio_estagio.shared.validation.annotation.ValidTelefone;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 // Payload de criação de endereço. O CEP é normalizado (somente dígitos) no service.
 public record EnderecoCreateDto(
         @NotBlank @ValidCep String cep,
         @NotBlank String logradouro,
-        @NotBlank String numero,
+        @NotNull @Positive Integer numero,
         @NotBlank String bairro,
         @NotBlank String cidade,
         @NotBlank @Size(min = 2, max = 2) String estado,

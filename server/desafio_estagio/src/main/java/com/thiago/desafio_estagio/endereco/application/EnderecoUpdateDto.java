@@ -4,7 +4,7 @@ import com.thiago.desafio_estagio.shared.validation.annotation.ValidTelefone;
 
 // PATCH parcial — campos de localização (cep, logradouro, bairro, cidade, estado) são imutáveis após criação.
 public record EnderecoUpdateDto(
-        String numero,
+        Integer numero,
         @ValidTelefone String telefone,
         Boolean enderecoPrincipal,
         String complemento

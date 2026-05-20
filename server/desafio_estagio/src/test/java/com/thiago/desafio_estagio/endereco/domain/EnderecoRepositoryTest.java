@@ -153,7 +153,7 @@ class EnderecoRepositoryTest {
     private Endereco endereco(ClientePf cliente, boolean principal) {
         Endereco e = new Endereco();
         e.setLogradouro("Rua A");
-        e.setNumero("100");
+        e.setNumero(100);
         e.setCep("01310100");
         e.setBairro("Centro");
         e.setCidade("São Paulo");

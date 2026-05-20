@@ -8,7 +8,7 @@ import java.util.UUID;
 public record EnderecoDto(
         UUID id,
         String logradouro,
-        String numero,
+        Integer numero,
         String cep,
         String bairro,
         String telefone,

@@ -59,7 +59,7 @@ class EnderecoControllerTest {
                         .content("""
                                 {
                                     "logradouro": "Rua A",
-                                    "numero": "100",
+                                    "numero": 100,
                                     "cep": "0131",
                                     "bairro": "Centro",
                                     "cidade": "São Paulo",
@@ -80,7 +80,7 @@ class EnderecoControllerTest {
                         .content("""
                                 {
                                     "logradouro": "Rua A",
-                                    "numero": "100",
+                                    "numero": 100,
                                     "cep": "01310100",
                                     "bairro": "Centro",
                                     "cidade": "São Paulo",
@@ -125,7 +125,7 @@ class EnderecoControllerTest {
         mockMvc.perform(patch("/endereco/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "numero": "200", "complemento": "Apto 5" }
+                                { "numero": 200, "complemento": "Apto 5" }
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.logradouro").value("Rua A"));
@@ -139,7 +139,7 @@ class EnderecoControllerTest {
         mockMvc.perform(patch("/endereco/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                { "numero": "200" }
+                                { "numero": 200 }
                                 """))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errors[0].field").value("id"));
@@ -181,7 +181,7 @@ class EnderecoControllerTest {
         return """
                 {
                     "logradouro": "Rua A",
-                    "numero": "100",
+                    "numero": 100,
                     "cep": "01310100",
                     "bairro": "Centro",
                     "cidade": "São Paulo",
@@ -194,7 +194,7 @@ class EnderecoControllerTest {
     private EnderecoDto enderecoDto() {
         return new EnderecoDto(
                 UUID.randomUUID(),
-                "Rua A", "100", "01310100", "Centro",
+                "Rua A", 100, "01310100", "Centro",
                 null, "São Paulo", "SP", true, null
         );
     }

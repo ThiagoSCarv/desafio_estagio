@@ -168,9 +168,9 @@ class EnderecoServiceTest {
         when(enderecoRepository.findById(enderecoId)).thenReturn(Optional.of(endereco));
         when(enderecoRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        enderecoService.atualizar(enderecoId, new EnderecoUpdateDto("200", "11987654321", null, "Apto 5"));
+        enderecoService.atualizar(enderecoId, new EnderecoUpdateDto(200, "11987654321", null, "Apto 5"));
 
-        assertThat(endereco.getNumero()).isEqualTo("200");
+        assertThat(endereco.getNumero()).isEqualTo(200);
         assertThat(endereco.getTelefone()).isEqualTo("11987654321");
         assertThat(endereco.getComplemento()).isEqualTo("Apto 5");
         assertThat(endereco.isEnderecoPrincipal()).isFalse(); // não mudou
@@ -213,8 +213,8 @@ class EnderecoServiceTest {
 
     private EnderecoCreateDto enderecoCreateDto(boolean principal) {
         return new EnderecoCreateDto(
-                "Rua A", "100", "01310100", "Centro",
-                null, "São Paulo", "SP", principal, null
+                "01310100", "Rua A", 100, "Centro",
+                "São Paulo", "SP", null, principal, null
         );
     }
 
@@ -222,7 +222,7 @@ class EnderecoServiceTest {
         Endereco e = new Endereco();
         e.setId(enderecoId);
         e.setLogradouro("Rua A");
-        e.setNumero("100");
+        e.setNumero(100);
         e.setCep("01310100");
         e.setBairro("Centro");
         e.setCidade("São Paulo");
