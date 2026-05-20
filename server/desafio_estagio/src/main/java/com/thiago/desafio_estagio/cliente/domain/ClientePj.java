@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+// Subtipo de Cliente para Pessoa Jurídica. O id é FK para a tabela clientes (herança JOINED).
 @Entity
 @Table(name = "clientes_pj")
 @PrimaryKeyJoinColumn(name = "id")
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ClientePj extends Cliente {
 
+    // Armazenado somente com dígitos (length = 14). O service normaliza antes de salvar.
     @Column(nullable = false, unique = true, length = 14)
     private String cnpj;
 

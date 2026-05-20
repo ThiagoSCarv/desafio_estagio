@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+// Payload de criação de PF. CPF e RG são normalizados no service antes de persistir.
 public record ClientePfCreateDto(
         @NotBlank @Email String email,
         @NotBlank String nome,

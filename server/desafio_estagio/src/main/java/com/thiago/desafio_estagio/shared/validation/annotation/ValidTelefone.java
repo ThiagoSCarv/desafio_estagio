@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// Valida telefone com 10 dígitos (fixo) ou 11 (celular), com ou sem formatação. Aceita nulo.
 @Documented
 @Constraint(validatedBy = TelefoneValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})

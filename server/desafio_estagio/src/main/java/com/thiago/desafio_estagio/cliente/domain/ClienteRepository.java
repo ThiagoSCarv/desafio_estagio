@@ -8,9 +8,10 @@ import java.util.UUID;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, UUID>, ClienteRepositoryCustom {
 
-    //Verifica em toda a tabela Cliente se existe somente um email
+    // Cobre PF e PJ na mesma query pois email fica na tabela pai clientes.
     boolean existsByEmail(String email);
 
+    // Usado no update para rejeitar duplicata excluindo o próprio registro.
     boolean existsByEmailAndIdNot(String email, UUID id);
 
     long countByAtivoTrue();

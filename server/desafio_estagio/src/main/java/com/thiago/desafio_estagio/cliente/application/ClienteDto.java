@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+// Sealed interface garante exaustividade em switches: qualquer adição de subtipo
+// quebra a compilação em vez de cair num default silencioso.
 public sealed interface ClienteDto permits ClientePfDto, ClientePjDto {
     UUID id();
     TipoPessoa tipoPessoa();

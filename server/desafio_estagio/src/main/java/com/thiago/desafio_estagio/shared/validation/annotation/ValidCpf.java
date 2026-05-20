@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// Valida CPF com ou sem máscara via Caelum Stella. Aceita nulo (use @NotBlank em conjunto).
 @Documented
 @Constraint(validatedBy = CpfValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})

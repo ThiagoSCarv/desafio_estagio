@@ -1,5 +1,7 @@
 package com.thiago.desafio_estagio.shared.utils;
 
+// Utilitários de formatação de documentos para exibição na camada Wicket.
+// Dados são persistidos sem máscara; a formatação é aplicada somente na apresentação.
 public class DocumentFormat {
 
     private DocumentFormat() {}

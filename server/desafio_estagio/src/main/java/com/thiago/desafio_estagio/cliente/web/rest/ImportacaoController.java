@@ -16,6 +16,7 @@ public class ImportacaoController {
 
     private final ImportacaoService importacaoService;
 
+    // Baixa o template XLSX preenchido com exemplos para guiar o usuário na importação em lote.
     @GetMapping("/template")
     public void downloadTemplate(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

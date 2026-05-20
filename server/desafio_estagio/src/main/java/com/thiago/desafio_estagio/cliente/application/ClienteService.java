@@ -58,6 +58,7 @@ public class ClienteService {
         clienteRepository.delete(cliente);
     }
 
+    // Delega para o DTO correto via pattern matching; IllegalStateException é defensiva.
     private ClienteDto toDto(Cliente cliente, List<EnderecoDto> enderecos) {
         if (cliente instanceof ClientePf pf) return ClientePfDto.from(pf, enderecos);
         if (cliente instanceof ClientePj pj) return ClientePjDto.from(pj, enderecos);

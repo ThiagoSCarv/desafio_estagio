@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// Valida que o CEP possui exatamente 8 dígitos (com ou sem hífen). Aceita nulo.
 @Documented
 @Constraint(validatedBy = CepValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})

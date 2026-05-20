@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
+// Payload de criação de PJ. CNPJ é normalizado no service antes de persistir.
 public record ClientePjCreateDto(
         @NotBlank @Email String email,
         @NotBlank @ValidCnpj String cnpj,

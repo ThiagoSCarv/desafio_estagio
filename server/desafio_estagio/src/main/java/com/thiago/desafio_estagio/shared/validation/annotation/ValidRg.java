@@ -10,6 +10,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// Valida RG alfanumérico (letras, dígitos, pontos, traços e espaços). Aceita nulo.
 @Documented
 @Constraint(validatedBy = RgValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})

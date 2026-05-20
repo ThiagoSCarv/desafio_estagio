@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+// Payload de criação de endereço. O CEP é normalizado (somente dígitos) no service.
 public record EnderecoCreateDto(
         @NotBlank @ValidCep String cep,
         @NotBlank String logradouro,
