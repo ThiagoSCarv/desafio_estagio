@@ -62,15 +62,11 @@
 
   &--tertiary {
     background: transparent;
-    color: var(--erp-text-secondary);
-    border-color: var(--erp-success);
-
-    mat-icon {
-      color: var(--erp-success);
-    }
+    color: rgba(140, 190, 240, 0.75);
+    border-color: rgba(100, 160, 220, 0.25);
 
     &:hover:not([disabled]) {
-      background: var(--erp-success-glow);
+      background: rgba(140, 190, 240, 0.2);
     }
   }
 }
