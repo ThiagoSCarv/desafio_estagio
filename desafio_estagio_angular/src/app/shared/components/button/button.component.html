@@ -2,6 +2,8 @@
   [class]="'erp-btn erp-btn--' + variant"
   [type]="type"
   [disabled]="loading || disabled"
+  [attr.aria-busy]="loading"
+  [attr.aria-disabled]="loading || disabled"
   (click)="clicked.emit()">
   <mat-spinner *ngIf="loading" [diameter]="16"></mat-spinner>
   <mat-icon *ngIf="icon && !loading">{{ icon }}</mat-icon>
