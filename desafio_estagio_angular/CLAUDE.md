@@ -1,12 +1,12 @@
 # CLAUDE.md — Guia de Arquitetura do Projeto
 
-> Documento de referência para decisões de arquitetura, estrutura de pastas e convenções adotadas neste projeto Angular 16 + Angular Material.
+> Documento de referência para decisões de arquitetura, estrutura de pastas e convenções adotadas neste projeto Angular 14 + Angular Material.
 
 ---
 
 ## Stack
 
-- **Framework:** Angular 16
+- **Framework:** Angular 14
 - **UI Library:** Angular Material
 - **Linguagem:** TypeScript
 - **Estilos:** SCSS

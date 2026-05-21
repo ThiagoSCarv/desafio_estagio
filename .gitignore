@@ -6,6 +6,8 @@
 /out-tsc
 /bazel-out
 
+/desafio_estagio_angular/docs/
+
 # Node
 /node_modules
 npm-debug.log
@@ -19,8 +21,6 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
-
-docs/
 
 # Visual Studio Code
 .vscode/*
@@ -42,3 +42,41 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+HELP.md
+../../CLAUDE.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+CLAUDE.md/
+../../CLAUDE.md
+.claude/
