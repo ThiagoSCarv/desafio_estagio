@@ -10,6 +10,7 @@
 O projeto Angular foi inicializado com o template padrão do Angular CLI. O `app.component.html` contém a welcome page padrão (toolbar, cards de recursos, footer). O `styles.scss` já tem um sistema de design completo (tokens ERP, tema Material dark). Nenhuma estrutura de pastas (`shared/`, `core/`, `features/`) existe ainda.
 
 Esta spec cobre dois trabalhos independentes executados juntos:
+
 1. Remover o boilerplate padrão do Angular CLI
 2. Criar o primeiro componente do `SharedModule`: `ButtonComponent`
 
@@ -18,12 +19,13 @@ Esta spec cobre dois trabalhos independentes executados juntos:
 ## Trabalho 1 — Limpeza do AppComponent
 
 ### Objetivo
+
 Deixar o `AppComponent` como casca mínima, delegando todo o visual para o roteador.
 
 ### Mudanças
 
 | Arquivo | Ação |
-|---|---|
+| --- | --- |
 | `app.component.html` | Substituir todo o conteúdo por `<router-outlet></router-outlet>` |
 | `app.component.scss` | Esvaziar (estilos globais vivem em `styles.scss`) |
 | `app.component.ts` | Remover campo `title`, manter apenas o decorator `@Component` |
@@ -35,7 +37,7 @@ Deixar o `AppComponent` como casca mínima, delegando todo o visual para o rotea
 
 ### Localização
 
-```
+```text
 src/app/shared/
 ├── components/
 │   └── button/
@@ -45,27 +47,35 @@ src/app/shared/
 └── shared.module.ts
 ```
 
-### Abordagem escolhida
+### Abordagem
 
-Wrapper de `mat-raised-button` (Opção A). O tema Material já está configurado em `styles.scss` para usar `--erp-success` como cor primária — o botão herda cor, ripple, focus ring e `aria-disabled` automaticamente.
+Wrapper sobre `mat-raised-button` (Primary) e botões nativos estilizados com tokens CSS para Secondary e Tertiary. O componente usa `:host` + classes derivadas do `variant` para aplicar os estilos corretos, mantendo o mesmo elemento `<button>` base.
+
+### Variantes (referência visual)
+
+| Variante | Aparência | Mapeamento de tokens |
+| --- | --- | --- |
+| `primary` | Fundo verde sólido, texto escuro | `bg: --erp-success`, `color: #0d2318` |
+| `secondary` | Fundo `--erp-surface`, borda `--erp-border-strong`, texto `--erp-text-secondary` | sem `mat-raised`, borda visível |
+| `tertiary` | Fundo transparente/surface, borda e ícone em `--erp-success` | destaque apenas no ícone e borda |
 
 ### API do componente
 
 ```typescript
-@Input() label: string         // texto exibido no botão (obrigatório em uso)
-@Input() icon?: string         // nome do mat-icon (opcional, renderizado à esquerda)
-@Input() loading = false       // exibe mat-spinner (diameter=16) e desabilita
-@Input() disabled = false      // desabilita sem spinner
+@Input() label: string                               // texto do botão (obrigatório em uso)
+@Input() icon?: string                               // nome do mat-icon (opcional, à esquerda)
+@Input() variant: 'primary' | 'secondary' | 'tertiary' = 'primary'
+@Input() loading = false                             // spinner (diameter=16) + desabilita
+@Input() disabled = false                            // desabilita sem spinner
 @Input() type: 'button' | 'submit' | 'reset' = 'button'
-@Output() clicked = new EventEmitter<void>()  // emite ao clicar
+@Output() clicked = new EventEmitter<void>()
 ```
 
 ### Template
 
 ```html
 <button
-  mat-raised-button
-  color="primary"
+  [class]="'erp-btn erp-btn--' + variant"
   [type]="type"
   [disabled]="loading || disabled"
   (click)="clicked.emit()">
@@ -75,35 +85,69 @@ Wrapper de `mat-raised-button` (Opção A). O tema Material já está configurad
 </button>
 ```
 
+> Não usa `mat-raised-button` diretamente — o estilo primary é replicado com tokens CSS para manter consistência entre as três variantes sem misturar APIs do Material.
+
 ### SCSS
 
-Mínimo: `gap` entre ícone/spinner e texto, opacidade reduzida durante loading para sinalizar estado inativo.
-
 ```scss
-button {
-  gap: 0.5rem;
+:host {
+  display: inline-flex;
+}
+
+.erp-btn {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem;
+  height: 2.25rem;
+  border-radius: 0.375rem;
+  font-family: var(--erp-font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity 0.15s, background-color 0.15s;
 
-  &[disabled] {
-    opacity: 0.6;
+  &[disabled] { opacity: 0.5; cursor: default; }
+
+  &--primary {
+    background: var(--erp-success);
+    color: #0d2318;
+    border-color: transparent;
+    &:hover:not([disabled]) { opacity: 0.88; }
+  }
+
+  &--secondary {
+    background: var(--erp-surface);
+    color: var(--erp-text-secondary);
+    border-color: var(--erp-border-strong);
+    &:hover:not([disabled]) { background: var(--erp-surface-muted); }
+  }
+
+  &--tertiary {
+    background: transparent;
+    color: var(--erp-text-secondary);
+    border-color: var(--erp-success);
+    mat-icon { color: var(--erp-success); }
+    &:hover:not([disabled]) { background: var(--erp-success-glow); }
   }
 }
 ```
 
 ### SharedModule
 
-Declara e exporta `ButtonComponent`. Importa os módulos Material necessários:
-- `MatButtonModule`
+Declara e exporta `ButtonComponent`. Importa:
+
+- `CommonModule` (para `*ngIf`)
 - `MatIconModule`
 - `MatProgressSpinnerModule`
-- `CommonModule` (para `*ngIf`)
+
+> `MatButtonModule` não é necessário — o botão é nativo com CSS próprio.
 
 ---
 
 ## Fora do escopo
 
-- Variantes Secondary, Ghost, Danger
 - Tamanhos (sm / lg)
 - Ícone à direita
 - Testes unitários
@@ -113,8 +157,11 @@ Declara e exporta `ButtonComponent`. Importa os módulos Material necessários:
 ## Critérios de sucesso
 
 - `app.component.html` contém apenas `<router-outlet>`
-- `ButtonComponent` compila sem erros
-- `SharedModule` exporta `ButtonComponent`
+- `ButtonComponent` compila sem erros TypeScript
+- `SharedModule` declara e exporta `ButtonComponent`
+- Variante `primary` exibe fundo verde sólido
+- Variante `secondary` exibe fundo escuro com borda sutil
+- Variante `tertiary` exibe borda e ícone em verde (`--erp-success`)
 - Ícone aparece à esquerda do texto quando `icon` é fornecido
-- Spinner aparece e botão fica desabilitado quando `loading=true`
-- Clicar no botão emite `clicked` (não emite quando `loading` ou `disabled`)
+- Spinner substitui o ícone e desabilita o botão quando `loading=true`
+- Botão não emite `clicked` quando `loading` ou `disabled`
